@@ -6,3 +6,10 @@ public class BadRequestException : Exception
     {
     }
 }
+
+internal class DuplicateLoginException : BadRequestException
+{
+    public DuplicateLoginException() : base (ExceptionMessages.BadRequestMessages.DuplicateLogin)
+    {
+    }
+}
