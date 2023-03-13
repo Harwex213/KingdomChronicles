@@ -10,6 +10,7 @@ public static class ExceptionMessages
     public static class BadRequestMessages
     {
         public const string DuplicateLogin = "Such login is already taken";
+        public const string PasswordAndRepeatedPasswordNotEquals = "Password and repeated password should be equal";
     }
 
     public static class UnauthorizedMessages

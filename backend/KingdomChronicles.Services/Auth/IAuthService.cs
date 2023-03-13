@@ -1,4 +1,5 @@
 ﻿using KingdomChronicles.DataAccess.Entities;
+using KingdomChronicles.Services.DTOs.Auth;
 
 namespace KingdomChronicles.Services.Auth;
 
@@ -8,7 +9,9 @@ public interface IAuthService
     
     Task CreateUser(User user);
     
-    Task Register(User user);
+    Task Register(RegisterDto user);
 
-    Task Login(string login, string password);
+    Task Login(LoginDto loginDto);
+
+    Task Logout();
 }

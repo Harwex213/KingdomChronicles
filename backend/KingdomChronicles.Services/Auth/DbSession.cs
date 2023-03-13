@@ -22,7 +22,7 @@ public class DbSession : IDbSession
         _webCookieService.AddSecure(AuthConstants.SessionCookieName, sessionId.ToString(), AuthConstants.SessionDaysLifetime);
     }
     
-    private async Task<Session> CreateSession()
+    private async Task<Session> Create()
     {
         var createdSession = new Session
         {
@@ -35,7 +35,7 @@ public class DbSession : IDbSession
         return createdSession;
     }
 
-    public async Task<Session> GetSession()
+    public async Task<Session> Get()
     {
         if (_session != null)
         {
@@ -45,10 +45,11 @@ public class DbSession : IDbSession
         string? sessionString = _webCookieService.Get(AuthConstants.SessionCookieName);
         Guid sessionId = sessionString == null ? Guid.NewGuid() : Guid.Parse(sessionString);
 
-        var foundSession = await _appDbContext.Sessions.FirstOrDefaultAsync(s => s.Id == sessionId);
+        var foundSession = await _appDbContext.Sessions.FirstOrDefaultAsync(s => s.Id == sessionId 
+            && s.Created.AddDays(AuthConstants.SessionDaysLifetime) > DateTime.UtcNow);
         if (foundSession == null)
         {
-            foundSession = await CreateSession();
+            foundSession = await Create();
             StoreSession(foundSession.Id);
         }
         _session = foundSession;
@@ -57,7 +58,7 @@ public class DbSession : IDbSession
 
     public async Task SetUserId(int userId)
     {
-        Session session = await GetSession();
+        Session session = await Get();
         session.UserId = userId;
         session.Id = Guid.NewGuid();
         await _appDbContext.SaveChangesAsync();
@@ -66,13 +67,22 @@ public class DbSession : IDbSession
 
     public async Task<int?> GetUserId()
     {
-        Session session = await GetSession();
+        Session session = await Get();
         return session.UserId;
     }
 
     public async Task<bool> IsLoggedIn()
     {
-        Session session = await GetSession();
+        Session session = await Get();
         return session.UserId != null;
     }
+
+    public async Task Destroy()
+    {
+        Session session = await Get();
+        _appDbContext.Sessions.Remove(session);
+        await _appDbContext.SaveChangesAsync();
+        _webCookieService.Delete(AuthConstants.SessionCookieName);
+    }
+    
 }

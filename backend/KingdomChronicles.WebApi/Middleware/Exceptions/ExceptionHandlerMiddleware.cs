@@ -26,7 +26,7 @@ public class ExceptionHandlerMiddleware
             HttpResponse response = context.Response;
             response.StatusCode = exceptionInfo.HttpCode;
             response.ContentType = "application/json";
-            string result = JsonConvert.SerializeObject(new { exceptionInfo.Message });
+            string result = JsonConvert.SerializeObject(new DTOs.ErrorDto { Message = exceptionInfo.Message });
             await response.WriteAsync(result);
         }
     }

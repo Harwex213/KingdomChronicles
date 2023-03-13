@@ -4,6 +4,7 @@ using KingdomChronicles.WebApi.Middleware.Exceptions;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddAutoMapper(typeof(KingdomChronicles.Services.DTOs.Automapper).Assembly);
 builder.Services.AddServices();
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddSwaggerGen(o =>

@@ -13,3 +13,11 @@ internal class DuplicateLoginException : BadRequestException
     {
     }
 }
+
+internal class PasswordAndRepeatedPasswordNotEqualsException : BadRequestException
+{
+    public PasswordAndRepeatedPasswordNotEqualsException() 
+        : base (ExceptionMessages.BadRequestMessages.PasswordAndRepeatedPasswordNotEquals)
+    {
+    }
+}

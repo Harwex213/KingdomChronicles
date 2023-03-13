@@ -1,6 +1,6 @@
 ﻿namespace KingdomChronicles.WebApi.Constants;
 
-public static class Routes
+public static class ControllersRoutes
 {
     public const string Authentication = "auth";
 }
