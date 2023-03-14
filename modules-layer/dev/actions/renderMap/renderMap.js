@@ -1,5 +1,4 @@
 import { MapRenderer, MapRendererConfig, spriteSheetFrameTypes } from "map-renderer";
-import spriteSheetAtlasData from "../../../dev-dist/assets/spritesheet.json";
 import { renderDevBioms } from "./renderDevBioms.js";
 import { changeableConfig } from "../changeableConfig.js";
 
@@ -9,7 +8,7 @@ mapRendererConfig.app = {
     containerId: "container",
 };
 mapRendererConfig.spriteSheet = {
-    atlasData: spriteSheetAtlasData,
+    path: "assets/spritesheet.json",
     textureNames: {
         [spriteSheetFrameTypes.WATER]: "water",
         [spriteSheetFrameTypes.FLATLAND]: "plainland",

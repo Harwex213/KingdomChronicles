@@ -4,8 +4,8 @@
   "main": "src/index.js",
   "type": "module",
   "dependencies": {
-    "pixi-viewport": "^4.38.0",
-    "pixi.js": "^6.5.9",
+    "pixi-viewport": "^5.0.1",
+    "pixi.js": "^7.1.4",
     "models": "file:../models"
   }
 }

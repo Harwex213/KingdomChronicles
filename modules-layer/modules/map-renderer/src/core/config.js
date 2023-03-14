@@ -11,7 +11,7 @@ export class MapRendererConfig {
         maxScale: null,
     };
     spriteSheet = {
-        atlasData: null,
+        path: null,
         textureNames: {
             [spriteSheetFrameTypes.WATER]: null,
             [spriteSheetFrameTypes.FLATLAND]: null,
