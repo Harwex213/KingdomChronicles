@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KingdomChronicles.WebApi", "KingdomChronicles.WebApi\KingdomChronicles.WebApi.csproj", "{889AF06B-B418-43BC-9104-93680F373672}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KingdomChronicles.Services", "KingdomChronicles.Services\KingdomChronicles.Services.csproj", "{CDDF50D2-0650-4F1B-8709-270C32078294}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KingdomChronicles.DataAccess", "KingdomChronicles.DataAccess\KingdomChronicles.DataAccess.csproj", "{5A23E04B-947F-4C35-89B2-B4AF852C3471}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{889AF06B-B418-43BC-9104-93680F373672}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{889AF06B-B418-43BC-9104-93680F373672}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{889AF06B-B418-43BC-9104-93680F373672}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{889AF06B-B418-43BC-9104-93680F373672}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDDF50D2-0650-4F1B-8709-270C32078294}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDDF50D2-0650-4F1B-8709-270C32078294}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDDF50D2-0650-4F1B-8709-270C32078294}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDDF50D2-0650-4F1B-8709-270C32078294}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A23E04B-947F-4C35-89B2-B4AF852C3471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A23E04B-947F-4C35-89B2-B4AF852C3471}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A23E04B-947F-4C35-89B2-B4AF852C3471}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A23E04B-947F-4C35-89B2-B4AF852C3471}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
