@@ -89,20 +89,27 @@ export class MapRenderer {
         const spriteSheet = await this._spriteSheetLoadPromise;
 
         this._mapContainer = new Container();
-        const { matrix } = mapToRender;
+        const { matrix, regions } = mapToRender;
 
         for (const tilesRow of matrix) {
             for (const mapTile of tilesRow) {
-                const tile = this._spriteCreator.mapFromMapTile(mapTile, spriteSheet);
+                const tile = this._spriteCreator.fromMapTile(mapTile, spriteSheet);
+                if (mapTile.partRegion !== "none" && regions[mapTile.partRegion.regionIndex].tint) {
+                    tile.tint = regions[mapTile.partRegion.regionIndex].tint;
+                }
                 this._mapContainer.addChild(tile);
             }
         }
 
-        const renderMapSizes = { width: this._mapContainer.width, height: this._mapContainer.height };
-        this._resizeViewportToMapSizes(renderMapSizes);
-        this._viewport.moveCenter(renderMapSizes.width / 2, renderMapSizes.height / 2);
+        this._positionViewport();
 
         this._viewport.addChild(this._mapContainer);
+    }
+    
+    _positionViewport() {
+        const rendererMapSizes = { width: this._mapContainer.width, height: this._mapContainer.height };
+        this._resizeViewportToMapSizes(rendererMapSizes);
+        this._viewport.moveCenter(rendererMapSizes.width / 2, rendererMapSizes.height / 2);
     }
 
     _resizeViewportToMapSizes(mapSizes) {

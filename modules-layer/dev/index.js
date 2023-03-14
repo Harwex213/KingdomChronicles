@@ -55,13 +55,23 @@ seedRandomInput.onChange(async (value) => {
 });
 guiManager.addGui(seedRandomInput);
 
-const toRenderDevBiomsCheckbox = new Checkbox({
-    placeholder: "Render dev bioms",
+const toDevBiomsRenderCheckbox = new Checkbox({
+    placeholder: "Develop bioms render",
 })
-toRenderDevBiomsCheckbox.onChange(async (value) => {
-    changeableConfig.renderDevBioms = value;
+toDevBiomsRenderCheckbox.onChange(async (value) => {
+    changeableConfig.devBiomsRender = value;
     await action();
 })
-guiManager.addGui(toRenderDevBiomsCheckbox);
+guiManager.addGui(toDevBiomsRenderCheckbox);
+
+
+const toDevRegionsRenderCheckbox = new Checkbox({
+    placeholder: "Develop regions render",
+})
+toDevRegionsRenderCheckbox.onChange(async (value) => {
+    changeableConfig.devRegionsRender = value;
+    await action();
+})
+guiManager.addGui(toDevRegionsRenderCheckbox);
 
 action();

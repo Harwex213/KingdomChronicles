@@ -1,4 +1,5 @@
-export const spriteSheetFrameTypes = {
+export const spritesheetTextureTypes = {
+    EMPTY: "empty",
     WATER: "water",
     FLATLAND: "flatland",
     GRASSLAND: "grassland",
