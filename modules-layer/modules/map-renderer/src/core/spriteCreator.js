@@ -1,29 +1,29 @@
 import { Sprite } from "pixi.js";
 import { areaTypes, biomTypes, tileTypes } from "models/map";
-import { spriteSheetFrameTypes } from "../constants.js";
+import { spritesheetTextureTypes } from "../constants.js";
 
-const areaTypeToSpriteSheetFrameType = {
+const areaTypeToSpritesheetTextureType = {
     [areaTypes.NONE]: {
-        [biomTypes.DESERT]: spriteSheetFrameTypes.DESERT,
-        [biomTypes.FLATLAND]: spriteSheetFrameTypes.FLATLAND,
-        [biomTypes.GRASSLAND]: spriteSheetFrameTypes.GRASSLAND,
-        [biomTypes.MOUNTAIN]: spriteSheetFrameTypes.MOUNTAIN,
-        [biomTypes.TUNDRA]: spriteSheetFrameTypes.TUNDRA,
+        [biomTypes.DESERT]: spritesheetTextureTypes.DESERT,
+        [biomTypes.FLATLAND]: spritesheetTextureTypes.FLATLAND,
+        [biomTypes.GRASSLAND]: spritesheetTextureTypes.GRASSLAND,
+        [biomTypes.MOUNTAIN]: spritesheetTextureTypes.MOUNTAIN,
+        [biomTypes.TUNDRA]: spritesheetTextureTypes.TUNDRA,
     },
     [areaTypes.HILLS]: {
-        [biomTypes.FLATLAND]: spriteSheetFrameTypes.HILLS_FLATLAND,
-        [biomTypes.GRASSLAND]: spriteSheetFrameTypes.HILLS_GRASSLAND,
-        [biomTypes.DESERT]: spriteSheetFrameTypes.HILLS_DESERT,
-        [biomTypes.TUNDRA]: spriteSheetFrameTypes.HILLS_TUNDRA,
+        [biomTypes.FLATLAND]: spritesheetTextureTypes.HILLS_FLATLAND,
+        [biomTypes.GRASSLAND]: spritesheetTextureTypes.HILLS_GRASSLAND,
+        [biomTypes.DESERT]: spritesheetTextureTypes.HILLS_DESERT,
+        [biomTypes.TUNDRA]: spritesheetTextureTypes.HILLS_TUNDRA,
     },
     [areaTypes.FOREST]: {
-        [biomTypes.GRASSLAND]: spriteSheetFrameTypes.FOREST_GRASSLAND,
-        [biomTypes.FLATLAND]: spriteSheetFrameTypes.FOREST_FLATLAND,
-        [biomTypes.TUNDRA]: spriteSheetFrameTypes.FOREST_TUNDRA,
+        [biomTypes.GRASSLAND]: spritesheetTextureTypes.FOREST_GRASSLAND,
+        [biomTypes.FLATLAND]: spritesheetTextureTypes.FOREST_FLATLAND,
+        [biomTypes.TUNDRA]: spritesheetTextureTypes.FOREST_TUNDRA,
     },
     [areaTypes.JUNGLE]: {
-        [biomTypes.GRASSLAND]: spriteSheetFrameTypes.JUNGLE_GRASSLAND,
-        [biomTypes.FLATLAND]: spriteSheetFrameTypes.JUNGLE_FLATLAND,
+        [biomTypes.GRASSLAND]: spritesheetTextureTypes.JUNGLE_GRASSLAND,
+        [biomTypes.FLATLAND]: spritesheetTextureTypes.JUNGLE_FLATLAND,
     },
 };
 
@@ -33,7 +33,7 @@ export class SpriteCreator {
         this._tileDimensions = tileDimensions;
     }
 
-    mapFromMapTile(mapTile, mapBiomsSpriteSheet) {
+    fromMapTile(mapTile, mapBiomsSpriteSheet) {
         const textureName = this._getTextureName(this._textureNames, mapTile);
         const tile = new Sprite(mapBiomsSpriteSheet.textures[textureName]);
 
@@ -44,12 +44,15 @@ export class SpriteCreator {
         return tile;
     }
 
-    _getTextureName = (frameNames, mapTile) => {
+    _getTextureName = (textureNames, mapTile) => {
+        if (mapTile.tileType === null) {
+            return textureNames[spritesheetTextureTypes.EMPTY];
+        }
         if (mapTile.tileType === tileTypes.LAND && mapTile.biomType !== biomTypes.NONE) {
-            const frameType = areaTypeToSpriteSheetFrameType[mapTile.areaType][mapTile.biomType];
-            return frameNames[frameType];
+            const textureName = areaTypeToSpritesheetTextureType[mapTile.areaType][mapTile.biomType];
+            return textureNames[textureName];
         }
 
-        return frameNames[spriteSheetFrameTypes.WATER];
+        return textureNames[spritesheetTextureTypes.WATER];
     }
 }

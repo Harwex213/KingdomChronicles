@@ -1,5 +1,4 @@
-import { MapRenderer, MapRendererConfig, spriteSheetFrameTypes } from "map-renderer";
-import spriteSheetAtlasData from "../../../dev-dist/assets/spritesheet.json";
+import { MapRenderer, MapRendererConfig, spritesheetTextureTypes } from "map-renderer";
 import { renderDevBioms } from "./renderDevBioms.js";
 import { changeableConfig } from "../changeableConfig.js";
 
@@ -9,23 +8,24 @@ mapRendererConfig.app = {
     containerId: "container",
 };
 mapRendererConfig.spriteSheet = {
-    atlasData: spriteSheetAtlasData,
+    path: "assets/spritesheet.json",
     textureNames: {
-        [spriteSheetFrameTypes.WATER]: "water",
-        [spriteSheetFrameTypes.FLATLAND]: "plainland",
-        [spriteSheetFrameTypes.GRASSLAND]: "grassland",
-        [spriteSheetFrameTypes.DESERT]: "desert",
-        [spriteSheetFrameTypes.MOUNTAIN]: "mountain",
-        [spriteSheetFrameTypes.TUNDRA]: "tundra",
-        [spriteSheetFrameTypes.FOREST_GRASSLAND]: "forest_grassland",
-        [spriteSheetFrameTypes.FOREST_FLATLAND]: "forest_plainland",
-        [spriteSheetFrameTypes.FOREST_TUNDRA]: "forest_tundra",
-        [spriteSheetFrameTypes.HILLS_DESERT]: "hills_desert",
-        [spriteSheetFrameTypes.HILLS_GRASSLAND]: "hills_grassland",
-        [spriteSheetFrameTypes.HILLS_FLATLAND]: "hills_plainland",
-        [spriteSheetFrameTypes.HILLS_TUNDRA]: "hills_tundra",
-        [spriteSheetFrameTypes.JUNGLE_GRASSLAND]: "jungle_grassland",
-        [spriteSheetFrameTypes.JUNGLE_FLATLAND]: "jungle_plainland",
+        [spritesheetTextureTypes.EMPTY]: "empty.png",
+        [spritesheetTextureTypes.WATER]: "water.png",
+        [spritesheetTextureTypes.FLATLAND]: "plainland.png",
+        [spritesheetTextureTypes.GRASSLAND]: "grassland.png",
+        [spritesheetTextureTypes.DESERT]: "desert.png",
+        [spritesheetTextureTypes.MOUNTAIN]: "mountain.png",
+        [spritesheetTextureTypes.TUNDRA]: "tundra.png",
+        [spritesheetTextureTypes.FOREST_GRASSLAND]: "forest_grassland.png",
+        [spritesheetTextureTypes.FOREST_FLATLAND]: "forest_plainland.png",
+        [spritesheetTextureTypes.FOREST_TUNDRA]: "forest_tundra.png",
+        [spritesheetTextureTypes.HILLS_DESERT]: "hills_desert.png",
+        [spritesheetTextureTypes.HILLS_GRASSLAND]: "hills_grassland.png",
+        [spritesheetTextureTypes.HILLS_FLATLAND]: "hills_plainland.png",
+        [spritesheetTextureTypes.HILLS_TUNDRA]: "hills_tundra.png",
+        [spritesheetTextureTypes.JUNGLE_GRASSLAND]: "jungle_grassland.png",
+        [spritesheetTextureTypes.JUNGLE_FLATLAND]: "jungle_plainland.png",
     }
 };
 mapRendererConfig.viewport = {
@@ -36,8 +36,12 @@ mapRendererConfig.viewport = {
 const mapRenderer = new MapRenderer(mapRendererConfig);
 
 export const renderMapAction = async (map) => {
-    if (changeableConfig.renderDevBioms) {
+    if (changeableConfig.devBiomsRender) {
         renderDevBioms(map);
+    }
+    if (changeableConfig.devRegionsRender) {
+        map.matrix.forEach(row => row.forEach(mapTile => mapTile.tileType = null));
+        map.regions.forEach(region => region.tint = Math.random() * 0xFFFFFF);
     }
     await mapRenderer.render(map);
 }

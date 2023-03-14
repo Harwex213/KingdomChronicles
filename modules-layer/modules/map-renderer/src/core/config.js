@@ -1,4 +1,4 @@
-import { spriteSheetFrameTypes } from "../constants.js";
+import { spritesheetTextureTypes } from "../constants.js";
 
 export class MapRendererConfig {
     tileSize = null;
@@ -11,23 +11,23 @@ export class MapRendererConfig {
         maxScale: null,
     };
     spriteSheet = {
-        atlasData: null,
+        path: null,
         textureNames: {
-            [spriteSheetFrameTypes.WATER]: null,
-            [spriteSheetFrameTypes.FLATLAND]: null,
-            [spriteSheetFrameTypes.GRASSLAND]: null,
-            [spriteSheetFrameTypes.DESERT]: null,
-            [spriteSheetFrameTypes.MOUNTAIN]: null,
-            [spriteSheetFrameTypes.TUNDRA]: null,
-            [spriteSheetFrameTypes.FOREST_GRASSLAND]: null,
-            [spriteSheetFrameTypes.FOREST_FLATLAND]: null,
-            [spriteSheetFrameTypes.FOREST_TUNDRA]: null,
-            [spriteSheetFrameTypes.HILLS_DESERT]: null,
-            [spriteSheetFrameTypes.HILLS_GRASSLAND]: null,
-            [spriteSheetFrameTypes.HILLS_FLATLAND]: null,
-            [spriteSheetFrameTypes.HILLS_TUNDRA]: null,
-            [spriteSheetFrameTypes.JUNGLE_GRASSLAND]: null,
-            [spriteSheetFrameTypes.JUNGLE_FLATLAND]: null,
+            [spritesheetTextureTypes.WATER]: null,
+            [spritesheetTextureTypes.FLATLAND]: null,
+            [spritesheetTextureTypes.GRASSLAND]: null,
+            [spritesheetTextureTypes.DESERT]: null,
+            [spritesheetTextureTypes.MOUNTAIN]: null,
+            [spritesheetTextureTypes.TUNDRA]: null,
+            [spritesheetTextureTypes.FOREST_GRASSLAND]: null,
+            [spritesheetTextureTypes.FOREST_FLATLAND]: null,
+            [spritesheetTextureTypes.FOREST_TUNDRA]: null,
+            [spritesheetTextureTypes.HILLS_DESERT]: null,
+            [spritesheetTextureTypes.HILLS_GRASSLAND]: null,
+            [spritesheetTextureTypes.HILLS_FLATLAND]: null,
+            [spritesheetTextureTypes.HILLS_TUNDRA]: null,
+            [spritesheetTextureTypes.JUNGLE_GRASSLAND]: null,
+            [spritesheetTextureTypes.JUNGLE_FLATLAND]: null,
         }
     };
 }

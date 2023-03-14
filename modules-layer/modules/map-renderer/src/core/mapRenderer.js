@@ -1,4 +1,4 @@
-import { Application, Container, BaseTexture, Spritesheet } from "pixi.js";
+import { Application, Container, Assets } from "pixi.js";
 import { Viewport } from "pixi-viewport";
 import { oddTileOffsetPercent } from "../constants.js";
 import { ElementResizeObserver } from "../utils/elementResizeObserver.js";
@@ -11,7 +11,6 @@ export class MapRenderer {
     _viewport;
     _mapContainer;
     _tileDimensions;
-    _spriteSheet;
     _spriteSheetLoadPromise;
     _spriteCreator;
 
@@ -40,7 +39,7 @@ export class MapRenderer {
 
         this._viewport = new Viewport({
             passiveWheel: false,
-            interaction: app.renderer.plugins.interaction,
+            events: app.renderer.events,
         });
 
         app.stage.addChild(this._viewport);
@@ -75,13 +74,9 @@ export class MapRenderer {
     }
 
     _loadSpriteSheet() {
-        const { atlasData } = this._config.spriteSheet;
+        const { path } = this._config.spriteSheet;
 
-        this._spriteSheet = new Spritesheet(
-            BaseTexture.from(atlasData.meta.image),
-            atlasData
-        );
-        this._spriteSheetLoadPromise = this._spriteSheet.parse();
+        this._spriteSheetLoadPromise = Assets.load(path);
     }
 
     _initSpriteCreator() {
@@ -91,23 +86,30 @@ export class MapRenderer {
     async render(mapToRender) {
         this.clean();
 
-        await this._spriteSheetLoadPromise;
+        const spriteSheet = await this._spriteSheetLoadPromise;
 
         this._mapContainer = new Container();
-        const { matrix } = mapToRender;
+        const { matrix, regions } = mapToRender;
 
         for (const tilesRow of matrix) {
             for (const mapTile of tilesRow) {
-                const tile = this._spriteCreator.mapFromMapTile(mapTile, this._spriteSheet);
+                const tile = this._spriteCreator.fromMapTile(mapTile, spriteSheet);
+                if (mapTile.partRegion !== "none" && regions[mapTile.partRegion.regionIndex].tint) {
+                    tile.tint = regions[mapTile.partRegion.regionIndex].tint;
+                }
                 this._mapContainer.addChild(tile);
             }
         }
 
-        const renderMapSizes = { width: this._mapContainer.width, height: this._mapContainer.height };
-        this._resizeViewportToMapSizes(renderMapSizes);
-        this._viewport.moveCenter(renderMapSizes.width / 2, renderMapSizes.height / 2);
+        this._positionViewport();
 
         this._viewport.addChild(this._mapContainer);
+    }
+    
+    _positionViewport() {
+        const rendererMapSizes = { width: this._mapContainer.width, height: this._mapContainer.height };
+        this._resizeViewportToMapSizes(rendererMapSizes);
+        this._viewport.moveCenter(rendererMapSizes.width / 2, rendererMapSizes.height / 2);
     }
 
     _resizeViewportToMapSizes(mapSizes) {
