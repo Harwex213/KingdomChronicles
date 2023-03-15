@@ -15,7 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\KingdomChronicles.Common\KingdomChronicles.Common.csproj" />
       <ProjectReference Include="..\KingdomChronicles.DataAccess\KingdomChronicles.DataAccess.csproj" />
     </ItemGroup>
 
