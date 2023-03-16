@@ -12,7 +12,7 @@ public class ShouldBeNotAuthorizedAttribute : Attribute, IAsyncAuthorizationFilt
         IDbSession dbSession = context.HttpContext.RequestServices.GetService<IDbSession>()!;
 
         bool isLoggedIn = await dbSession.IsLoggedIn();
-        if (isLoggedIn == false)
+        if (isLoggedIn)
         {
             context.Result = new BadRequestObjectResult(new DTOs.ErrorDto
             {

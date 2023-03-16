@@ -6,13 +6,21 @@ namespace KingdomChronicles.WebApi;
 
 public static class ProgramHelper
 {
-    public static void AddServices(this IServiceCollection services)
+    public static void AddServices(this IServiceCollection services, IWebHostEnvironment environment)
     {
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddSingleton<Middleware.Exceptions.IExceptionAnalyzer, Middleware.Exceptions.ExceptionAnalyzer>();
 
         // Services.Internal
-        services.AddScoped<IWebCookieService, WebCookieService>();
+        if (environment.IsProduction())
+        {
+            services.AddScoped<IWebCookieService, WebCookieService>();
+        }
+        
+        if (environment.IsDevelopment())
+        {
+            services.AddScoped<IWebCookieService, DevWebCookieService>();
+        }
         
         // Services.Auth
         services.AddScoped<IDbSession, DbSession>();
@@ -35,5 +43,24 @@ public static class ProgramHelper
         using var scope = serviceProvider.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<DataAccess.AppDbContext>();    
         dbContext.Database.Migrate();
+    }
+
+    public static void UseCors(this WebApplication app)
+    {
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseCors(b =>
+            {
+                b.SetIsOriginAllowed(_ => true);
+                b.AllowAnyHeader();
+                b.AllowAnyMethod();
+                b.AllowCredentials();
+            });
+        }
+
+        if (app.Environment.IsProduction())
+        {
+            // TODO: set production cors
+        }
     }
 }

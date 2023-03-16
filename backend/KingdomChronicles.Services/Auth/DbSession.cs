@@ -22,7 +22,7 @@ public class DbSession : IDbSession
         _webCookieService.AddSecure(AuthConstants.SessionCookieName, sessionId.ToString(), AuthConstants.SessionDaysLifetime);
     }
     
-    private async Task<Session> Create()
+    private async Task<Session> Create(int? userId = null)
     {
         var createdSession = new Session
         {
@@ -30,6 +30,10 @@ public class DbSession : IDbSession
             Created = DateTime.UtcNow,
             LastAccessed = DateTime.UtcNow
         };
+        if (userId.HasValue)
+        {
+            createdSession.UserId = userId;
+        }
         await _appDbContext.Sessions.AddAsync(createdSession);
         await _appDbContext.SaveChangesAsync();
         return createdSession;
@@ -58,10 +62,8 @@ public class DbSession : IDbSession
 
     public async Task SetUserId(int userId)
     {
-        Session session = await Get();
-        session.UserId = userId;
-        session.Id = Guid.NewGuid();
-        await _appDbContext.SaveChangesAsync();
+        Session session = await Create(userId);
+        _session = session;
         StoreSession(session.Id);
     }
 

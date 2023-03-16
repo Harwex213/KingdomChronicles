@@ -1,11 +1,18 @@
 using KingdomChronicles.WebApi;
 using KingdomChronicles.WebApi.Middleware.Exceptions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+
+JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+{
+    ContractResolver = new CamelCasePropertyNamesContractResolver()
+};
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(KingdomChronicles.Services.DTOs.Automapper).Assembly);
-builder.Services.AddServices();
+builder.Services.AddServices(builder.Environment);
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddSwaggerGen(o =>
 {
@@ -21,6 +28,7 @@ if (app.Environment.IsProduction())
 
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseCors();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.MapControllers();
 

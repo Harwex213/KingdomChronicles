@@ -1,0 +1,16 @@
+const API_URL = process.env.REACT_APP_API_URL;
+
+const API_CONTROLLERS = {
+    AUTHENTICATION: "auth",
+};
+
+const API_ROUTES = {
+    AUTHENTICATION: {
+        LOGIN: `${API_CONTROLLERS.AUTHENTICATION}/login`,
+        LOGOUT: `${API_CONTROLLERS.AUTHENTICATION}/logout`,
+        REGISTER: `${API_CONTROLLERS.AUTHENTICATION}/register`,
+        DESCRIBE: `${API_CONTROLLERS.AUTHENTICATION}/describe`,
+    },
+};
+
+export { API_URL, API_ROUTES };

@@ -1,0 +1,10 @@
+{
+  "stateRouters": {
+    "apiStatus": {
+      "header": "Service is unavailable now, please try again"
+    }
+  },
+  "components": {
+    "siteLoading": "Loading..."
+  }
+}
