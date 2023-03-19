@@ -12,9 +12,7 @@ export const waterBalanceTypes = {
 
 export const tileTypes = {
     SEA: "sea",
-    LAKE: "lake",
     LAND: "land",
-    COAST: "coast",
 }
 
 export const biomTypes = {

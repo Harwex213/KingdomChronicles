@@ -4,8 +4,9 @@
   "main": "src/index.js",
   "type": "module",
   "dependencies": {
+    "models": "file:../models",
+    "poisson-disk-sampling": "^2.3.1",
     "seedrandom": "^3.0.5",
-    "simplex-noise": "^4.0.1",
-    "models": "file:../models"
+    "simplex-noise": "^4.0.1"
   }
 }

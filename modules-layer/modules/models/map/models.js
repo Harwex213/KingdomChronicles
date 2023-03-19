@@ -9,24 +9,25 @@ export class MapTile {
         this.biomType = biomTypes.NONE;
         this.areaType = areaTypes.NONE;
         this.neighboringTiles = neighboringTiles;
+        this.neighboringTilesRegion = [];
         this.partRegion = "none";
     }
 
-    addRegionToMapTile(region) {
-        this.partRegion = { regionIndex: region.index };
+    addRegionToMapTile(region, index) {
+        this.partRegion = { regionIndex: index };
         region.tilesRegion.push([this.row, this.col]);
     }
 }
 
 export class MapRegion {
-    constructor(regionIndex) {
+    constructor() {
         this.tilesRegion = [];
-        this.index = regionIndex;
+        this.indicesNeighboringRegions = [];
     }
 }
 
 export class Map {
-    constructor(width, height, regionsAmount) {
+    constructor(width, height) {
         this.width = Math.max(width, 0);
         this.height = Math.max(height, 0);
 
@@ -45,7 +46,6 @@ export class Map {
                 return new MapTile(row, col, copyDiff)
             })
         });
-        this.regions = Array.from(Array(regionsAmount), (_, regionIndex) => new MapRegion(regionIndex));
-        this.lands = [];
+        this.regions = [];
     }
 }
