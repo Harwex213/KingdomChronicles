@@ -20,4 +20,9 @@
       <ProjectReference Include="..\KingdomChronicles.Services\KingdomChronicles.Services.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\flag\emblem" />
+      <Folder Include="wwwroot\flag\foreground" />
+    </ItemGroup>
+
 </Project>

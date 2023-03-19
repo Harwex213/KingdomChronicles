@@ -1,0 +1,16 @@
+.container {
+    padding: 0 50px;
+    display: flex;
+    height: 100%;
+}
+
+.menu {
+    width: 15%;
+    height: 100%;
+}
+
+.page {
+    width: 85%;
+    height: 100%;
+    padding: 50px 100px;
+}

@@ -1,5 +1,5 @@
-﻿using KingdomChronicles.Services.Internal;
-using KingdomChronicles.Services.Auth;
+﻿using KingdomChronicles.Services.Auth;
+using KingdomChronicles.Services.UserProfile;
 using Microsoft.EntityFrameworkCore;
 
 namespace KingdomChronicles.WebApi;
@@ -14,18 +14,24 @@ public static class ProgramHelper
         // Services.Internal
         if (environment.IsProduction())
         {
-            services.AddScoped<IWebCookieService, WebCookieService>();
+            services.AddScoped<Services.Internal.IWebCookieService, Services.Internal.WebCookieService>();
         }
         
         if (environment.IsDevelopment())
         {
-            services.AddScoped<IWebCookieService, DevWebCookieService>();
+            services.AddScoped<Services.Internal.IWebCookieService, Services.Internal.DevWebCookieService>();
         }
         
         // Services.Auth
         services.AddScoped<IDbSession, DbSession>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
+        
+        // Services.UserProfile
+        services.AddScoped<IUserProfileService, UserProfileService>();
+        
+        // Services.Title
+        services.AddScoped<Services.Title.ITitleService, Services.Title.TitleService>();
     }
 
     public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

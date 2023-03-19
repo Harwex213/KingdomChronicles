@@ -1,12 +1,12 @@
-import { ApiStatusStateRouter } from "./stateRouters/ApiStatus";
-import { UserStateRouter } from "./stateRouters/User";
+import { TitlesPreLoader } from "./loaders/TitlesPreLoader";
+import { UserPreLoader } from "./loaders/UserPreLoader";
 import "./reset.css";
 
 const App = () => {
     return (
-        <ApiStatusStateRouter>
-            <UserStateRouter />
-        </ApiStatusStateRouter>
+        <TitlesPreLoader>
+            <UserPreLoader />
+        </TitlesPreLoader>
     );
 };
 

@@ -47,14 +47,28 @@ public class AuthService : IAuthService
         await AuthenticateUser(user.Id);
     }
     
-    public async Task CreateUser(User user)
+    public async Task CreateUser(UserEntity userEntity)
     {
-        user.Salt = Guid.NewGuid().ToString();
-        user.PasswordHash = _passwordHasher.HashPassword(user.PasswordHash, user.Salt);
+        userEntity.Salt = Guid.NewGuid().ToString();
+        userEntity.PasswordHash = _passwordHasher.HashPassword(userEntity.PasswordHash, userEntity.Salt);
 
-        await _appDbContext.Users.AddAsync(user);
+        await _appDbContext.Users.AddAsync(userEntity);
         await _appDbContext.SaveChangesAsync();
-        await AuthenticateUser(user.Id);
+        await AuthenticateUser(userEntity.Id);
+    }
+
+    private async Task CreateUserProfile(UserEntity userEntity)
+    {
+        var userProfileEntity = new UserProfileEntity
+        {
+            UserId = userEntity.Id,
+            Name = userEntity.Username,
+            TitleId = TitleEntity.DefaultTitleId,
+            FlagBackgroundColor = Internal.Utils.GetRandomHexColor()
+        };
+        
+        await _appDbContext.UserProfiles.AddAsync(userProfileEntity);
+        await _appDbContext.SaveChangesAsync();
     }
 
     public async Task Register(RegisterDto registerDto)
@@ -64,12 +78,13 @@ public class AuthService : IAuthService
             throw new PasswordAndRepeatedPasswordNotEqualsException();
         }
 
-        var user = _mapper.Map<User>(registerDto);
+        var user = _mapper.Map<UserEntity>(registerDto);
         
         using (var scope = ServiceHelper.CreateTransactionScope())
         {
             await ValidateUsername(user.Username);
             await CreateUser(user);
+            await CreateUserProfile(user);
             scope.Complete();
         }
     }

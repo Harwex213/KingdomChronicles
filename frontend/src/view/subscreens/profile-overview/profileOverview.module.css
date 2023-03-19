@@ -1,0 +1,21 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.info {
+
+}
+
+.flag {
+
+}
+
+.flagImage {
+    width: 250px;
+    height: 325px;
+}
+
+.flagDescription {
+    text-align: center;
+}

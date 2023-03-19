@@ -4,7 +4,7 @@ namespace KingdomChronicles.Services.Auth;
 
 public interface IDbSession
 {
-    Task<Session> Get();
+    Task<SessionEntity> Get();
     
     Task Destroy();
     

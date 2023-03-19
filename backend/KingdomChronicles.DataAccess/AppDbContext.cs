@@ -13,8 +13,10 @@ public class AppDbContext : DbContext
     {
     }
 
-    public DbSet<Session> Sessions { get; set; } = null!;
-    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<UserProfileEntity> UserProfiles { get; set; }
+    public DbSet<TitleEntity> Titles { get; set; }
+    public DbSet<SessionEntity> Sessions { get; set; }
+    public DbSet<UserEntity> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -32,12 +34,15 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         
-        ConfigureSessionEntity(modelBuilder.Entity<Session>());
-        ConfigureUserEntity(modelBuilder.Entity<User>());
+        ConfigureSessionEntity(modelBuilder.Entity<SessionEntity>());
+        ConfigureUserEntity(modelBuilder.Entity<UserEntity>());
+        ConfigureTitleEntity(modelBuilder.Entity<TitleEntity>());
+        ConfigureUserProfileEntity(modelBuilder.Entity<UserProfileEntity>());
     }
 
-    private static void ConfigureSessionEntity(EntityTypeBuilder<Session> typeBuilder)
+    private static void ConfigureSessionEntity(EntityTypeBuilder<SessionEntity> typeBuilder)
     {
+        // Primary key
         typeBuilder.HasKey(s => s.Id);
         
         // UserId
@@ -47,7 +52,7 @@ public class AppDbContext : DbContext
             .HasForeignKey(s => s.UserId);
     }
     
-    private static void ConfigureUserEntity(EntityTypeBuilder<User> typeBuilder)
+    private static void ConfigureUserEntity(EntityTypeBuilder<UserEntity> typeBuilder)
     {
         // Primary key
         typeBuilder.HasKey(u => u.Id);
@@ -74,5 +79,51 @@ public class AppDbContext : DbContext
             .Property(u => u.Salt)
             .HasMaxLength(UserConstraint.SaltMaxLength)
             .IsRequired();
+    }
+
+    private static void ConfigureTitleEntity(EntityTypeBuilder<TitleEntity> typeBuilder)
+    {
+        // Primary key
+        typeBuilder.HasKey(t => t.Id);
+        
+        // Name
+        typeBuilder
+            .Property(t => t.Name)
+            .HasMaxLength(TitleConstraint.NameMaxLength)
+            .IsRequired();
+
+        // Initial Data
+        typeBuilder.HasData(TitleEntity.InitialData);
+    }
+    
+
+    private static void ConfigureUserProfileEntity(EntityTypeBuilder<UserProfileEntity> typeBuilder)
+    {
+        // Primary key
+        typeBuilder.HasKey(p => p.UserId);
+        
+        // UserId
+        typeBuilder
+            .HasOne(p => p.UserEntity)
+            .WithOne(u => u.UserProfileEntity)
+            .HasForeignKey<UserProfileEntity>(p => p.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Name
+        typeBuilder
+            .Property(p => p.Name)
+            .HasMaxLength(UserProfileConstraint.NameMaxLength)
+            .IsRequired();
+        
+        // Motto
+        typeBuilder
+            .Property(p => p.Motto)
+            .HasMaxLength(UserProfileConstraint.MottoMaxLength);
+        
+        // Title
+        typeBuilder
+            .HasOne(p => p.TitleEntity)
+            .WithMany(t => t.Profiles)
+            .HasForeignKey(p => p.TitleId);
     }
 }

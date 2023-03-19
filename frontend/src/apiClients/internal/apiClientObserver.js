@@ -2,14 +2,12 @@ const EVENT_NAMES = {
     BEFORE_REQUEST: "BEFORE_REQUEST",
     AFTER_RESPONSE: "AFTER_RESPONSE",
     NOT_AUTHORIZED: "NOT_AUTHORIZED",
-    CONNECTION_ERROR: "CONNECTION_ERROR",
 };
 
 const subscribers = {
     [EVENT_NAMES.BEFORE_REQUEST]: [],
     [EVENT_NAMES.AFTER_RESPONSE]: [],
     [EVENT_NAMES.NOT_AUTHORIZED]: [],
-    [EVENT_NAMES.CONNECTION_ERROR]: [],
 };
 
 const subscribe = (eventName, callback) => {

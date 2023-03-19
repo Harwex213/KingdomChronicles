@@ -1,10 +1,10 @@
 import { AUTH_SERVICE_ACTIONS, AUTH_SERVICE_STATES } from "./meta";
-import { State } from "../state";
+import { State } from "../../models/state";
 import { dispatch } from "../dispatch";
 import { apiClientObserver, apiClients } from "../../apiClients";
-import { models } from "../../store";
+import { User } from "../../models/user";
 
-const userModel = models.user;
+const userModel = new User();
 const { authenticationClient } = apiClients;
 
 const authService = {

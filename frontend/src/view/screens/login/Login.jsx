@@ -1,9 +1,9 @@
 import { Formik } from "formik";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
-import internalization from "../../../common/internalization/forms.json";
+import { TextField } from "../../components/form";
 import { AUTH_SERVICE_ACTIONS, authService } from "../../../services/auth";
-import { TextField } from "../../components/form/Input";
+import internalization from "../../../common/internalization/auth-forms.json";
 import styles from "./login.module.css";
 
 const locale = internalization.login;
@@ -35,6 +35,7 @@ const LoginScreen = () => {
 
     return (
         <div className={styles.screen}>
+            <h1>{locale.header}</h1>
             <Formik
                 initialValues={form.initialValues}
                 validationSchema={form.validationSchema}
@@ -42,10 +43,10 @@ const LoginScreen = () => {
             >
                 {(formik) => (
                     <form onSubmit={formik.handleSubmit}>
-                        <TextField name={form.fields.username} formik={formik}>
+                        <TextField name={form.fields.username} formik={formik} autoFocus>
                             {locale.username.placeholder}
                         </TextField>
-                        <TextField name={form.fields.password} formik={formik} type="password" autoFocus>
+                        <TextField name={form.fields.password} formik={formik} type="password">
                             {locale.password.placeholder}
                         </TextField>
                         <div className={styles.submitButton}>
