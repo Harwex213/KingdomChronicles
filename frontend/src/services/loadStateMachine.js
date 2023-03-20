@@ -11,6 +11,7 @@ export const LOAD_SERVICE_ACTIONS = {
     LOAD: "LOAD",
     FAILURE: "FAILURE",
     SUCCESS: "SUCCESS",
+    RELOAD: "RELOAD",
 };
 
 class LoadStateMachine {
@@ -45,10 +46,10 @@ class LoadStateMachine {
                 [LOAD_SERVICE_ACTIONS.FAILURE]: this.#failureAction,
             },
             [LOAD_SERVICE_STATES.ERROR]: {
-                [LOAD_SERVICE_ACTIONS.LOAD]: this.#loadAction,
+                [LOAD_SERVICE_ACTIONS.RELOAD]: this.#loadAction,
             },
             [LOAD_SERVICE_STATES.LOADED]: {
-                [LOAD_SERVICE_ACTIONS.LOAD]: this.#loadAction,
+                [LOAD_SERVICE_ACTIONS.RELOAD]: this.#loadAction,
             },
         };
     }
@@ -84,6 +85,10 @@ class LoadStateMachine {
 
     load(params) {
         this.#dispatch(LOAD_SERVICE_ACTIONS.LOAD, params);
+    }
+
+    reload(params) {
+        this.#dispatch(LOAD_SERVICE_ACTIONS.RELOAD, params);
     }
 
     get isLoading() {

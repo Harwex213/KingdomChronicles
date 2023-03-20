@@ -1,11 +1,11 @@
 ﻿using KingdomChronicles.Services.DTOs.Common;
-using KingdomChronicles.WebApi.Middleware.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KingdomChronicles.WebApi.Controllers;
 
 [Route(Constants.ControllersRoutes.Title)]
-[ShouldBeAuthorized]
+[Authorize]
 public class TitleController : ControllerBase
 {
     private readonly Services.Title.ITitleService _titleService;

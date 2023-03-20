@@ -20,11 +20,7 @@ authService.transitions = {
                 authService.state.setState(AUTH_SERVICE_STATES.TRY_DESCRIBE);
 
                 const { payload: user } = await authenticationClient.describe();
-                if (user.isLoggedIn) {
-                    authService.dispatch(AUTH_SERVICE_ACTIONS.IS_DESCRIBED, user);
-                } else {
-                    authService.dispatch(AUTH_SERVICE_ACTIONS.IS_NOT_DESCRIBED);
-                }
+                authService.dispatch(AUTH_SERVICE_ACTIONS.IS_DESCRIBED, user);
             } catch (e) {
                 authService.dispatch(AUTH_SERVICE_ACTIONS.IS_NOT_DESCRIBED);
             }

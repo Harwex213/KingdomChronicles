@@ -49,8 +49,10 @@ public class DbSession : IDbSession
         string? sessionString = _webCookieService.Get(AuthConstants.SessionCookieName);
         Guid sessionId = sessionString == null ? Guid.NewGuid() : Guid.Parse(sessionString);
 
-        var foundSession = await _appDbContext.Sessions.FirstOrDefaultAsync(s => s.Id == sessionId 
-            && s.Created.AddDays(AuthConstants.SessionDaysLifetime) > DateTime.UtcNow);
+        var foundSession = await _appDbContext.Sessions
+            .Include(s => s.User)
+            .FirstOrDefaultAsync(s => s.Id == sessionId &&
+                                      s.Created.AddDays(AuthConstants.SessionDaysLifetime) > DateTime.UtcNow);
         if (foundSession == null)
         {
             foundSession = await Create();

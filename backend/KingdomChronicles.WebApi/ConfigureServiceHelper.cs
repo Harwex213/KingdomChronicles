@@ -1,10 +1,11 @@
 ﻿using KingdomChronicles.Services.Auth;
 using KingdomChronicles.Services.UserProfile;
+using KingdomChronicles.WebApi.Middleware;
 using Microsoft.EntityFrameworkCore;
 
 namespace KingdomChronicles.WebApi;
 
-public static class ProgramHelper
+public static class ConfigureServiceHelper
 {
     public static void AddServices(this IServiceCollection services, IWebHostEnvironment environment)
     {
@@ -44,29 +45,11 @@ public static class ProgramHelper
         });
     }
 
-    public static void UpdateDatabaseMigrations(this IServiceProvider serviceProvider)
+    public static void AddCustomAuthentication(this IServiceCollection services)
     {
-        using var scope = serviceProvider.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<DataAccess.AppDbContext>();    
-        dbContext.Database.Migrate();
-    }
-
-    public static void UseCors(this WebApplication app)
-    {
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseCors(b =>
-            {
-                b.SetIsOriginAllowed(_ => true);
-                b.AllowAnyHeader();
-                b.AllowAnyMethod();
-                b.AllowCredentials();
-            });
-        }
-
-        if (app.Environment.IsProduction())
-        {
-            // TODO: set production cors
-        }
+        services.AddOptions<CustomAuthenticationOptions>();
+        services.AddAuthentication(Constants.MiddlewareConstants.AuthenticationScheme)
+            .AddScheme<CustomAuthenticationOptions, CustomAuthenticationHandler>(
+                Constants.MiddlewareConstants.AuthenticationScheme, null);
     }
 }

@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AUTHORIZED_ROUTES } from "../../common/constants/routes";
 import { ProfileScreen } from "../screens/profile/ProfileScreen";
-import { NewGameScreen } from "../screens/new-game/NewGame";
+import { NewGameScreen } from "../screens/new-game/NewGameScreen";
 
 const routes = {
     profile: `/${AUTHORIZED_ROUTES.PROFILE}/*`,

@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { LoginScreen } from "../screens/login/Login";
-import { RegistrationScreen } from "../screens/registration/Registration";
+import { LoginScreen } from "../screens/login/LoginScreen";
+import { RegistrationScreen } from "../screens/registration/RegistrationScreen";
 
 const NotAuthorizedRoutes = () => {
     return (

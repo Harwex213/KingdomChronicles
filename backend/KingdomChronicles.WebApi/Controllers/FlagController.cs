@@ -1,10 +1,10 @@
-﻿using KingdomChronicles.WebApi.Middleware.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KingdomChronicles.WebApi.Controllers;
 
 [Route(Constants.ControllersRoutes.Flag)]
-[ShouldBeAuthorized]
+[Authorize]
 public class FlagController : ControllerBase
 {
     [HttpGet("current-svg-icons")]

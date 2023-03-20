@@ -1,11 +1,11 @@
 ﻿using KingdomChronicles.Services.DTOs.UserProfile;
-using KingdomChronicles.WebApi.Middleware.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KingdomChronicles.WebApi.Controllers;
 
 [Route(Constants.ControllersRoutes.Profile)]
-[ShouldBeAuthorized]
+[Authorize]
 public class UserProfileController : ControllerBase
 {
     private readonly Services.UserProfile.IUserProfileService _userProfileService;

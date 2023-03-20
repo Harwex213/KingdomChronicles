@@ -1,7 +1,8 @@
 ﻿using KingdomChronicles.Services.Auth;
 using KingdomChronicles.Services.DTOs.Auth;
+using KingdomChronicles.Services.Exceptions;
 using KingdomChronicles.WebApi.Middleware;
-using KingdomChronicles.WebApi.Middleware.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KingdomChronicles.WebApi.Controllers;
@@ -19,44 +20,50 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    [ShouldBeNotAuthorized]
     [ModelValidation]
     public async Task<UserDto> Register([FromBody] RegisterDto registerDto)
     {
+        if (HttpContext.User.Identity?.IsAuthenticated == true)
+        {
+            throw new BadRequestException(Constants.MiddlewareConstants.ShouldBeNotAuthorizedMessage);
+        }
+        
         await _authService.Register(registerDto);
         return new UserDto
         {
-            IsLoggedIn = await _dbSession.IsLoggedIn(),
             Username = registerDto.Username
         };
     }
     
     [HttpPost("login")]
-    [ShouldBeNotAuthorized]
     [ModelValidation]
     public async Task<UserDto> Login([FromBody] LoginDto loginDto)
     {
+        if (HttpContext.User.Identity?.IsAuthenticated == true)
+        {
+            throw new BadRequestException(Constants.MiddlewareConstants.ShouldBeNotAuthorizedMessage);
+        }
+        
         await _authService.Login(loginDto);
         return new UserDto
         {
-            IsLoggedIn = await _dbSession.IsLoggedIn(),
             Username = loginDto.Username
         };
     }
     
     [HttpGet("describe")]
+    [Authorize]
     public async Task<UserDto> DescribeUser()
     {
         var session = await _dbSession.Get();
         return new UserDto
         {
-            IsLoggedIn = await _dbSession.IsLoggedIn(),
-            Username = session.User?.Username
+            Username = session.User!.Username
         };
     }
 
     [HttpDelete("logout")]
-    [ShouldBeAuthorized]
+    [Authorize]
     public async Task Logout()
     {
         await _authService.Logout();

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { TextField } from "../../components/form";
 import { AUTH_SERVICE_ACTIONS, authService } from "../../../services/auth";
 import internalization from "../../../common/internalization/auth-forms.json";
-import styles from "./registration.module.css";
+import styles from "./registrationScreen.module.css";
 
 const locale = internalization.registration;
 

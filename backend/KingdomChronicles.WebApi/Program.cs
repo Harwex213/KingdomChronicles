@@ -13,11 +13,13 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(KingdomChronicles.Services.DTOs.Automapper).Assembly);
 builder.Services.AddServices(builder.Environment);
+builder.Services.AddCustomAuthentication();
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddSwaggerGen(o =>
 {
     o.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 });
+builder.Services.AddSignalR();
 
 WebApplication app = builder.Build();
 
@@ -30,6 +32,9 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
+app.UseSignalrHubs();
 
 app.Run();
