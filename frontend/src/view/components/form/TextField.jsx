@@ -1,8 +1,8 @@
 import "./form-styles.css";
 
-const TextField = ({ name, formik, disableErrors = false, children, ...props }) => {
+const TextField = ({ containerClassName, name, formik, disableErrors = false, children, ...props }) => {
     return (
-        <div>
+        <div className={containerClassName}>
             <p>{children}</p>
             <input
                 id={name}

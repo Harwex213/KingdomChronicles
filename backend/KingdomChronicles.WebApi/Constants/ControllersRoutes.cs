@@ -6,9 +6,5 @@ public static class ControllersRoutes
     public const string Profile = "profile";
     public const string Flag = "flag";
     public const string Title = "title";
-}
-
-public static class HubRoutes
-{
-    public const string Game = "game-hub";
+    public const string Game = "game";
 }

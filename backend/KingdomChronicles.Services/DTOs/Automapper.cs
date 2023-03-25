@@ -1,7 +1,9 @@
 ﻿using KingdomChronicles.DataAccess.Entities;
 using KingdomChronicles.Services.DTOs.Auth;
 using KingdomChronicles.Services.DTOs.Common;
+using KingdomChronicles.Services.DTOs.Game;
 using KingdomChronicles.Services.DTOs.UserProfile;
+using KingdomChronicles.Services.Game;
 
 namespace KingdomChronicles.Services.DTOs;
 
@@ -12,6 +14,7 @@ public class Automapper : AutoMapper.Profile
         MapAuthDto();
         MapUserProfileDto();
         MapTitleDto();
+        MapGameDto();
     }
 
     private void MapAuthDto()
@@ -23,7 +26,7 @@ public class Automapper : AutoMapper.Profile
 
     private void MapUserProfileDto()
     {
-        CreateProjection<UserProfileEntity, UserProfileDto>()
+        CreateMap<UserProfileEntity, UserProfileDto>()
             .ForMember(dto => dto.Flag, op => op.MapFrom(u => new UserProfileFlagDto
             {
                 BackgroundColor = u.FlagBackgroundColor,
@@ -36,5 +39,15 @@ public class Automapper : AutoMapper.Profile
     private void MapTitleDto()
     {
         CreateProjection<TitleEntity, TitleDto>();
+    }
+
+    private void MapGameDto()
+    {
+        CreateMap<CreateGameDto, PendingStartGame>();
+        CreateMap<PendingStartGame, PendingStartGameDto>()
+            .ForMember(dto => dto.Players, op => op.MapFrom(
+                e => e.UserProfiles.Select(p => p.Name).ToArray())
+            );
+        CreateMap<PendingStartGame, StartedGame>();
     }
 }

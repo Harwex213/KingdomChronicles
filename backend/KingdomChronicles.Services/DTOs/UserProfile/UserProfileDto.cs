@@ -10,6 +10,7 @@ public class UserProfileFlagDto
 
 public class UserProfileDto
 {
+    public int UserId { get; set; }
     public string Name { get; set; } = null!;
     public string? Motto { get; set; }
     public int? TitleId { get; set; }

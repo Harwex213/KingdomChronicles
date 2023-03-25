@@ -1,6 +1,7 @@
 ﻿using KingdomChronicles.Services.Auth;
 using KingdomChronicles.Services.UserProfile;
 using KingdomChronicles.WebApi.Middleware;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace KingdomChronicles.WebApi;
@@ -51,5 +52,15 @@ public static class ConfigureServiceHelper
         services.AddAuthentication(Constants.MiddlewareConstants.AuthenticationScheme)
             .AddScheme<CustomAuthenticationOptions, CustomAuthenticationHandler>(
                 Constants.MiddlewareConstants.AuthenticationScheme, null);
+    }
+
+    public static void ConfigureSignalR(this IServiceCollection services)
+    {
+        services.AddSignalR(hubOptions =>
+        {
+            hubOptions.AddFilter<Middleware.Exceptions.ExceptionHubFilter>();
+        });
+
+        services.AddSingleton<Middleware.Exceptions.ExceptionHubFilter>();
     }
 }

@@ -1,0 +1,5 @@
+{
+  "required": "Is required",
+  "maxLengthExceeded": "Too long",
+  "minLengthExceeded": "Too short"
+}

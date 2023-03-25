@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen(o =>
 {
     o.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 });
-builder.Services.AddSignalR();
+builder.Services.ConfigureSignalR();
 
 WebApplication app = builder.Build();
 

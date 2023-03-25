@@ -1,0 +1,66 @@
+.row {
+    display: flex;
+    height: 150px;
+    flex-direction: row;
+    background: #444444;
+    padding: 5px;
+    gap: 10px;
+}
+
+.row[data-is-empty="true"] {
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+}
+
+.flag {
+    width: 108px;
+    height: 140px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 108px);
+}
+
+.infoHeader {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.name {
+    font-size: 36px;
+    color: #fff;
+}
+
+.motto {
+    font-size: 18px;
+    color: #b0b0b0;
+    line-height: 1;
+}
+
+.gameStatus {
+    margin-left: auto;
+    font-size: 24px;
+}
+
+.readyStatus[data-is-ready="true"] {
+    color: #4fcb4b;
+}
+
+.readyStatus[data-is-ready="false"] {
+    color: #ea4343;
+}
+
+.owner {
+    color: gold;
+}
+
+.actions {
+    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}

@@ -16,4 +16,12 @@ public static class ValidationErrorMessages
     public const string MottoMaxLengthExceeded = "Motto is too long";
 
     public const string TitleRequired = "Title is required";
+
+    public const string GameNameRequired = "Game name is required";
+    public const string GameNameMaxLengthExceeded = "Game name is too long";
+
+    public const string GameMaxPlayersAmountRequired = "Game max players amount is required";
+    public const string GameMaxPlayersAmountRangeExceeded = "Game max players amount is invalid";
+
+    public const string GameMapGenerationConfigRequired = "Game map generation config is required";
 }

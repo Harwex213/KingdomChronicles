@@ -1,0 +1,8 @@
+.actionBtn {
+    min-width: 75px;
+    padding: 5px 10px;
+}
+
+.actionBtn:hover {
+    cursor: pointer;
+}

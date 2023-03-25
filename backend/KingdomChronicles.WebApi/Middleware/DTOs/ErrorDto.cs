@@ -1,4 +1,4 @@
-﻿namespace KingdomChronicles.WebApi.DTOs;
+﻿namespace KingdomChronicles.WebApi.Middleware.DTOs;
 
 public class ErrorDto
 {

@@ -35,7 +35,6 @@ const ProfileInfoEditSubScreen = () => {
     const handleSubmit = async (values) => {
         const newUserProfileInfo = { ...values };
         newUserProfileInfo.titleId = values.titleId === "" ? null : Number(values.titleId);
-        console.log(newUserProfileInfo);
     };
 
     return (

@@ -1,0 +1,18 @@
+.container {
+    margin: 5px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.input {
+    width: 100%;
+}
+
+.sendButton {
+    margin-left: 5px;
+}
+
+.sendButton button:hover {
+    cursor: pointer;
+}

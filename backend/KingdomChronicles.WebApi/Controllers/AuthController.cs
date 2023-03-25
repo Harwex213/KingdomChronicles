@@ -29,10 +29,7 @@ public class AuthController : ControllerBase
         }
         
         await _authService.Register(registerDto);
-        return new UserDto
-        {
-            Username = registerDto.Username
-        };
+        return await DescribeUser();
     }
     
     [HttpPost("login")]
@@ -45,10 +42,7 @@ public class AuthController : ControllerBase
         }
         
         await _authService.Login(loginDto);
-        return new UserDto
-        {
-            Username = loginDto.Username
-        };
+        return await DescribeUser();
     }
     
     [HttpGet("describe")]
@@ -58,7 +52,8 @@ public class AuthController : ControllerBase
         var session = await _dbSession.Get();
         return new UserDto
         {
-            Username = session.User!.Username
+            Id = session.UserId!.Value,
+            ShouldBeInGame = Hubs.GameHub.IsPlayerShouldBeInGame(session.UserId!.Value),
         };
     }
 

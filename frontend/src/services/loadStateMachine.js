@@ -1,4 +1,4 @@
-import { State } from "../models/state";
+import { State } from "../models/states/state";
 
 export const LOAD_SERVICE_STATES = {
     IDLE: "IDLE",

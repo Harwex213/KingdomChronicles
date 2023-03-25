@@ -38,7 +38,7 @@ public class CustomAuthenticationHandler : AuthenticationHandler<CustomAuthentic
     private AuthenticationTicket GetAuthenticationTicket(SessionEntity session)
     {
         var claimsIdentity = new ClaimsIdentity(Constants.MiddlewareConstants.AuthenticationScheme);
-        claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, session.User!.Username));
+        claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, session.UserId.ToString()!));
         var principal = new ClaimsPrincipal(claimsIdentity);
         return new AuthenticationTicket(principal, Scheme.Name);
     }
