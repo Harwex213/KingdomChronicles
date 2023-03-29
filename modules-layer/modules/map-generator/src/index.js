@@ -34,7 +34,6 @@ export default class MapGenerator {
     }
 
     generateMap(randomSeed) {
-        randomSeed = '3';
         const { minRegionSize, maxRegionSize } = this._config;
         const { mapSizes, centerPoint } = this._params;
         const randomizer = new Randomizer(randomSeed);

@@ -3,8 +3,8 @@ import { spritesheetTextureTypes } from "../constants.js";
 export class MapRendererConfig {
     tileSize = null;
     app = {
-        containerId: null,
-        dimensions:  { width: null, height: null },
+        containerSelector: null,
+        dimensions: { width: null, height: null },
     };
     viewport = {
         minScale: null,
@@ -28,6 +28,6 @@ export class MapRendererConfig {
             [spritesheetTextureTypes.HILLS_TUNDRA]: null,
             [spritesheetTextureTypes.JUNGLE_GRASSLAND]: null,
             [spritesheetTextureTypes.JUNGLE_FLATLAND]: null,
-        }
+        },
     };
 }

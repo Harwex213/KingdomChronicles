@@ -1,0 +1,17 @@
+.screen {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    grid-template-rows: 100%;
+    overflow: hidden;
+}
+
+.controlBar {
+    overflow-y: scroll;
+}
+
+.container {
+    box-sizing: border-box;
+    border: 3px silver solid;
+}

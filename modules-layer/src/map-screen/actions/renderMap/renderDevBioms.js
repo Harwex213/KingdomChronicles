@@ -20,14 +20,14 @@ export const renderDevBioms = (map) => {
             mapTile.areaType = areaTypes.NONE;
         }
     }
-    
+
     const setTileWithoutArea = createTileFiller(areaTypes.NONE);
     setTileWithoutArea(biomTypes.GRASSLAND);
     setTileWithoutArea(biomTypes.FLATLAND);
     setTileWithoutArea(biomTypes.DESERT);
     setTileWithoutArea(biomTypes.TUNDRA);
     setTileWithoutArea(biomTypes.MOUNTAIN);
-    
+
     const setTileWithForest = createTileFiller(areaTypes.FOREST);
     setTileWithForest(biomTypes.GRASSLAND);
     setTileWithForest(biomTypes.FLATLAND);
@@ -42,4 +42,4 @@ export const renderDevBioms = (map) => {
     setTileWithHills(biomTypes.FLATLAND);
     setTileWithHills(biomTypes.DESERT);
     setTileWithHills(biomTypes.TUNDRA);
-}
+};

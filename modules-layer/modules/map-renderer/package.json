@@ -2,7 +2,6 @@
   "name": "map-renderer",
   "version": "1.0.0",
   "main": "src/index.js",
-  "type": "module",
   "dependencies": {
     "pixi-viewport": "^5.0.1",
     "pixi.js": "^7.1.4",
