@@ -34,6 +34,7 @@ export default class MapGenerator {
     }
 
     generateMap(randomSeed) {
+        randomSeed = '3';
         const { minRegionSize, maxRegionSize } = this._config;
         const { mapSizes, centerPoint } = this._params;
         const randomizer = new Randomizer(randomSeed);
@@ -366,6 +367,7 @@ export default class MapGenerator {
         }
         
         const addSeaRegion = (regionIndex) => {
+            map.regions[regionIndex].regionType = tileTypes.SEA;
             map.regions[regionIndex].tilesRegion.forEach((tile) => {
                 map.matrix[tile[0]][tile[1]].tileType = tileTypes.SEA;
             });
@@ -390,7 +392,7 @@ export default class MapGenerator {
                 addSeaRegion(map.matrix[row][0].partRegion.regionIndex);
             }
         }
-        
+        /*
         const elevationAssignment = (elevation, tile) => {
             if (elevation > 0.90) {
                 tile.biomType = biomTypes.MOUNTAIN;
@@ -496,6 +498,70 @@ export default class MapGenerator {
                 }
             }
         }
+        */
+        // ТЕСТ
+        const centerRow = (mapSizes.height / 2) - 1;
+        
+        const desertRegions = [];
+        const addDesertRegion = (regionIndex) => {
+            map.regions[regionIndex].biomType = biomTypes.DESERT;
+            desertRegions.push(regionIndex);
+            map.regions[regionIndex].tilesRegion.forEach((tile) => {
+                map.matrix[tile[0]][tile[1]].biomType = biomTypes.DESERT;
+            });
+        }
+        for (let col = 0; col < mapSizes.width; col++) {
+            if (map.matrix[centerRow][col].tileType !== tileTypes.SEA && map.matrix[centerRow][col].biomType !== biomTypes.DESERT) {
+                addDesertRegion(map.matrix[centerRow][col].partRegion.regionIndex);
+            }
+        }
+        
+        const flatlandRegions = [];
+        const addFlatlandRegion = (regionIndex) => {
+            map.regions[regionIndex].biomType = biomTypes.FLATLAND;
+            flatlandRegions.push(regionIndex);
+            map.regions[regionIndex].tilesRegion.forEach((tile) => {
+                map.matrix[tile[0]][tile[1]].biomType = biomTypes.FLATLAND;
+            });
+        }
+        desertRegions.forEach((regionIndex) => {
+            map.regions[regionIndex].indicesNeighboringRegions.forEach((regionIndex) => {
+                if (map.regions[regionIndex].biomType !== biomTypes.DESERT) {
+                    addFlatlandRegion(regionIndex);
+                }
+            });
+        });
+        
+        const grasslandRegions = [];
+        const addGrasslandRegion = (regionIndex) => {
+            map.regions[regionIndex].biomType = biomTypes.GRASSLAND;
+            grasslandRegions.push(regionIndex);
+            map.regions[regionIndex].tilesRegion.forEach((tile) => {
+                map.matrix[tile[0]][tile[1]].biomType = biomTypes.GRASSLAND;
+            });
+        }
+        flatlandRegions.forEach((regionIndex) => {
+            map.regions[regionIndex].indicesNeighboringRegions.forEach((regionIndex) => {
+                if (map.regions[regionIndex].biomType !== biomTypes.FLATLAND && map.regions[regionIndex].biomType !== biomTypes.DESERT) {
+                    addGrasslandRegion(regionIndex);
+                }
+            });
+        });
+        
+        const addTundraRegion = (regionIndex) => {
+            map.regions[regionIndex].biomType = biomTypes.TUNDRA;
+            map.regions[regionIndex].tilesRegion.forEach((tile) => {
+                map.matrix[tile[0]][tile[1]].biomType = biomTypes.TUNDRA;
+            });
+        }
+        grasslandRegions.forEach((regionIndex) => {
+            map.regions[regionIndex].indicesNeighboringRegions.forEach((regionIndex) => {
+                if (map.regions[regionIndex].biomType !== biomTypes.FLATLAND && map.regions[regionIndex].biomType !== biomTypes.GRASSLAND) {
+                    addTundraRegion(regionIndex);
+                }
+            });
+        });
+        // ТЕСТ
         
         return map;
     }

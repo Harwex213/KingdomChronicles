@@ -11,6 +11,7 @@ export class MapTile {
         this.neighboringTiles = neighboringTiles;
         this.neighboringTilesRegion = [];
         this.partRegion = "none";
+        this.forDevOnly = { temperature: null, moisture: null };
     }
 
     addRegionToMapTile(region, index) {
@@ -23,6 +24,8 @@ export class MapRegion {
     constructor() {
         this.tilesRegion = [];
         this.indicesNeighboringRegions = [];
+        this.regionType = tileTypes.LAND;
+        this.biomType = "none";
     }
 }
 
