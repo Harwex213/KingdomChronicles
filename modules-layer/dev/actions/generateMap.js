@@ -15,7 +15,8 @@ const waterBalanceTypeToValues = {
 };
 
 export const mapGeneratorConfig = new MapGenerationConfig();
-mapGeneratorConfig.regionSize = 8;
+mapGeneratorConfig.minRegionSize = 14;
+mapGeneratorConfig.maxRegionSize = 27;
 
 export const generateMapAction = (seedRandom) => {
     mapGeneratorConfig.mapSizes = mapSizeTypeToDimensions[changeableConfig.mapSizes];

@@ -1,9 +1,11 @@
-import { Map, tileTypes, biomTypes, areaTypes } from "models/map";
+import { Map, tileTypes, biomTypes, areaTypes, MapRegion } from "models/map";
 import Randomizer from "./randomizer.js";
 import { createNoise2D } from 'simplex-noise';
+import PoissonDiskSampling from "poisson-disk-sampling"
 
 export class MapGenerationConfig {
-    regionSize = null;
+    minRegionSize = null;
+    maxRegionSize = null;
     mapSizes = null;
     waterBalancePercent = null;
 }
@@ -11,7 +13,8 @@ export class MapGenerationConfig {
 export default class MapGenerator {
     constructor(config) {
         this._config = {
-            regionSize: config.regionSize,
+            minRegionSize: config.minRegionSize,
+            maxRegionSize: config.maxRegionSize,
             mapSizes: { ...config.mapSizes },
             waterBalancePercent: config.waterBalancePercent,
         };
@@ -23,43 +26,43 @@ export default class MapGenerator {
 
         const totalTilesAmount = mapSizes.width * mapSizes.height;
         const landTilesAmount = totalTilesAmount - (totalTilesAmount * waterBalancePercent);
-        const regionsAmount = Math.trunc(landTilesAmount / regionSize);
 
         this._params = {
             mapSizes,
-            regionsAmount,
-            centerPoint: [mapSizes.height / 2 - 1, mapSizes.width / 2 - 1],
+            centerPoint: [0, 0],
         };
     }
 
     generateMap(randomSeed) {
-        const { regionSize } = this._config;
-        const { mapSizes, centerPoint, regionsAmount } = this._params;
+        randomSeed = '3';
+        const { minRegionSize, maxRegionSize } = this._config;
+        const { mapSizes, centerPoint } = this._params;
         const randomizer = new Randomizer(randomSeed);
 
-        const map = new Map(mapSizes.width, mapSizes.height, regionsAmount);
+        const map = new Map(mapSizes.width, mapSizes.height);
+        const tilesWithoutRegion = [];
+        const tilesForRegionsLeft = [];
+        map.matrix.forEach((height) => {
+                    height.forEach((tile) => {
+                tilesForRegionsLeft.push(`${tile.row}-${tile.col}`);
+            });
+        });
         const coasts = {
+            coastsArray: [],
             addCoast(tile) {
-                map.matrix[tile[0]][tile[1]].tileType = tileTypes.COAST;
+                this.coastsArray.push(`${tile[0]}-${tile[1]}`);
             },
             removeCoast(tile) {
-                map.matrix[tile[0]][tile[1]].tileType = tileTypes.LAND;
-            },
-            getArrCoasts() {
-                const arrCoasts = [];
-                map.matrix.forEach((height) => {
-                    height.forEach((tile) => {
-                        if (tile.tileType === tileTypes.COAST) {
-                            arrCoasts.push([tile.row, tile.col]);
-                        }
-                    });
-                });
-                
-                return arrCoasts;
+                this.coastsArray.splice(this.coastsArray.indexOf(`${tile[0]}-${tile[1]}`), 1);
             },
             randomCoast() {
-                const arrCoasts = this.getArrCoasts();
-                return arrCoasts[randomizer.getRandom(arrCoasts.length)];
+                return this.coastsArray[randomizer.getRandom(this.coastsArray.length - 1)].split('-');
+            },
+            isCoast(tile) {
+                return this.coastsArray.includes(`${tile[0]}-${tile[1]}`);
+            },
+            clearCoasts() {
+                this.coastsArray.length = 0;
             },
         };
         const assignedForRegion = {
@@ -67,129 +70,329 @@ export default class MapGenerator {
             addTile(tile) {
                 this.tilesForRegion.push([tile[0], tile[1]]);
             },
+            sendTilesToRegion(region) {
+                this.tilesForRegion.forEach((tile) => {
+                    map.matrix[tile[0]][tile[1]].addRegionToMapTile(map.regions[region], region);
+                    tilesForRegionsLeft.splice(tilesForRegionsLeft.indexOf(`${tile[0]}-${tile[1]}`), 1);
+                    map.matrix[tile[0]][tile[1]].tileType = tileTypes.LAND;  
+                });
+            },
             clearTilesForRegion() {
                 this.tilesForRegion.length = 0;
             },
-            sendTilesToRegion(region) {
-                this.tilesForRegion.forEach(tile => {
-                    map.matrix[tile[0]][tile[1]].addRegionToMapTile(map.regions[region]);
-                    map.lands.push(map.matrix[tile[0]][tile[1]]);
-                });
-            },
-        };
-        const tileCounter = {
-            tileNumber: 0,
-            addTile() {
-                this.tileNumber++;
-            },
-            clearTile() {
-                this.tileNumber = 0;
-            },
-        };
-        const possibleDirections = {
-            allDirections: [],
-            currentDirections: [],
-            clearCurrentDirections() {
-                this.currentDirections.length = 0;
-            },
-            clearAllDirections() {
-                this.allDirections.length = 0;
-            },
-            checkDirections(point) {
-                Object.keys(map.matrix[point[0]][point[1]].neighboringTiles).forEach(direction => {
-                    const tileDirection = map.matrix[point[0]][point[1]].neighboringTiles[direction];
+            isAssignedTile(tile) {
+                let isAssigned = false;
                 
-                    if (tileDirection !== "none" && map.matrix[tileDirection[0]][tileDirection[1]].tileType === tileTypes.COAST) {
-                        this.currentDirections.push(tileDirection);
+                this.tilesForRegion.forEach((assignedTile) => {
+                    if (JSON.stringify(tile) === JSON.stringify(assignedTile)) {
+                        isAssigned = true;
                     }
                 });
-            },
-            getRandomDirection(directions) {
-                const randomIndex = randomizer.getRandom(directions.length);
-                const chosenDirection = directions[randomIndex];
-                directions.splice(randomIndex, 1);
                 
-                return chosenDirection;
-            },
-            checkSameDirections() {
-                const temporarySet = new Set(this.allDirections.map(tileDirection => map.matrix[tileDirection[0]][tileDirection[1]]));
-                this.clearAllDirections();
-                for (const tileDirection of temporarySet) {
-                    if (tileDirection.tileType !== tileTypes.LAND) {
-                        this.allDirections.push([tileDirection.row, tileDirection.col]);
-                    }
-                }
-            },
-            addCurrentToAllDirections() {
-                this.allDirections.push(...this.currentDirections);
-                this.checkSameDirections();
+                return isAssigned;
             },
         };
-
+        const potentialRegionTiles = {
+            potentialRegionTilesArray: [],
+            randomPotentialTile() {
+                return this.potentialRegionTilesArray[randomizer.getRandom(this.potentialRegionTilesArray.length - 1)].split('-');    
+            },
+            removePotentialTile(tile) {
+                this.potentialRegionTilesArray.splice(this.potentialRegionTilesArray.indexOf(`${tile[0]}-${tile[1]}`), 1);
+            },
+            isPotentialTile(tile) {
+                return this.potentialRegionTilesArray.includes(`${tile[0]}-${tile[1]}`);
+            },
+        };
         const tileTypeCoast = (point) => {
             Object.keys(map.matrix[point[0]][point[1]].neighboringTiles).forEach(direction => {
                 const tileDirection = map.matrix[point[0]][point[1]].neighboringTiles[direction];
                 
-                if (tileDirection !== "none" && map.matrix[tileDirection[0]][tileDirection[1]].tileType === tileTypes.SEA) {
+                if (tileDirection !== "none" && map.matrix[tileDirection[0]][tileDirection[1]].tileType !== tileTypes.LAND && 
+                    !coasts.isCoast(tileDirection) && !assignedForRegion.isAssignedTile(tileDirection) && 
+                        !potentialRegionTiles.isPotentialTile(tileDirection)) {
                     coasts.addCoast(tileDirection);
                 }
             });
         }
-        
-        coasts.addCoast(centerPoint);
-        
-        const branchNoAllDirections = () => {
-            if (tileCounter.tileNumber > 0) {
-                assignedForRegion.tilesForRegion.forEach(tile => {
-                    map.matrix[tile[0]][tile[1]].tileType = tileTypes.LAKE;
-                });
-                
-                assignedForRegion.clearTilesForRegion();
-                tileCounter.clearTile();
-            } 
+
+        noNextTile: for (let region = 0; tilesForRegionsLeft.length !== 0; region++) {
+            const regionSize = randomizer.getRandom(maxRegionSize, minRegionSize);
+            coasts.addCoast(centerPoint);
             
-            const coast = coasts.randomCoast();
-            centerPoint[0] = coast[0];
-            centerPoint[1] = coast[1];
-            coasts.removeCoast(coast);
-        }
-        
-        const branchNoCurrentDirections = () => {
-            const chosenDirection = possibleDirections.getRandomDirection(possibleDirections.allDirections);
-            if (typeof chosenDirection === "undefined") {
-                branchNoAllDirections();
-            } else {
-                centerPoint[0] = chosenDirection[0];
-                centerPoint[1] = chosenDirection[1];
-                coasts.removeCoast(chosenDirection);
-            }
-        }
-
-        for (let region = 0; region < regionsAmount; region++) {
-            for (tileCounter; tileCounter.tileNumber < regionSize; tileCounter.addTile()) {
-                possibleDirections.clearCurrentDirections();
-                possibleDirections.checkDirections(centerPoint);
-                const chosenDirection = possibleDirections.getRandomDirection(possibleDirections.currentDirections);
-                possibleDirections.addCurrentToAllDirections();
-
-                if (typeof chosenDirection === "undefined") {
-                    branchNoCurrentDirections();
-                } else {
-                    centerPoint[0] = chosenDirection[0];
-                    centerPoint[1] = chosenDirection[1];
-                    coasts.removeCoast(centerPoint);
+            for (let tile = 0; tile < regionSize; tile++) {
+                if (tile + coasts.coastsArray.length < regionSize && potentialRegionTiles.potentialRegionTilesArray.length === 0) {
+                    potentialRegionTiles.potentialRegionTilesArray = coasts.coastsArray;
+                    coasts.coastsArray = [];
                 }
-
+                if (potentialRegionTiles.potentialRegionTilesArray.length === 0) {
+                    if (coasts.coastsArray.length === 0) {
+                        if (assignedForRegion.tilesForRegion.length >= minRegionSize) {
+                            break;
+                        }
+                        assignedForRegion.tilesForRegion.forEach(tile => {
+                            tilesWithoutRegion.push([tile[0], tile[1]]);
+                            tilesForRegionsLeft.splice(tilesForRegionsLeft.indexOf(`${tile[0]}-${tile[1]}`), 1);
+                        });
+                        assignedForRegion.clearTilesForRegion();
+                        tile = 0;
+                        if (tilesForRegionsLeft.length === 0) {
+                            break noNextTile;
+                        }
+                        
+                        const nextTile = tilesForRegionsLeft[0].split('-');
+                        centerPoint[0] = +nextTile[0];
+                        centerPoint[1] = +nextTile[1];
+                    } else {
+                        const coast = coasts.randomCoast();
+                        centerPoint[0] = +coast[0];
+                        centerPoint[1] = +coast[1];
+                        coasts.removeCoast(coast);
+                    }
+                } else {
+                    const potentialRegionTile = potentialRegionTiles.randomPotentialTile();
+                    centerPoint[0] = +potentialRegionTile[0];
+                    centerPoint[1] = +potentialRegionTile[1];
+                    potentialRegionTiles.removePotentialTile(potentialRegionTile);
+                }
+                
                 tileTypeCoast(centerPoint);
                 assignedForRegion.addTile(centerPoint);
             }
             
+            map.regions.push(new MapRegion()); 
             assignedForRegion.sendTilesToRegion(region);
+            if (tilesForRegionsLeft.length === 0) {
+                break;
+            }
+            const nextTile = tilesForRegionsLeft[0].split('-');
+            centerPoint[0] = +nextTile[0];
+            centerPoint[1] = +nextTile[1];
             assignedForRegion.clearTilesForRegion();
-            possibleDirections.clearAllDirections();
-            tileCounter.clearTile();
+            coasts.clearCoasts();
         }
         
+        const getIndexesNeighboringRegions = (tile, condition) => {
+            const neighboringRegions = [];
+            
+            Object.keys(map.matrix[tile[0]][tile[1]].neighboringTiles).forEach(direction => {
+                const tileDirection = map.matrix[tile[0]][tile[1]].neighboringTiles[direction];
+                
+                if (condition(tileDirection)) {
+                    neighboringRegions.push(map.matrix[tileDirection[0]][tileDirection[1]].partRegion.regionIndex);
+                }
+            });
+            
+            return Array.from(new Set(neighboringRegions));
+        }
+        
+        tilesWithoutRegion.forEach((tile) => {
+            map.matrix[tile[0]][tile[1]].tileType = tileTypes.LAND;  
+            const neighboringRegions = getIndexesNeighboringRegions(tile, (tileDirection) => tileDirection !== "none" && map.matrix[tileDirection[0]][tileDirection[1]].partRegion !== "none");
+            const chosenRegionIndex = neighboringRegions[randomizer.getRandom(neighboringRegions.length - 1)];
+            
+            map.matrix[tile[0]][tile[1]].addRegionToMapTile(map.regions[chosenRegionIndex], chosenRegionIndex);
+        });
+        
+        const addIndicesNeighboringRegions = (tile, currentRegionIndex) => {
+            const neighboringRegions = getIndexesNeighboringRegions(tile, (tileDirection) => tileDirection !== "none" && map.matrix[tileDirection[0]][tileDirection[1]].partRegion.regionIndex !== currentRegionIndex);
+                
+            neighboringRegions.forEach((indexNeighboringRegion) => {
+                if (!map.regions[currentRegionIndex].indicesNeighboringRegions.includes(indexNeighboringRegion)) {
+                    map.regions[currentRegionIndex].indicesNeighboringRegions.push(indexNeighboringRegion);
+                }
+            });
+        }
+        const addNeighboringTilesRegion = (tile, currentRegionIndex) => {
+            Object.assign(map.matrix[tile[0]][tile[1]].neighboringTilesRegion, map.matrix[tile[0]][tile[1]].neighboringTiles);
+            Object.keys(map.matrix[tile[0]][tile[1]].neighboringTilesRegion).forEach((direction) => {
+                const tileDirection = map.matrix[tile[0]][tile[1]].neighboringTiles[direction];
+                    
+                if (tileDirection !== "none" && map.matrix[tileDirection[0]][tileDirection[1]].partRegion.regionIndex !== currentRegionIndex) {
+                    map.matrix[tile[0]][tile[1]].neighboringTilesRegion[direction] = "none";
+                }
+            });
+        }
+                
+        map.regions.forEach((region, currentRegionIndex) => {
+            region.tilesRegion.forEach((tile) => {
+                addIndicesNeighboringRegions(tile, currentRegionIndex);
+                addNeighboringTilesRegion(tile, currentRegionIndex);
+            });
+        });
+        
+        const getBorderingTilesToRegion = (initialRegionIndex, targetRegionIndex) => {
+            const borderingTilesToRegion = [];
+            map.regions[initialRegionIndex].tilesRegion.forEach((tile) => {
+                for (const direction in map.matrix[tile[0]][tile[1]].neighboringTilesRegion) {
+                    const tileDirection = map.matrix[tile[0]][tile[1]].neighboringTiles[direction];
+                            
+                    if (tileDirection !== "none" && map.matrix[tileDirection[0]][tileDirection[1]].partRegion.regionIndex === targetRegionIndex) {
+                        borderingTilesToRegion.push([tile[0], tile[1]]);
+                        break;
+                    }
+                }
+            });
+            
+            return borderingTilesToRegion;
+        }
+        const isGapRegion = (tile, region) => {
+            const copyTilesRegion = [];
+            Object.assign(copyTilesRegion, region.tilesRegion);
+            copyTilesRegion.splice(copyTilesRegion.indexOf(copyTilesRegion.find((copyTile) => JSON.stringify(tile) === JSON.stringify(copyTile))), 1);
+            const chosenTile = copyTilesRegion[randomizer.getRandom(copyTilesRegion.length - 1)];
+            const countedTiles = [chosenTile];
+            const isCountedTile = (tileDirection) => {
+                let isCounted = false;
+                
+                countedTiles.forEach((countedTile) => {
+                    if (JSON.stringify(tileDirection) === JSON.stringify(countedTile)) {
+                        isCounted = true;
+                    }
+                });
+                    
+                return isCounted;
+            };
+            const containerAddedTiles = { saveNumber: 1, currentNumber: 0 };
+            while (countedTiles.length !== copyTilesRegion.length) {
+                const oldSizeCountedTiles = countedTiles.length;
+                countedTiles.slice(countedTiles.length - containerAddedTiles.saveNumber).forEach((countedTile) => {
+                    Object.keys(map.matrix[countedTile[0]][countedTile[1]].neighboringTilesRegion).forEach((direction) => {
+                        const tileDirection = map.matrix[countedTile[0]][countedTile[1]].neighboringTilesRegion[direction];
+                                
+                        if (tileDirection !== "none" && !isCountedTile(tileDirection) && JSON.stringify(tileDirection) !== JSON.stringify(tile)) {
+                            countedTiles.push([tileDirection[0], tileDirection[1]]);
+                            containerAddedTiles.currentNumber++;
+                        }
+                    });
+                });
+                
+                if (oldSizeCountedTiles === countedTiles.length) {
+                    break;
+                }
+                
+                containerAddedTiles.saveNumber = containerAddedTiles.currentNumber;
+                containerAddedTiles.currentNumber = 0;
+            }
+
+            return countedTiles.length !== copyTilesRegion.length;
+        }
+        const recursivelyResizeRegions = (targetRegionIndex) => {
+            while (map.regions[targetRegionIndex].tilesRegion.length !== maxRegionSize) {
+                const neighboringRegionsSmallerMaxSize = [];
+                map.regions[targetRegionIndex].indicesNeighboringRegions.forEach((regionIndex) => {
+                    if (map.regions[regionIndex].tilesRegion.length < maxRegionSize) {
+                        neighboringRegionsSmallerMaxSize.push(regionIndex);
+                    }
+                });
+                const chosenRegionIndex = (neighboringRegionsSmallerMaxSize.length === 0) ? 
+                    map.regions[targetRegionIndex].indicesNeighboringRegions[randomizer.getRandom(map.regions[targetRegionIndex].indicesNeighboringRegions.length - 1)] :
+                    neighboringRegionsSmallerMaxSize[randomizer.getRandom(neighboringRegionsSmallerMaxSize.length - 1)];
+                const condition = (neighboringRegionsSmallerMaxSize.length === 0) ? 
+                    () => map.regions[targetRegionIndex].tilesRegion.length !== maxRegionSize && borderingTilesToRegion.length !== 0 :
+                    () => map.regions[chosenRegionIndex].tilesRegion.length !== maxRegionSize && map.regions[targetRegionIndex].tilesRegion.length !== maxRegionSize && borderingTilesToRegion.length !== 0;
+                const borderingTilesToRegion = getBorderingTilesToRegion(targetRegionIndex, chosenRegionIndex);
+                while (condition()) {
+                    const chosenIndex = randomizer.getRandom(borderingTilesToRegion.length - 1);
+                    const chosenTile = borderingTilesToRegion[chosenIndex];
+                    borderingTilesToRegion.splice(chosenIndex, 1);
+                    
+                    if (!isGapRegion(chosenTile, map.regions[targetRegionIndex])) { 
+                        for (const direction in map.matrix[chosenTile[0]][chosenTile[1]].neighboringTilesRegion) {
+                            const tileDirection = map.matrix[chosenTile[0]][chosenTile[1]].neighboringTilesRegion[direction];
+                            const isBorderTile = borderingTilesToRegion.findIndex((tile) => JSON.stringify(tile) === JSON.stringify(tileDirection));
+                                    
+                            if (tileDirection !== "none" && isBorderTile === -1) {
+                                borderingTilesToRegion.push([tileDirection[0], tileDirection[1]]);
+                            }
+                        }
+                        map.matrix[chosenTile[0]][chosenTile[1]].addRegionToMapTile(map.regions[chosenRegionIndex], chosenRegionIndex);
+                        map.regions[targetRegionIndex].tilesRegion.splice(
+                            map.regions[targetRegionIndex].tilesRegion.indexOf(
+                                map.regions[targetRegionIndex].tilesRegion.find(
+                                    (tile) => JSON.stringify(tile) === JSON.stringify(chosenTile))), 1);
+                        const oldIndicesNeighboringRegions = map.regions[targetRegionIndex].indicesNeighboringRegions;
+                        map.regions[targetRegionIndex].indicesNeighboringRegions = [];
+                        map.regions[targetRegionIndex].tilesRegion.forEach((tile) => {
+                            addIndicesNeighboringRegions(tile, targetRegionIndex);
+                        });
+                        if (oldIndicesNeighboringRegions.length !== map.regions[targetRegionIndex].indicesNeighboringRegions.length) {
+                            oldIndicesNeighboringRegions.forEach((index) => {
+                                if (!map.regions[targetRegionIndex].indicesNeighboringRegions.includes(index)) {
+                                    map.regions[index].indicesNeighboringRegions.splice(
+                                        map.regions[index].indicesNeighboringRegions.indexOf(targetRegionIndex), 1);
+                                }
+                            });
+                        }
+                        const chosenOldIndicesNeighboringRegions = [];
+                        Object.assign(chosenOldIndicesNeighboringRegions, map.regions[chosenRegionIndex].indicesNeighboringRegions);
+                        addIndicesNeighboringRegions(chosenTile, chosenRegionIndex);
+                        if (chosenOldIndicesNeighboringRegions.length !== map.regions[chosenRegionIndex].indicesNeighboringRegions.length) {
+                            const newIndices = map.regions[chosenRegionIndex].indicesNeighboringRegions.slice(chosenOldIndicesNeighboringRegions.length);
+                            newIndices.forEach((index) => {
+                                map.regions[index].indicesNeighboringRegions.push(chosenRegionIndex);
+                            });
+                        }   
+                        const updateDirectionsNeighboringTiles = (regionIndex) => {
+                            for (const direction in map.matrix[chosenTile[0]][chosenTile[1]].neighboringTilesRegion) {
+                                const tileDirection = map.matrix[chosenTile[0]][chosenTile[1]].neighboringTilesRegion[direction];
+                                
+                                if (tileDirection !== "none") {
+                                    addNeighboringTilesRegion(tileDirection, regionIndex);
+                                }
+                            } 
+                        }
+                        
+                        updateDirectionsNeighboringTiles(targetRegionIndex);
+                        addNeighboringTilesRegion(chosenTile, chosenRegionIndex);
+                        updateDirectionsNeighboringTiles(chosenRegionIndex);
+                    }  
+                }
+            }
+        }
+        const regionSizes = {
+            arrayRegionSizes: [],
+            isRegionLargerMaxSize() {
+                this.arrayRegionSizes = map.regions.map((region) => region.tilesRegion.length);
+                return this.arrayRegionSizes.find(size => size > maxRegionSize);
+            },
+            getRegionLargerMaxSize() {
+                return this.arrayRegionSizes.indexOf(this.arrayRegionSizes.find(size => size > maxRegionSize));
+            },
+        }
+        
+        while (regionSizes.isRegionLargerMaxSize()) {
+            const chosenRegionIndex = regionSizes.getRegionLargerMaxSize();
+            recursivelyResizeRegions(chosenRegionIndex);
+        }
+        
+        const addSeaRegion = (regionIndex) => {
+            map.regions[regionIndex].regionType = tileTypes.SEA;
+            map.regions[regionIndex].tilesRegion.forEach((tile) => {
+                map.matrix[tile[0]][tile[1]].tileType = tileTypes.SEA;
+            });
+        }
+        for (let col = 0; col < mapSizes.width; col++) {
+            if (map.matrix[0][col].tileType !== tileTypes.SEA) {
+                addSeaRegion(map.matrix[0][col].partRegion.regionIndex);
+            }
+        }
+        for (let row = 1; row < mapSizes.height; row++) {
+            if (map.matrix[row][mapSizes.width - 1].tileType !== tileTypes.SEA) {
+                addSeaRegion(map.matrix[row][mapSizes.width - 1].partRegion.regionIndex);
+            }
+        }
+        for (let col = 0; col < mapSizes.width - 1; col++) {
+            if (map.matrix[mapSizes.height - 1][col].tileType !== tileTypes.SEA) {
+                addSeaRegion(map.matrix[mapSizes.height - 1][col].partRegion.regionIndex);
+            }
+        }
+        for (let row = 1; row < mapSizes.height - 1; row++) {
+            if (map.matrix[row][0].tileType !== tileTypes.SEA) {
+                addSeaRegion(map.matrix[row][0].partRegion.regionIndex);
+            }
+        }
+        /*
         const elevationAssignment = (elevation, tile) => {
             if (elevation > 0.90) {
                 tile.biomType = biomTypes.MOUNTAIN;
@@ -206,17 +409,29 @@ export default class MapGenerator {
                 } else {
                     tile.biomType = biomTypes.DESERT;
                 }
+                
+                if (tile.areaType !== areaTypes.HILLS && tile.biomType !== biomTypes.DESERT && treesFlags[tile.row][tile.col] === true) {
+                    tile.areaType = areaTypes.JUNGLE;
+                }
             } else if (temperature > 0.5) {
                 if (moisture > 0.5) {
                     tile.biomType = biomTypes.GRASSLAND;
                 } else {
                     tile.biomType = biomTypes.FLATLAND;
                 }
+                
+                if (tile.areaType !== areaTypes.HILLS && treesFlags[tile.row][tile.col] === true) {
+                    tile.areaType = areaTypes.FOREST;
+                }
             } else {
                 if (moisture > 0.75) {
                     tile.biomType = biomTypes.FLATLAND;
                 } else {
                     tile.biomType = biomTypes.TUNDRA;
+                }
+                
+                if (tile.areaType !== areaTypes.HILLS && treesFlags[tile.row][tile.col] === true) {
+                    tile.areaType = areaTypes.FOREST;
                 }
             }
         }
@@ -228,6 +443,39 @@ export default class MapGenerator {
         const noiseT = (nRow, nCol) => genT(nRow, nCol) / 2 + 0.5;
         const poles = -1;
         const equator = 3.5;
+        const treesFlags = Array.from(Array(mapSizes.height), () => new Array(mapSizes.width));
+        const p = new PoissonDiskSampling({
+            shape: [mapSizes.height, mapSizes.width],
+            minDistance: 10,
+            maxDistance: 10,
+            tries: 30,
+        });
+        const lowFrequencyPoints = p.fill();
+        lowFrequencyPoints.forEach((lowFrequencyPoint) => {
+            const lowRow = Math.trunc(lowFrequencyPoint[0]);
+            const lowCol = Math.trunc(lowFrequencyPoint[1]);
+            treesFlags[lowRow][lowCol] = true;
+            const p = new PoissonDiskSampling({
+                shape: [5, 5],
+                minDistance: 1,
+                maxDistance: 1,
+                tries: 5,
+            });
+            const highFrequencyPoints = p.fill();
+            highFrequencyPoints.forEach((highFrequencyPoint) => {
+                const radiusRow = Math.trunc(highFrequencyPoint[0]);
+                const radiusCol = Math.trunc(highFrequencyPoint[1]);
+                const vector = [0, 0];
+                vector[0] = (2 === radiusRow) ? 0 : radiusRow - 2;
+                vector[1] = (2 === radiusCol) ? 0 : radiusCol - 2;
+                const highRow = vector[0] + lowRow;
+                const highCol = vector[1] + lowCol;
+                
+                if (highRow >= 0 && highRow < mapSizes.height && highCol >= 0 && highCol < mapSizes.width) {
+                    treesFlags[highRow][highCol] = true;
+                }                    
+            });
+        });
         
         for (let row = 0; row < mapSizes.height; row++) {
             for (let col = 0; col < mapSizes.width; col++) {
@@ -250,6 +498,70 @@ export default class MapGenerator {
                 }
             }
         }
+        */
+        // ТЕСТ
+        const centerRow = (mapSizes.height / 2) - 1;
+        
+        const desertRegions = [];
+        const addDesertRegion = (regionIndex) => {
+            map.regions[regionIndex].biomType = biomTypes.DESERT;
+            desertRegions.push(regionIndex);
+            map.regions[regionIndex].tilesRegion.forEach((tile) => {
+                map.matrix[tile[0]][tile[1]].biomType = biomTypes.DESERT;
+            });
+        }
+        for (let col = 0; col < mapSizes.width; col++) {
+            if (map.matrix[centerRow][col].tileType !== tileTypes.SEA && map.matrix[centerRow][col].biomType !== biomTypes.DESERT) {
+                addDesertRegion(map.matrix[centerRow][col].partRegion.regionIndex);
+            }
+        }
+        
+        const flatlandRegions = [];
+        const addFlatlandRegion = (regionIndex) => {
+            map.regions[regionIndex].biomType = biomTypes.FLATLAND;
+            flatlandRegions.push(regionIndex);
+            map.regions[regionIndex].tilesRegion.forEach((tile) => {
+                map.matrix[tile[0]][tile[1]].biomType = biomTypes.FLATLAND;
+            });
+        }
+        desertRegions.forEach((regionIndex) => {
+            map.regions[regionIndex].indicesNeighboringRegions.forEach((regionIndex) => {
+                if (map.regions[regionIndex].biomType !== biomTypes.DESERT) {
+                    addFlatlandRegion(regionIndex);
+                }
+            });
+        });
+        
+        const grasslandRegions = [];
+        const addGrasslandRegion = (regionIndex) => {
+            map.regions[regionIndex].biomType = biomTypes.GRASSLAND;
+            grasslandRegions.push(regionIndex);
+            map.regions[regionIndex].tilesRegion.forEach((tile) => {
+                map.matrix[tile[0]][tile[1]].biomType = biomTypes.GRASSLAND;
+            });
+        }
+        flatlandRegions.forEach((regionIndex) => {
+            map.regions[regionIndex].indicesNeighboringRegions.forEach((regionIndex) => {
+                if (map.regions[regionIndex].biomType !== biomTypes.FLATLAND && map.regions[regionIndex].biomType !== biomTypes.DESERT) {
+                    addGrasslandRegion(regionIndex);
+                }
+            });
+        });
+        
+        const addTundraRegion = (regionIndex) => {
+            map.regions[regionIndex].biomType = biomTypes.TUNDRA;
+            map.regions[regionIndex].tilesRegion.forEach((tile) => {
+                map.matrix[tile[0]][tile[1]].biomType = biomTypes.TUNDRA;
+            });
+        }
+        grasslandRegions.forEach((regionIndex) => {
+            map.regions[regionIndex].indicesNeighboringRegions.forEach((regionIndex) => {
+                if (map.regions[regionIndex].biomType !== biomTypes.FLATLAND && map.regions[regionIndex].biomType !== biomTypes.GRASSLAND) {
+                    addTundraRegion(regionIndex);
+                }
+            });
+        });
+        // ТЕСТ
         
         return map;
     }

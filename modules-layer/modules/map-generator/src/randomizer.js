@@ -6,6 +6,6 @@ export default class Randomizer {
     }
 
     getRandom(max, min = 0) {
-        return Math.floor(this._getNextRandom() * 100000 % max + min);
+        return Math.floor(this._getNextRandom() * 100000 % (max - min + 1) + min);
     }
 }
