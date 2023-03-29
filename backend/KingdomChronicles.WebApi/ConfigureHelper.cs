@@ -29,6 +29,7 @@ public static class ConfigureHelper
 
     public static void UseSignalrHubs(this WebApplication app)
     {
-        app.MapHub<StartGameHub>($"/{Constants.GameHubConstants.Route}");
+        app.MapHub<StartGameHub>($"/{Constants.GameHubConstants.StartGameRoute}");
+        app.MapHub<GameHub>($"/{Constants.GameHubConstants.GameRoute}");
     }
 }

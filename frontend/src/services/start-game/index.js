@@ -1,7 +1,7 @@
 import { SERVER_METHODS } from "./config";
 import { connection, startGameConnector, searchGameModel, pendingStartGameModel } from "./init";
 import "./eventHandlers";
-import { makeGlobalCatchError } from "./makeGlobalCatchError";
+import { globallyCatchHubException } from "../globallyCatchHubException";
 
 const startGameService = {};
 
@@ -34,6 +34,6 @@ startGameService.startGame = async () => {
     await connection.invoke(SERVER_METHODS.START_GAME);
 };
 
-makeGlobalCatchError(startGameService);
+globallyCatchHubException(startGameService);
 
 export { startGameConnector, startGameService, searchGameModel, pendingStartGameModel };

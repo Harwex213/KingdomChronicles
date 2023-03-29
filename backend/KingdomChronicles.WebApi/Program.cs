@@ -1,4 +1,5 @@
 using KingdomChronicles.WebApi;
+using KingdomChronicles.WebApi.BackgroundServices;
 using KingdomChronicles.WebApi.Middleware.Exceptions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -20,6 +21,7 @@ builder.Services.AddSwaggerGen(o =>
     o.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 });
 builder.Services.ConfigureSignalR();
+builder.Services.AddHostedService<GameTickerHostedService>();
 
 WebApplication app = builder.Build();
 

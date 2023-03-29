@@ -2,8 +2,10 @@
 
 public static class GameHubConstants
 {
-    public const string Route = "start-game-hub";
+    public const string StartGameRoute = "start-game-hub";
+    public const string GameRoute = "game-hub";
     public const string HubUserItemKey = "HubUser";
+    public const int TickSecondsAmount = 5;
 
     public static class NotInGameEvent
     {
@@ -28,6 +30,28 @@ public static class GameHubConstants
         public const string GameStarted = "PendingStartGameEvents_LeavedFromGame";
     }
 
+    public static class StartedGameEvents
+    {
+        public const string NotInGame = "StartedGameEvent_NotInGame";
+        public const string AbortExistedConnection = "StartedGameEvent_AbortExistedConnection";
+        
+        public const string JoinedToGame = "StartedGameEvent_JoinedToGame";
+        public const string LeavedFromGame = "StartedGameEvent_LeavedFromGame";
+        public const string KickedFromGame = "StartedGameEvent_KickedFromGame";
+        
+        public const string PlayerJoined = "StartedGameEvent_PlayerJoined";
+        public const string PlayerLeaved = "StartedGameEvent_PlayerLeaved";
+        public const string PlayerKicked = "StartedGameEvent_PlayerKicked";
+        
+        public const string GameRunning = "StartedGameEvent_GameRunning";
+        public const string Tick = "StartedGameEvent_Tick";
+        public const string Action = "StartedGameEvent_Action";
+        public const string Pause = "StartedGameEvent_Pause";
+        public const string Unpause = "StartedGameEvent_Unpause";
+        
+        public const string NewChatMessage = "StartedGameEvent_NewChatMessage";
+    }
+
     public static class GroupNames
     {
         public const string NotInGame = "NotInGame";
@@ -43,5 +67,8 @@ public static class GameHubConstants
         public const string ShouldBeOwner = "Only owner can do this";
         public const string ShouldBeNotOwner = "Owner cannot do this";
         public const string GameIsFull = "Game is full already. Try find another or create new one";
+        public const string NotAllPlayersReady = "Some player is not ready for game";
+        public const string GameAlreadyStarted = "This game is already started";
+        public const string PlayerNotExistOrAlreadyConnected = "Player not in game or already connected";
     }
 }

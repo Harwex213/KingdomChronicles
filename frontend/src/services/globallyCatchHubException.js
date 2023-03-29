@@ -13,7 +13,7 @@ const catchError = (apiCall) => {
     };
 };
 
-const makeGlobalCatchError = (service) => {
+const globallyCatchHubException = (service) => {
     for (const methodName in service) {
         if (typeof service[methodName] === "function") {
             service[methodName] = catchError(service[methodName]);
@@ -21,4 +21,4 @@ const makeGlobalCatchError = (service) => {
     }
 };
 
-export { makeGlobalCatchError };
+export { globallyCatchHubException };

@@ -351,6 +351,29 @@ public class StartGameHub : Hub
 
     public async Task StartGame()
     {
-        // TODO: ...
+        var currentHubUser = GetCurrentHubUser();
+        var game = RetrieveGame(currentHubUser);
+
+        lock (game)
+        {
+            if (currentHubUser.UserProfile.UserId != game.OwnerId)
+            {
+                throw new HubException(GameHubConstants.Errors.ShouldBeOwner);
+            }
+
+            if (game.PlayersReadyStatus.Where(g => g.Key != game.OwnerId).All(g => g.Value) == false)
+            {
+                throw new HubException(GameHubConstants.Errors.NotAllPlayersReady);
+            }
+        }
+
+        PendingStartGames.TryRemove(game.Id, out _);
+
+        await SendGlobalEventGameDestroyed(game.Id);
+
+        var startedGame = _mapper.Map<StartedGame>(game);
+        GameHub.AddToStartedGames(startedGame);
+
+        await Clients.Group(game.Id.ToString()).SendAsync(GameHubConstants.PendingStartGameEvents.GameStarted);
     }
 }
