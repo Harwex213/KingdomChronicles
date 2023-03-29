@@ -21,3 +21,10 @@ internal class PasswordAndRepeatedPasswordNotEqualsException : BadRequestExcepti
     {
     }
 }
+
+internal class CannotLoginException : BadRequestException
+{
+    public CannotLoginException() : base(ExceptionMessages.UnauthorizedMessages.CannotLogin)
+    {
+    }
+}

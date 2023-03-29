@@ -1,0 +1,19 @@
+.form {
+
+}
+
+.form select {
+    width: 200px;
+    height: 30px;
+}
+
+.actions {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.actions button:hover {
+    cursor: pointer;
+}

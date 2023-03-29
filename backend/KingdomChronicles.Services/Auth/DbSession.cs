@@ -7,7 +7,7 @@ public class DbSession : IDbSession
 {
     private readonly DataAccess.AppDbContext _appDbContext;
     private readonly Internal.IWebCookieService _webCookieService;
-    private Session? _session;
+    private SessionEntity? _session;
     
     public DbSession(DataAccess.AppDbContext appDbContext, 
         Internal.IWebCookieService webCookieService)
@@ -22,20 +22,24 @@ public class DbSession : IDbSession
         _webCookieService.AddSecure(AuthConstants.SessionCookieName, sessionId.ToString(), AuthConstants.SessionDaysLifetime);
     }
     
-    private async Task<Session> Create()
+    private async Task<SessionEntity> Create(int? userId = null)
     {
-        var createdSession = new Session
+        var createdSession = new SessionEntity
         {
             Id = Guid.NewGuid(),
             Created = DateTime.UtcNow,
             LastAccessed = DateTime.UtcNow
         };
+        if (userId.HasValue)
+        {
+            createdSession.UserId = userId;
+        }
         await _appDbContext.Sessions.AddAsync(createdSession);
         await _appDbContext.SaveChangesAsync();
         return createdSession;
     }
 
-    public async Task<Session> Get()
+    public async Task<SessionEntity> Get()
     {
         if (_session != null)
         {
@@ -45,8 +49,8 @@ public class DbSession : IDbSession
         string? sessionString = _webCookieService.Get(AuthConstants.SessionCookieName);
         Guid sessionId = sessionString == null ? Guid.NewGuid() : Guid.Parse(sessionString);
 
-        var foundSession = await _appDbContext.Sessions.FirstOrDefaultAsync(s => s.Id == sessionId 
-            && s.Created.AddDays(AuthConstants.SessionDaysLifetime) > DateTime.UtcNow);
+        var foundSession = await _appDbContext.Sessions.FirstOrDefaultAsync(s => s.Id == sessionId && 
+            s.Created.AddDays(AuthConstants.SessionDaysLifetime) > DateTime.UtcNow);
         if (foundSession == null)
         {
             foundSession = await Create();
@@ -58,29 +62,27 @@ public class DbSession : IDbSession
 
     public async Task SetUserId(int userId)
     {
-        Session session = await Get();
-        session.UserId = userId;
-        session.Id = Guid.NewGuid();
-        await _appDbContext.SaveChangesAsync();
-        StoreSession(session.Id);
+        SessionEntity sessionEntity = await Create(userId);
+        _session = sessionEntity;
+        StoreSession(sessionEntity.Id);
     }
 
     public async Task<int?> GetUserId()
     {
-        Session session = await Get();
-        return session.UserId;
+        SessionEntity sessionEntity = await Get();
+        return sessionEntity.UserId;
     }
 
     public async Task<bool> IsLoggedIn()
     {
-        Session session = await Get();
-        return session.UserId != null;
+        SessionEntity sessionEntity = await Get();
+        return sessionEntity.UserId != null;
     }
 
     public async Task Destroy()
     {
-        Session session = await Get();
-        _appDbContext.Sessions.Remove(session);
+        SessionEntity sessionEntity = await Get();
+        _appDbContext.Sessions.Remove(sessionEntity);
         await _appDbContext.SaveChangesAsync();
         _webCookieService.Delete(AuthConstants.SessionCookieName);
     }

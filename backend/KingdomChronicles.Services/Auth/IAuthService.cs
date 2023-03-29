@@ -7,7 +7,7 @@ public interface IAuthService
 {
     Task ValidateUsername(string email);
     
-    Task CreateUser(User user);
+    Task CreateUser(UserEntity userEntity);
     
     Task Register(RegisterDto user);
 

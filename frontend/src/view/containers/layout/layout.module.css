@@ -1,0 +1,23 @@
+.screen {
+    width: 100vw;
+    height: 100vh;
+    background: #1e1e1e;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.container {
+    width: 1320px;
+    background: #a5a5a5;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    height: 85px;
+}
+
+.page {
+    height: calc(100% - 85px);
+}

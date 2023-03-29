@@ -1,0 +1,21 @@
+{
+  "search": {
+    "header": "Pending start games",
+    "actions": {
+      "createGame": "Create",
+      "joinGame": "Join"
+    }
+  },
+  "create": {
+    "header": "Create new game",
+    "placeholders": {
+      "name": "Name",
+      "maxPlayersAmount": "Maximum players amount",
+      "maxPlayersAmountOption": "player"
+    },
+    "actions": {
+      "submit": "Create",
+      "backToSearch": "Back to search"
+    }
+  }
+}

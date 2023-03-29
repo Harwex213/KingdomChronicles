@@ -1,0 +1,37 @@
+.container {
+    border: solid 5px transparent;
+}
+
+.container:hover {
+    cursor: pointer;
+}
+
+.container[data-is-selected="true"] {
+    border: solid 5px cornflowerblue;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    height: 60px;
+    align-items: center;
+    background: #444444;
+}
+
+.name {
+    padding: 10px;
+    font-size: 24px;
+    color: #fff;
+}
+
+.playersAmount {
+    padding: 10px;
+    margin-left: auto;
+    font-weight: 800;
+    font-size: 24px;
+    color: #4fe34a;
+}
+
+.playersAmount[data-is-full="true"] {
+    color: #ea4343;
+}

@@ -1,0 +1,19 @@
+.container {
+    padding: 0 50px;
+    display: flex;
+    height: 100%;
+    gap: 50px;
+}
+
+.main {
+    width: 55%;
+    max-height: 100%;
+    margin: 20px 0;
+}
+
+.addition {
+    width: 45%;
+    max-height: 100%;
+    background: #444444;
+    margin: 20px 0;
+}

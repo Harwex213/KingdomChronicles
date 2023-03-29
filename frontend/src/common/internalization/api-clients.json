@@ -1,0 +1,6 @@
+{
+  "errors": {
+    "undefinedError": "Something went wrong, please try again",
+    "serviceUnavailable": "Service is unavailable now, please try again later"
+  }
+}

@@ -25,7 +25,7 @@ namespace KingdomChronicles.DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("KingdomChronicles.DataAccess.Entities.Session", b =>
+            modelBuilder.Entity("KingdomChronicles.DataAccess.Entities.SessionEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -48,7 +48,42 @@ namespace KingdomChronicles.DataAccess.Migrations
                     b.ToTable("Sessions");
                 });
 
-            modelBuilder.Entity("KingdomChronicles.DataAccess.Entities.User", b =>
+            modelBuilder.Entity("KingdomChronicles.DataAccess.Entities.TitleEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Titles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "King"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Free city"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "House"
+                        });
+                });
+
+            modelBuilder.Entity("KingdomChronicles.DataAccess.Entities.UserEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -80,18 +115,78 @@ namespace KingdomChronicles.DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("KingdomChronicles.DataAccess.Entities.Session", b =>
+            modelBuilder.Entity("KingdomChronicles.DataAccess.Entities.UserProfileEntity", b =>
                 {
-                    b.HasOne("KingdomChronicles.DataAccess.Entities.User", "User")
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("FlagBackgroundColor")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FlagEmblemSvg")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FlagForegroundColor")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FlagForegroundSvg")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Motto")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)");
+
+                    b.Property<int?>("TitleId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("UserProfiles");
+                });
+
+            modelBuilder.Entity("KingdomChronicles.DataAccess.Entities.SessionEntity", b =>
+                {
+                    b.HasOne("KingdomChronicles.DataAccess.Entities.UserEntity", "User")
                         .WithMany("Sessions")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("KingdomChronicles.DataAccess.Entities.User", b =>
+            modelBuilder.Entity("KingdomChronicles.DataAccess.Entities.UserProfileEntity", b =>
+                {
+                    b.HasOne("KingdomChronicles.DataAccess.Entities.TitleEntity", "TitleEntity")
+                        .WithMany("Profiles")
+                        .HasForeignKey("TitleId");
+
+                    b.HasOne("KingdomChronicles.DataAccess.Entities.UserEntity", "UserEntity")
+                        .WithOne("UserProfileEntity")
+                        .HasForeignKey("KingdomChronicles.DataAccess.Entities.UserProfileEntity", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TitleEntity");
+
+                    b.Navigation("UserEntity");
+                });
+
+            modelBuilder.Entity("KingdomChronicles.DataAccess.Entities.TitleEntity", b =>
+                {
+                    b.Navigation("Profiles");
+                });
+
+            modelBuilder.Entity("KingdomChronicles.DataAccess.Entities.UserEntity", b =>
                 {
                     b.Navigation("Sessions");
+
+                    b.Navigation("UserProfileEntity")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

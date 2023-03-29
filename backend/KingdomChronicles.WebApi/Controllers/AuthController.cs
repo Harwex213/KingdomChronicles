@@ -1,7 +1,8 @@
 ﻿using KingdomChronicles.Services.Auth;
 using KingdomChronicles.Services.DTOs.Auth;
+using KingdomChronicles.Services.Exceptions;
 using KingdomChronicles.WebApi.Middleware;
-using KingdomChronicles.WebApi.Middleware.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KingdomChronicles.WebApi.Controllers;
@@ -19,44 +20,45 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    [ShouldBeNotAuthorized]
     [ModelValidation]
     public async Task<UserDto> Register([FromBody] RegisterDto registerDto)
     {
-        await _authService.Register(registerDto);
-        return new UserDto
+        if (HttpContext.User.Identity?.IsAuthenticated == true)
         {
-            IsLoggedIn = await _dbSession.IsLoggedIn(),
-            Username = registerDto.Username
-        };
+            throw new BadRequestException(Constants.MiddlewareConstants.ShouldBeNotAuthorizedMessage);
+        }
+        
+        await _authService.Register(registerDto);
+        return await DescribeUser();
     }
     
     [HttpPost("login")]
-    [ShouldBeNotAuthorized]
     [ModelValidation]
     public async Task<UserDto> Login([FromBody] LoginDto loginDto)
     {
-        await _authService.Login(loginDto);
-        return new UserDto
+        if (HttpContext.User.Identity?.IsAuthenticated == true)
         {
-            IsLoggedIn = await _dbSession.IsLoggedIn(),
-            Username = loginDto.Username
-        };
+            throw new BadRequestException(Constants.MiddlewareConstants.ShouldBeNotAuthorizedMessage);
+        }
+        
+        await _authService.Login(loginDto);
+        return await DescribeUser();
     }
     
     [HttpGet("describe")]
+    [Authorize]
     public async Task<UserDto> DescribeUser()
     {
         var session = await _dbSession.Get();
         return new UserDto
         {
-            IsLoggedIn = await _dbSession.IsLoggedIn(),
-            Username = session.User?.Username
+            Id = session.UserId!.Value,
+            ShouldBeInGame = Hubs.GameHub.IsPlayerShouldBeInGame(session.UserId!.Value),
         };
     }
 
     [HttpDelete("logout")]
-    [ShouldBeAuthorized]
+    [Authorize]
     public async Task Logout()
     {
         await _authService.Logout();

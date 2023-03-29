@@ -1,0 +1,1 @@
+dotnet ef database update -s ./KingdomChronicles.WebApi/KingdomChronicles.WebApi.csproj -p KingdomChronicles.DataAccess/KingdomChronicles.DataAccess.csproj

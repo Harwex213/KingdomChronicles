@@ -2,6 +2,6 @@
 
 public class UserDto
 {
-    public bool IsLoggedIn { get; set; }
-    public string? Username { get; set; }
+    public int Id { get; set; }
+    public bool ShouldBeInGame { get; set; } = false;
 }

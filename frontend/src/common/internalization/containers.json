@@ -1,0 +1,20 @@
+{
+  "headerMenu": {
+    "newGame": "New game",
+    "userProfile": "User profile"
+  },
+  "chat": {
+    "message": {
+      "placeholder": "Message.."
+    },
+    "sendButton": "Send"
+  },
+  "pendingStartGame": {
+    "playerActions": {
+      "ready": "Ready",
+      "notReady": "Not Ready",
+      "start": "Start",
+      "leave":  "Leave"
+    }
+  }
+}

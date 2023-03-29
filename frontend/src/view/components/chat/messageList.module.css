@@ -1,0 +1,9 @@
+.container {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.message {
+    color: #fff;
+    padding: 5px;
+}

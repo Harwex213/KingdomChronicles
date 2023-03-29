@@ -1,0 +1,25 @@
+class UserProfile {
+    constructor() {
+        this.name = "";
+        this.motto = "";
+        this.titleId = "";
+        this.flag = {
+            backgroundColor: "",
+            foregroundColor: "",
+            foregroundSvg: "",
+            emblemSvg: "",
+        };
+    }
+
+    setUserProfile({ name, motto, titleId, flag }) {
+        this.name = name;
+        this.titleId = titleId;
+        this.motto = motto;
+        this.flag.backgroundColor = flag.backgroundColor;
+        this.flag.foregroundColor = flag.foregroundColor;
+        this.flag.foregroundSvg = flag.foregroundSvg;
+        this.flag.emblemSvg = flag.emblemSvg;
+    }
+}
+
+export { UserProfile };

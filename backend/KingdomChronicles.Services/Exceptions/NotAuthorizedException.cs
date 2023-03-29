@@ -6,10 +6,3 @@ public class NotAuthorizedException : Exception
     {
     }
 }
-
-internal class CannotLoginException : NotAuthorizedException
-{
-    public CannotLoginException() : base(ExceptionMessages.UnauthorizedMessages.CannotLogin)
-    {
-    }
-}

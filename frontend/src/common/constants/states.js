@@ -1,0 +1,9 @@
+export const PLAYER_STATES = {
+    NOT_STARTED_GAME: "NOT_STARTED_GAME",
+    IN_GAME: "IN_GAME",
+};
+
+export const SEARCH_GAME_STATES = {
+    IDLE: "IDLE",
+    IN_PENDING_START_GAME: "IN_PENDING_START_GAME",
+};

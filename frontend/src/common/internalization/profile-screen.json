@@ -1,0 +1,33 @@
+{
+  "menu": {
+    "overview": "Overview",
+    "editInfo": "Edit info",
+    "editFlag": "Edit flag"
+  },
+  "index": {
+    "loading": "Loading...",
+    "error": "Error occurred while attempt to load user profile"
+  },
+  "overview": {
+    "flagDescription": "Your flag"
+  },
+  "infoEdit": {
+    "name": {
+      "placeholder": "Your in-game name",
+      "errors": {
+        "required": "Name is required",
+        "maxLengthExceeded": "Name is too long"
+      }
+    },
+    "motto": {
+      "placeholder": "Motto",
+      "errors": {
+        "maxLengthExceeded": "Motto is too long"
+      }
+    },
+    "title": {
+      "placeholder": "Prefix"
+    },
+    "submit": "Submit"
+  }
+}
