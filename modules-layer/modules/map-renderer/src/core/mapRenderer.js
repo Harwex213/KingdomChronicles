@@ -51,6 +51,7 @@ export class MapRenderer {
             })
             .pinch()
             .decelerate()
+            .wheel()
             .clamp({
                 direction: "all",
                 underflow: "center",

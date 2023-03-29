@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { mapScreenModel } from "./mapScreenModel.js";
 import styles from "./mapScreen.module.css";
-import { ControlBar } from "./components/ControlBar.jsx";
+import { ControlBar } from "./controlBar/ControlBar.jsx";
 
 const MapScreen = () => {
     useEffect(() => {

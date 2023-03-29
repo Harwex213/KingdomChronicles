@@ -4,7 +4,7 @@
 			"frame": {
 				"x": 1,
 				"y": 1,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -12,19 +12,19 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
+				"w": 44,
 				"h": 43
 			}
 		},
-		"empty.png": {
+		"flatland.png": {
 			"frame": {
-				"x": 46,
+				"x": 47,
 				"y": 1,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -32,19 +32,19 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
+				"w": 44,
 				"h": 43
 			}
 		},
-		"forest_grassland.png": {
+		"forest (flatland).png": {
 			"frame": {
-				"x": 91,
+				"x": 93,
 				"y": 1,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -52,19 +52,19 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
+				"w": 44,
 				"h": 43
 			}
 		},
-		"forest_plainland.png": {
+		"forest (grassland).png": {
 			"frame": {
-				"x": 136,
+				"x": 139,
 				"y": 1,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -72,19 +72,19 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
+				"w": 44,
 				"h": 43
 			}
 		},
-		"forest_tundra.png": {
+		"forest (tundra).png": {
 			"frame": {
 				"x": 1,
 				"y": 46,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -92,19 +92,19 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
+				"w": 44,
 				"h": 43
 			}
 		},
 		"grassland.png": {
 			"frame": {
-				"x": 46,
+				"x": 47,
 				"y": 46,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -112,19 +112,19 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
+				"w": 44,
 				"h": 43
 			}
 		},
-		"hills_desert.png": {
+		"hills (desert).png": {
 			"frame": {
-				"x": 91,
+				"x": 93,
 				"y": 46,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -132,19 +132,19 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
+				"w": 44,
 				"h": 43
 			}
 		},
-		"hills_grassland.png": {
+		"hills (flatlandd).png": {
 			"frame": {
-				"x": 136,
+				"x": 139,
 				"y": 46,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -152,19 +152,19 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
+				"w": 44,
 				"h": 43
 			}
 		},
-		"hills_plainland.png": {
+		"hills (grassland).png": {
 			"frame": {
 				"x": 1,
 				"y": 91,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -172,19 +172,19 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
+				"w": 44,
 				"h": 43
 			}
 		},
-		"hills_tundra.png": {
+		"hills (tundra).png": {
 			"frame": {
-				"x": 46,
+				"x": 47,
 				"y": 91,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -192,19 +192,19 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
+				"w": 44,
 				"h": 43
 			}
 		},
-		"jungle_grassland.png": {
+		"hills+forest (flatlandd).png": {
 			"frame": {
-				"x": 91,
+				"x": 93,
 				"y": 91,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -212,19 +212,19 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
+				"w": 44,
 				"h": 43
 			}
 		},
-		"jungle_plainland.png": {
+		"hills+forest (grassland).png": {
 			"frame": {
-				"x": 136,
+				"x": 139,
 				"y": 91,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -232,19 +232,19 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
+				"w": 44,
 				"h": 43
 			}
 		},
-		"mountain.png": {
+		"hills+forest (tundra).png": {
 			"frame": {
 				"x": 1,
 				"y": 136,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -252,19 +252,19 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
+				"w": 44,
 				"h": 43
 			}
 		},
-		"plainland.png": {
+		"jungle.png": {
 			"frame": {
-				"x": 46,
+				"x": 47,
 				"y": 136,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -272,19 +272,79 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
+				"w": 44,
+				"h": 43
+			}
+		},
+		"land.png": {
+			"frame": {
+				"x": 93,
+				"y": 136,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"mountains.png": {
+			"frame": {
+				"x": 139,
+				"y": 136,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sea.png": {
+			"frame": {
+				"x": 185,
+				"y": 1,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
 				"h": 43
 			}
 		},
 		"tundra.png": {
 			"frame": {
-				"x": 91,
-				"y": 136,
-				"w": 43,
+				"x": 185,
+				"y": 46,
+				"w": 44,
 				"h": 43
 			},
 			"rotated": false,
@@ -292,31 +352,11 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 43,
+				"w": 44,
 				"h": 43
 			},
 			"sourceSize": {
-				"w": 43,
-				"h": 43
-			}
-		},
-		"water.png": {
-			"frame": {
-				"x": 136,
-				"y": 136,
-				"w": 43,
-				"h": 43
-			},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {
-				"x": 0,
-				"y": 0,
-				"w": 43,
-				"h": 43
-			},
-			"sourceSize": {
-				"w": 43,
+				"w": 44,
 				"h": 43
 			}
 		}
@@ -326,7 +366,7 @@
 		"image": "spritesheet.png",
 		"format": "RGBA8888",
 		"size": {
-			"w": 180,
+			"w": 230,
 			"h": 180
 		},
 		"scale": "1"
