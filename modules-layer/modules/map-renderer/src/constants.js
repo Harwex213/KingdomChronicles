@@ -1,20 +1,25 @@
 export const spritesheetTextureTypes = {
-    EMPTY: "empty",
+    LAND: "land",
     WATER: "water",
+
+    DESERT: "desert",
     FLATLAND: "flatland",
     GRASSLAND: "grassland",
-    DESERT: "desert",
     MOUNTAIN: "mountain",
+    JUNGLE: "jungle",
     TUNDRA: "tundra",
-    FOREST_GRASSLAND: "forestGrassland",
+
     FOREST_FLATLAND: "forestFlatland",
+    FOREST_HILLS_FLATLAND: "forestHillsFlatland",
+    FOREST_GRASSLAND: "forestGrassland",
+    FOREST_HILLS_GRASSLAND: "foresHillsGrassland",
     FOREST_TUNDRA: "forestTundra",
+    FOREST_HILLS_TUNDRA: "forestHillsTundra",
+
     HILLS_GRASSLAND: "hillsGrassland",
     HILLS_FLATLAND: "hillsFlatland",
     HILLS_TUNDRA: "hillsTundra",
     HILLS_DESERT: "hillsDesert",
-    JUNGLE_GRASSLAND: "jungleGrassland",
-    JUNGLE_FLATLAND: "jungleFlatland",
-}
+};
 
 export const oddTileOffsetPercent = 0.5;

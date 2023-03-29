@@ -9,6 +9,7 @@ const areaTypeToSpritesheetTextureType = {
         [biomTypes.GRASSLAND]: spritesheetTextureTypes.GRASSLAND,
         [biomTypes.MOUNTAIN]: spritesheetTextureTypes.MOUNTAIN,
         [biomTypes.TUNDRA]: spritesheetTextureTypes.TUNDRA,
+        [biomTypes.JUNGLE]: spritesheetTextureTypes.JUNGLE,
     },
     [areaTypes.HILLS]: {
         [biomTypes.FLATLAND]: spritesheetTextureTypes.HILLS_FLATLAND,
@@ -21,9 +22,10 @@ const areaTypeToSpritesheetTextureType = {
         [biomTypes.FLATLAND]: spritesheetTextureTypes.FOREST_FLATLAND,
         [biomTypes.TUNDRA]: spritesheetTextureTypes.FOREST_TUNDRA,
     },
-    [areaTypes.JUNGLE]: {
-        [biomTypes.GRASSLAND]: spritesheetTextureTypes.JUNGLE_GRASSLAND,
-        [biomTypes.FLATLAND]: spritesheetTextureTypes.JUNGLE_FLATLAND,
+    [areaTypes.FOREST_HILLS]: {
+        [biomTypes.GRASSLAND]: spritesheetTextureTypes.FOREST_HILLS_GRASSLAND,
+        [biomTypes.FLATLAND]: spritesheetTextureTypes.FOREST_HILLS_FLATLAND,
+        [biomTypes.TUNDRA]: spritesheetTextureTypes.FOREST_HILLS_TUNDRA,
     },
 };
 
@@ -46,7 +48,7 @@ export class SpriteCreator {
 
     _getTextureName = (textureNames, mapTile) => {
         if (mapTile.tileType === null) {
-            return textureNames[spritesheetTextureTypes.EMPTY];
+            return textureNames[spritesheetTextureTypes.LAND];
         }
         if (mapTile.tileType === tileTypes.LAND && mapTile.biomType !== biomTypes.NONE) {
             const textureName = areaTypeToSpritesheetTextureType[mapTile.areaType][mapTile.biomType];
@@ -54,5 +56,5 @@ export class SpriteCreator {
         }
 
         return textureNames[spritesheetTextureTypes.WATER];
-    }
+    };
 }

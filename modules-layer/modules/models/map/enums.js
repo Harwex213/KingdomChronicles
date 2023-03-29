@@ -2,18 +2,18 @@ export const mapSizeTypes = {
     SMALL: "small",
     MEDIUM: "medium",
     BIG: "big",
-}
+};
 
 export const waterBalanceTypes = {
     LESS_WATER: "less-water",
     BALANCE: "balance",
-    MORE_WATER: "more-water"
-}
+    MORE_WATER: "more-water",
+};
 
 export const tileTypes = {
     SEA: "sea",
     LAND: "land",
-}
+};
 
 export const biomTypes = {
     TUNDRA: "tundra",
@@ -21,15 +21,16 @@ export const biomTypes = {
     FLATLAND: "flatland",
     GRASSLAND: "grassland",
     MOUNTAIN: "mountain",
+    JUNGLE: "jungle",
     NONE: "none",
-}
+};
 
 export const areaTypes = {
     HILLS: "hills",
-    JUNGLE: "jungle",
     FOREST: "forest",
+    FOREST_HILLS: "forestHills",
     NONE: "none",
-}
+};
 
 export const directionsTypes = {
     LEFT_DOWN: "left-down",
@@ -38,4 +39,4 @@ export const directionsTypes = {
     RIGHT_UP: "right-up",
     LEFT_UP: "left-up",
     LEFT: "left",
-}
+};

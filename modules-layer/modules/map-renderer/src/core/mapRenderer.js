@@ -17,7 +17,7 @@ export class MapRenderer {
     constructor(config) {
         this._config = { ...config };
 
-        const appHtmlContainer = document.getElementById(this._config.app.containerId);
+        const appHtmlContainer = document.querySelector(this._config.app.containerSelector);
         this._appContainerResizeObserver = new ElementResizeObserver(appHtmlContainer);
         this._initPixiApp(appHtmlContainer);
         this._initViewport();
@@ -51,15 +51,16 @@ export class MapRenderer {
             })
             .pinch()
             .decelerate()
+            .wheel()
             .clamp({
                 direction: "all",
-                underflow: "center"
+                underflow: "center",
             });
 
         this._appContainerResizeObserver.subscribe({
             update: ({ width, height }) => {
                 this._viewport.resize(width, height);
-            }
+            },
         });
     }
 
@@ -105,7 +106,7 @@ export class MapRenderer {
 
         this._viewport.addChild(this._mapContainer);
     }
-    
+
     _positionViewport() {
         const rendererMapSizes = { width: this._mapContainer.width, height: this._mapContainer.height };
         this._resizeViewportToMapSizes(rendererMapSizes);
