@@ -14,7 +14,12 @@ public class TitleEntity
     public static readonly IEnumerable<TitleEntity> InitialData = new List<TitleEntity>
     {
         new() { Id = DefaultTitleId, Name = "King" },
-        new() { Id = 2, Name = "Free city" },
-        new() { Id = 3, Name = "House" }
+        new() { Id = 2, Name = "Emperor" },
+        new() { Id = 3, Name = "Consul" },
+        new() { Id = 4, Name = "Senator" },
+        new() { Id = 5, Name = "Tsar" },
+        new() { Id = 6, Name = "Prince" },
+        new() { Id = 7, Name = "Nobleman" },
+        new() { Id = 8, Name = "Trader" }
     };
 }

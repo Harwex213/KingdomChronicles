@@ -7,6 +7,7 @@ class UserProfile {
             backgroundColor: "",
             foregroundColor: "",
             foregroundSvg: "",
+            emblemColor: "",
             emblemSvg: "",
         };
     }
@@ -18,6 +19,7 @@ class UserProfile {
         this.flag.backgroundColor = flag.backgroundColor;
         this.flag.foregroundColor = flag.foregroundColor;
         this.flag.foregroundSvg = flag.foregroundSvg;
+        this.flag.emblemColor = flag.emblemColor;
         this.flag.emblemSvg = flag.emblemSvg;
     }
 }

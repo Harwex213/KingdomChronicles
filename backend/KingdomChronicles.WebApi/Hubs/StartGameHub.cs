@@ -28,7 +28,7 @@ public class StartGameHub : Hub
     {
         if (GameHub.IsPlayerShouldBeInGame(userId))
         {
-            await Clients.Caller.SendAsync(GameHubConstants.NotInGameEvent.ShouldBeInStartedGame);
+            await Clients.Caller.SendAsync(GameHubConstants.NotInGameEvents.ShouldBeInStartedGame);
             return true;
         }
 
@@ -39,7 +39,7 @@ public class StartGameHub : Hub
     {
         if (ConnectionIds.TryRemove(Context.UserIdentifier!, out var oldConnectionId))
         {
-            await Clients.Client(oldConnectionId).SendAsync(GameHubConstants.NotInGameEvent.AbortExistedConnection);
+            await Clients.Client(oldConnectionId).SendAsync(GameHubConstants.NotInGameEvents.AbortExistedConnection);
         }
     }
 
@@ -64,7 +64,12 @@ public class StartGameHub : Hub
     {
         var pendingStartGames = PendingStartGames.Select(g => g.Value).ToList();
         var pendingStartGamesDto = _mapper.Map<IEnumerable<PendingStartGameDto>>(pendingStartGames);
-        await Clients.Caller.SendAsync(GameHubConstants.NotInGameEvent.CurrentPendingStartGames, pendingStartGamesDto);
+        await Clients.Caller.SendAsync(GameHubConstants.NotInGameEvents.CurrentPendingStartGames, pendingStartGamesDto);
+    }
+
+    private async Task SendUserProfileInfo(StartGameHubUser hubUser)
+    {
+        await Clients.Caller.SendAsync(GameHubConstants.UserProfileEvents.UserProfileInfo, hubUser.UserProfile);
     }
     
     public override async Task OnConnectedAsync()
@@ -84,7 +89,8 @@ public class StartGameHub : Hub
         Context.Items.Add(GameHubConstants.HubUserItemKey, hubUser);
         
         await Groups.AddToGroupAsync(Context.ConnectionId, GameHubConstants.GroupNames.NotInGame);
-        
+
+        await SendUserProfileInfo(hubUser);
         await SendCurrentPendingStartGames();
     }
 
@@ -123,7 +129,7 @@ public class StartGameHub : Hub
         else
         {
             await Clients.Group(GameHubConstants.GroupNames.NotInGame)
-                .SendAsync(GameHubConstants.NotInGameEvent.NewChatMessage, chatMessage);
+                .SendAsync(GameHubConstants.NotInGameEvents.NewChatMessage, chatMessage);
         }
     }
 
@@ -143,20 +149,20 @@ public class StartGameHub : Hub
     {
         var pendingStartGameDto = _mapper.Map<PendingStartGameDto>(createdGame);
         await Clients.Group(GameHubConstants.GroupNames.NotInGame)
-            .SendAsync(GameHubConstants.NotInGameEvent.GameCreated, pendingStartGameDto);
+            .SendAsync(GameHubConstants.NotInGameEvents.GameCreated, pendingStartGameDto);
     }
     
     private async Task SendGlobalEventGameUpdated(PendingStartGame updatedGame)
     {
         var pendingStartGameDto = _mapper.Map<PendingStartGameDto>(updatedGame);
         await Clients.Group(GameHubConstants.GroupNames.NotInGame)
-            .SendAsync(GameHubConstants.NotInGameEvent.GameUpdated, pendingStartGameDto);
+            .SendAsync(GameHubConstants.NotInGameEvents.GameUpdated, pendingStartGameDto);
     }
 
     private async Task SendGlobalEventGameDestroyed(Guid gameId)
     {
         await Clients.Group(GameHubConstants.GroupNames.NotInGame)
-            .SendAsync(GameHubConstants.NotInGameEvent.GameDestroyed, gameId);
+            .SendAsync(GameHubConstants.NotInGameEvents.GameDestroyed, gameId);
     }
     
     public async Task CreateGame(CreateGameDto createGameDto)
@@ -303,22 +309,21 @@ public class StartGameHub : Hub
         {
             PendingStartGames.TryRemove(game.Id, out _);
             await SendGlobalEventGameDestroyed(game.Id);
-
-            return;
         }
-        
-        lock (game)
+        else
         {
-            if (game.OwnerId == currentHubUser.UserProfile.UserId)
+            lock (game)
             {
-                game.OwnerId = game.UserProfiles.First().UserId;
+                if (game.OwnerId == currentHubUser.UserProfile.UserId)
+                {
+                    game.OwnerId = game.UserProfiles.First().UserId;
+                }
             }
-        }
 
-        await Clients.Caller.SendAsync(GameHubConstants.PendingStartGameEvents.LeavedFromGame);
-        await Clients.GroupExcept(game.Id.ToString(), Context.ConnectionId)
-            .SendAsync(GameHubConstants.PendingStartGameEvents.PlayerLeaved, game);
-        await SendGlobalEventGameUpdated(game);
+            await Clients.GroupExcept(game.Id.ToString(), Context.ConnectionId)
+                .SendAsync(GameHubConstants.PendingStartGameEvents.PlayerLeaved, game);
+            await SendGlobalEventGameUpdated(game);
+        }
     }
 
     private void CleanConnection()
@@ -375,5 +380,56 @@ public class StartGameHub : Hub
         GameHub.AddToStartedGames(startedGame);
 
         await Clients.Group(game.Id.ToString()).SendAsync(GameHubConstants.PendingStartGameEvents.GameStarted);
+    }
+
+    public async Task EditUserProfileInfo(EditUserProfileInfoDto editUserProfileInfoDto)
+    {
+        var (validationResult, errorMessage) = Utils.Validate(editUserProfileInfoDto);
+        if (validationResult == false)
+        {
+            throw new HubException(errorMessage);
+        }
+        
+        var currentHubUser = GetCurrentHubUser();
+        var userProfile = await _dbContext.UserProfiles
+            .FirstAsync(u => u.UserId == currentHubUser.UserProfile.UserId);
+
+        userProfile.Name = editUserProfileInfoDto.Name!;
+        userProfile.KingdomName = editUserProfileInfoDto.KingdomName!;
+        userProfile.Motto = editUserProfileInfoDto.Motto!;
+        userProfile.TitleId = editUserProfileInfoDto.TitleId!;
+
+        _dbContext.UserProfiles.Update(userProfile);
+        await _dbContext.SaveChangesAsync();
+        
+        currentHubUser.UserProfile = _mapper.Map<UserProfileDto>(userProfile);
+
+        await SendUserProfileInfo(currentHubUser);
+    }
+
+    public async Task EditUserProfileFlag(EditUserProfileFlagDto editUserProfileFlagDto)
+    {
+        var (validationResult, errorMessage) = Utils.Validate(editUserProfileFlagDto);
+        if (validationResult == false)
+        {
+            throw new HubException(errorMessage);
+        }
+        
+        var currentHubUser = GetCurrentHubUser();
+        var userProfile = await _dbContext.UserProfiles
+            .FirstAsync(u => u.UserId == currentHubUser.UserProfile.UserId);
+
+        userProfile.FlagBackgroundColor = editUserProfileFlagDto.BackgroundColor!;
+        userProfile.FlagForegroundColor = editUserProfileFlagDto.ForegroundColor!;
+        userProfile.FlagForegroundSvg = editUserProfileFlagDto.ForegroundSvg!;
+        userProfile.FlagEmblemColor = editUserProfileFlagDto.EmblemColor!;
+        userProfile.FlagEmblemSvg = editUserProfileFlagDto.EmblemSvg!;
+        
+        _dbContext.UserProfiles.Update(userProfile);
+        await _dbContext.SaveChangesAsync();
+        
+        currentHubUser.UserProfile = _mapper.Map<UserProfileDto>(userProfile);
+
+        await SendUserProfileInfo(currentHubUser);
     }
 }

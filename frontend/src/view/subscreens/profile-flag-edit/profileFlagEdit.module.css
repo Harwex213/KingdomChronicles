@@ -1,0 +1,17 @@
+.container {
+    display: grid;
+    grid-template-columns: auto 250px;
+    height: 100%;
+}
+
+.editFlag {
+
+}
+
+.flag {
+    height: 325px;
+}
+
+.flagDescription {
+    text-align: center;
+}

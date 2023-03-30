@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.input {
+
+}
+
+.input:hover {
+    cursor: pointer;
+}

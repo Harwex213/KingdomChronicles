@@ -29,5 +29,5 @@ export const PENDING_START_GAME_EVENTS = {
     PLAYER_JOINED: "PendingStartGameEvents_PlayerJoined",
     PLAYER_LEAVED: "PendingStartGameEvents_PlayerLeaved",
     PLAYER_CHANGE_READY_STATUS: "PendingStartGameEvents_PlayerChangeReadyStatus",
-    GAME_STARTED: "PendingStartGameEvents_LeavedFromGame",
+    GAME_STARTED: "PendingStartGameEvents_GameStarted",
 };
