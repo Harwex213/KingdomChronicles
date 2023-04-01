@@ -1,4 +1,7 @@
 {
   "name": "models",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "mobx": "^6.9.0"
+  }
 }

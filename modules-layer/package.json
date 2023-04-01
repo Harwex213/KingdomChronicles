@@ -9,6 +9,7 @@
     "control-bar-gui": "file:./modules/control-bar-gui",
     "map-generator": "file:./modules/map-generator",
     "map-renderer": "file:./modules/map-renderer",
+    "game": "file:./modules/game",
     "models": "file:./modules/models",
     "mobx": "^6.9.0",
     "mobx-react-lite": "^3.4.3",

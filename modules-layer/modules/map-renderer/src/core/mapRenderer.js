@@ -17,21 +17,17 @@ export class MapRenderer {
     constructor(config) {
         this._config = { ...config };
 
-        const appHtmlContainer = document.querySelector(this._config.app.containerSelector);
-        this._appContainerResizeObserver = new ElementResizeObserver(appHtmlContainer);
-        this._initPixiApp(appHtmlContainer);
+        this._initPixiApp();
         this._initViewport();
         this._calculateTileDimensions();
         this._loadSpriteSheet();
         this._initSpriteCreator();
     }
 
-    _initPixiApp(appHtmlContainer) {
+    _initPixiApp() {
         this._pixiApp = new Application({
             background: "#000",
-            resizeTo: appHtmlContainer,
         });
-        appHtmlContainer.appendChild(this._pixiApp.view);
     }
 
     _initViewport() {
@@ -40,6 +36,8 @@ export class MapRenderer {
         this._viewport = new Viewport({
             passiveWheel: false,
             events: app.renderer.events,
+            ticker: app.ticker,
+            disableOnContextMenu: true,
         });
 
         app.stage.addChild(this._viewport);
@@ -56,21 +54,15 @@ export class MapRenderer {
                 direction: "all",
                 underflow: "center",
             });
-
-        this._appContainerResizeObserver.subscribe({
-            update: ({ width, height }) => {
-                this._viewport.resize(width, height);
-            },
-        });
     }
 
     _calculateTileDimensions() {
-        const { tileSize } = this._config;
+        const { tileDimensions } = this._config;
 
         this._tileDimensions = {
-            width: tileSize,
-            height: tileSize,
-            widthOffset: [0, tileSize * oddTileOffsetPercent],
+            width: tileDimensions.width,
+            height: tileDimensions.height,
+            widthOffset: [0, tileDimensions.width * oddTileOffsetPercent],
         };
     }
 
@@ -82,6 +74,20 @@ export class MapRenderer {
 
     _initSpriteCreator() {
         this._spriteCreator = new SpriteCreator(this._config.spriteSheet.textureNames, this._tileDimensions);
+    }
+
+    mountView(containerSelector) {
+        const appHtmlContainer = document.querySelector(containerSelector);
+
+        this._pixiApp.resizeTo = appHtmlContainer;
+        appHtmlContainer.appendChild(this._pixiApp.view);
+
+        this._appContainerResizeObserver = new ElementResizeObserver(appHtmlContainer);
+        this._appContainerResizeObserver.subscribe({
+            update: ({ width, height }) => {
+                this._viewport.resize(width, height);
+            },
+        });
     }
 
     async render(mapToRender) {

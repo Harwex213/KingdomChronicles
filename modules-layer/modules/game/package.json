@@ -1,0 +1,8 @@
+{
+  "name": "map-generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "models": "file:../models",
+    "map-generator": "file:../map-generator"
+  }}
