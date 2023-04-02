@@ -3,6 +3,9 @@ import { Viewport } from "pixi-viewport";
 import { oddTileOffsetPercent } from "../constants.js";
 import { ElementResizeObserver } from "../utils/elementResizeObserver.js";
 import { SpriteCreator } from "./spriteCreator.js";
+import { BorderGraphics } from "./borderGraphics";
+import { RegionBordersRenderer } from "./regionBordersRenderer";
+import { TilePositionCalculator } from "./tilePositionCalculator";
 
 export class MapRenderer {
     _config;
@@ -13,6 +16,9 @@ export class MapRenderer {
     _tileDimensions;
     _spriteSheetLoadPromise;
     _spriteCreator;
+    #borderGraphics;
+    #tilePositionCalculator;
+    #regionBordersRenderer;
 
     constructor(config) {
         this._config = { ...config };
@@ -22,6 +28,15 @@ export class MapRenderer {
         this._calculateTileDimensions();
         this._loadSpriteSheet();
         this._initSpriteCreator();
+
+        this.#borderGraphics = new BorderGraphics(this._tileDimensions);
+        this.#tilePositionCalculator = new TilePositionCalculator(this._tileDimensions);
+
+        this.#regionBordersRenderer = new RegionBordersRenderer({
+            tilePositionCalculator: this.#tilePositionCalculator,
+            borderGraphics: this.#borderGraphics,
+            renderer: this._pixiApp.renderer,
+        });
     }
 
     _initPixiApp() {
@@ -101,12 +116,16 @@ export class MapRenderer {
         for (const tilesRow of matrix) {
             for (const mapTile of tilesRow) {
                 const tile = this._spriteCreator.fromMapTile(mapTile, spriteSheet);
+
                 if (mapTile.partRegion !== "none" && regions[mapTile.partRegion.regionIndex].tint) {
                     tile.tint = regions[mapTile.partRegion.regionIndex].tint;
                 }
+
                 this._mapContainer.addChild(tile);
             }
         }
+
+        this.#regionBordersRenderer.render(this._mapContainer, matrix, regions);
 
         this._positionViewport();
 

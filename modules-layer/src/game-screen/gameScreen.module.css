@@ -13,13 +13,22 @@
     max-height: 1080px;
     width: 100%;
     height: 100%;
-    background: #6e6e6e;
+    background: #000000;
     position: relative;
+    display: grid;
+    grid-template-columns: 200px auto 200px;
+}
+
+.gameInfo {
+}
+
+.map {
+    width: 100%;
+    height: 100%;
+    align-self: center;
+    justify-self: center;
 }
 
 .gameCreator {
-    position: absolute;
-    width: 200px;
     height: 200px;
-    right: 0;
 }

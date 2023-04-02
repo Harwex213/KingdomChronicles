@@ -9,10 +9,13 @@ const GameScreen = observer(() => {
         <div className={styles.screen}>
             <div style={{ display: "none" }}>{gameService.lastGameCreated.getTime()}</div>
             <div className={styles.container}>
+                <div className={styles.gameInfo}>There will be settings</div>
+                <div className={styles.map}>
+                    <Map />
+                </div>
                 <div className={styles.gameCreator}>
                     <GameCreator />
                 </div>
-                <Map />
             </div>
         </div>
     );
