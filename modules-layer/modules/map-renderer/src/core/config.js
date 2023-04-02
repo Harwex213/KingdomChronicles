@@ -1,10 +1,9 @@
 import { spritesheetTextureTypes } from "../constants.js";
 
 export class MapRendererConfig {
-    tileSize = null;
-    app = {
-        containerSelector: null,
-        dimensions: { width: null, height: null },
+    tileDimensions = {
+        width: null,
+        height: null,
     };
     viewport = {
         minScale: null,
@@ -13,21 +12,27 @@ export class MapRendererConfig {
     spriteSheet = {
         path: null,
         textureNames: {
+            [spritesheetTextureTypes.LAND]: null,
             [spritesheetTextureTypes.WATER]: null,
+
+            [spritesheetTextureTypes.DESERT]: null,
             [spritesheetTextureTypes.FLATLAND]: null,
             [spritesheetTextureTypes.GRASSLAND]: null,
-            [spritesheetTextureTypes.DESERT]: null,
             [spritesheetTextureTypes.MOUNTAIN]: null,
+            [spritesheetTextureTypes.JUNGLE]: null,
             [spritesheetTextureTypes.TUNDRA]: null,
-            [spritesheetTextureTypes.FOREST_GRASSLAND]: null,
+
             [spritesheetTextureTypes.FOREST_FLATLAND]: null,
+            [spritesheetTextureTypes.FOREST_HILLS_FLATLAND]: null,
+            [spritesheetTextureTypes.FOREST_GRASSLAND]: null,
+            [spritesheetTextureTypes.FOREST_HILLS_GRASSLAND]: null,
             [spritesheetTextureTypes.FOREST_TUNDRA]: null,
-            [spritesheetTextureTypes.HILLS_DESERT]: null,
+            [spritesheetTextureTypes.FOREST_HILLS_TUNDRA]: null,
+
             [spritesheetTextureTypes.HILLS_GRASSLAND]: null,
             [spritesheetTextureTypes.HILLS_FLATLAND]: null,
             [spritesheetTextureTypes.HILLS_TUNDRA]: null,
-            [spritesheetTextureTypes.JUNGLE_GRASSLAND]: null,
-            [spritesheetTextureTypes.JUNGLE_FLATLAND]: null,
+            [spritesheetTextureTypes.HILLS_DESERT]: null,
         },
     };
 }

@@ -1,7 +1,6 @@
 import { MapRenderer, MapRendererConfig, spritesheetTextureTypes } from "map-renderer";
-import { renderDevBioms } from "./renderDevBioms.js";
 
-export const mapRendererConfig = new MapRendererConfig();
+const mapRendererConfig = new MapRendererConfig();
 mapRendererConfig.tileDimensions = {
     width: 43,
     height: 43,
@@ -37,26 +36,6 @@ mapRendererConfig.viewport = {
     maxScale: null,
 };
 
-let mapRenderer = null;
+const mapRenderer = new MapRenderer(mapRendererConfig);
 
-const initRenderer = ({ containerSelector }) => {
-    mapRenderer = new MapRenderer(mapRendererConfig);
-    mapRenderer.mountView(containerSelector);
-};
-
-const disposeRenderer = () => {
-    mapRenderer.clean();
-};
-
-const renderMap = async (map, { devBiomsRender, devRegionsRender }) => {
-    if (devBiomsRender) {
-        renderDevBioms(map);
-    }
-    if (devRegionsRender) {
-        map.matrix.forEach((row) => row.forEach((mapTile) => (mapTile.tileType = null)));
-        map.regions.forEach((region) => (region.tint = Math.random() * 0xffffff));
-    }
-    await mapRenderer.render(map);
-};
-
-export { initRenderer, disposeRenderer, renderMap };
+export { mapRenderer };

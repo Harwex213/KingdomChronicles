@@ -23,3 +23,8 @@ export const spritesheetTextureTypes = {
 };
 
 export const oddTileOffsetPercent = 0.5;
+
+export const BORDER_STYLES = {
+    COLOR: 0xffffff,
+    WIDTH: 3,
+};

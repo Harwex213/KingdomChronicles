@@ -73,7 +73,7 @@ class MapScreenModel {
     }
 
     setSeedRandom(newSeedRandom) {
-        if (this.seedRandom === "") {
+        if (newSeedRandom === "") {
             this.seedRandom = undefined;
         } else {
             this.seedRandom = newSeedRandom;
