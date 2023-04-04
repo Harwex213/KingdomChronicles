@@ -103,9 +103,9 @@ export class MapRenderer {
     }
 
     async render(mapToRender) {
-        this.clean();
-
         const spriteSheet = await this._spriteSheetLoadPromise;
+
+        this.clean();
 
         this._mapContainer = new Container();
         const { matrix, regions } = mapToRender;

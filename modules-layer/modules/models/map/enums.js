@@ -20,12 +20,12 @@ export const biomTypes = {
     DESERT: "desert",
     FLATLAND: "flatland",
     GRASSLAND: "grassland",
-    MOUNTAIN: "mountain",
     JUNGLE: "jungle",
     NONE: "none",
 };
 
 export const areaTypes = {
+    MOUNTAIN: "mountain",
     HILLS: "hills",
     FOREST: "forest",
     FOREST_HILLS: "forestHills",

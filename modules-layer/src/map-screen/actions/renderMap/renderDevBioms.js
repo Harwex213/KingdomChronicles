@@ -26,8 +26,10 @@ export const renderDevBioms = (map) => {
     setTileWithoutArea(biomTypes.FLATLAND);
     setTileWithoutArea(biomTypes.DESERT);
     setTileWithoutArea(biomTypes.TUNDRA);
-    setTileWithoutArea(biomTypes.MOUNTAIN);
     setTileWithoutArea(biomTypes.JUNGLE);
+
+    const setTileWithMountain = createTileFiller(areaTypes.MOUNTAIN);
+    setTileWithMountain(biomTypes.FLATLAND);
 
     const setTileWithForest = createTileFiller(areaTypes.FOREST);
     setTileWithForest(biomTypes.GRASSLAND);

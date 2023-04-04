@@ -7,7 +7,6 @@ const areaTypeToSpritesheetTextureName = {
         [biomTypes.DESERT]: spritesheetTextureNames.DESERT,
         [biomTypes.FLATLAND]: spritesheetTextureNames.FLATLAND,
         [biomTypes.GRASSLAND]: spritesheetTextureNames.GRASSLAND,
-        [biomTypes.MOUNTAIN]: spritesheetTextureNames.MOUNTAIN,
         [biomTypes.TUNDRA]: spritesheetTextureNames.TUNDRA,
         [biomTypes.JUNGLE]: spritesheetTextureNames.JUNGLE,
     },
@@ -50,6 +49,10 @@ export class SpriteCreator {
             return spritesheetTextureNames.LAND;
         }
         if (mapTile.tileType === tileTypes.LAND && mapTile.biomType !== biomTypes.NONE) {
+            if (mapTile.areaType === areaTypes.MOUNTAIN) {
+                return spritesheetTextureNames.MOUNTAIN;
+            }
+
             return areaTypeToSpritesheetTextureName[mapTile.areaType][mapTile.biomType];
         }
 

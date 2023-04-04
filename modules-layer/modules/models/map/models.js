@@ -55,5 +55,7 @@ export class Map {
             });
         });
         this.regions = [];
+        this.seaRegions = [];
+        this.landRegions = [];
     }
 }

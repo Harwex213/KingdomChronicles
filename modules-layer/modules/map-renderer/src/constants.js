@@ -13,8 +13,8 @@ export const spritesheetTextureNames = {
     FOREST_HILLS_GRASSLAND: "hills+forest (grassland).png",
     FOREST_FLATLAND: "forest (flatland).png",
     FOREST_HILLS_FLATLAND: "hills+forest (flatlandd).png",
-    FOREST_TUNDRA: "hills+forest (tundra).png",
-    FOREST_HILLS_TUNDRA: "forest_tundra.png",
+    FOREST_TUNDRA: "forest (tundra).png",
+    FOREST_HILLS_TUNDRA: "hills+forest (tundra).png",
 
     HILLS_DESERT: "hills (desert).png",
     HILLS_GRASSLAND: "hills (grassland).png",

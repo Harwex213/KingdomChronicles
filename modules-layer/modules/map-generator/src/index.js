@@ -1,14 +1,17 @@
-import { Map, tileTypes, biomTypes, areaTypes, MapRegion } from "models/map";
-import Randomizer from "./randomizer.js";
+import { Map, tileTypes, MapRegion } from "models/map";
 import { MAP_SIZE_DIMENSIONS, REGION_SIZES } from "../constants";
+import { defineRegionsType } from "./defineRegionsType";
+import { defineRegionsBiom } from "./defineRegionsBiom";
+import { defineElevation } from "./defineElevation";
+import { defineFlora } from "./defineFlora";
 
 class MapGenerationConfig {
-    randomSeed = null;
     mapSizeType = null;
+    randomizer = null;
 }
 
 const generateMap = (mapGenerationConfig) => {
-    const randomizer = new Randomizer(mapGenerationConfig.randomSeed);
+    const randomizer = mapGenerationConfig.randomizer;
     const mapSizes = MAP_SIZE_DIMENSIONS[mapGenerationConfig.mapSizeType];
     const centerPoint = [0, 0];
     const minRegionSize = REGION_SIZES.MIN;
@@ -31,7 +34,7 @@ const generateMap = (mapGenerationConfig) => {
             this.coastsArray.splice(this.coastsArray.indexOf(`${tile[0]}-${tile[1]}`), 1);
         },
         randomCoast() {
-            return this.coastsArray[randomizer.getRandom(this.coastsArray.length - 1)].split("-");
+            return this.coastsArray[randomizer.getRangedRandom(this.coastsArray.length - 1)].split("-");
         },
         isCoast(tile) {
             return this.coastsArray.includes(`${tile[0]}-${tile[1]}`);
@@ -71,7 +74,7 @@ const generateMap = (mapGenerationConfig) => {
         potentialRegionTilesArray: [],
         randomPotentialTile() {
             return this.potentialRegionTilesArray[
-                randomizer.getRandom(this.potentialRegionTilesArray.length - 1)
+                randomizer.getRangedRandom(this.potentialRegionTilesArray.length - 1)
             ].split("-");
         },
         removePotentialTile(tile) {
@@ -101,7 +104,7 @@ const generateMap = (mapGenerationConfig) => {
     };
 
     noNextTile: for (let region = 0; tilesForRegionsLeft.length !== 0; region++) {
-        const regionSize = randomizer.getRandom(maxRegionSize, minRegionSize);
+        const regionSize = randomizer.getRangedRandom(maxRegionSize, minRegionSize);
         coasts.addCoast(centerPoint);
 
         for (let tile = 0; tile < regionSize; tile++) {
@@ -183,7 +186,8 @@ const generateMap = (mapGenerationConfig) => {
                 tileDirection !== "none" &&
                 map.matrix[tileDirection[0]][tileDirection[1]].partRegion !== "none"
         );
-        const chosenRegionIndex = neighboringRegions[randomizer.getRandom(neighboringRegions.length - 1)];
+        const chosenRegionIndex =
+            neighboringRegions[randomizer.getRangedRandom(neighboringRegions.length - 1)];
 
         map.matrix[tile[0]][tile[1]].addRegionToMapTile(map.regions[chosenRegionIndex], chosenRegionIndex);
     });
@@ -254,7 +258,7 @@ const generateMap = (mapGenerationConfig) => {
             ),
             1
         );
-        const chosenTile = copyTilesRegion[randomizer.getRandom(copyTilesRegion.length - 1)];
+        const chosenTile = copyTilesRegion[randomizer.getRangedRandom(copyTilesRegion.length - 1)];
         const countedTiles = [chosenTile];
         const isCountedTile = (tileDirection) => {
             let isCounted = false;
@@ -311,12 +315,12 @@ const generateMap = (mapGenerationConfig) => {
             const chosenRegionIndex =
                 neighboringRegionsSmallerMaxSize.length === 0
                     ? map.regions[targetRegionIndex].indicesNeighboringRegions[
-                          randomizer.getRandom(
+                          randomizer.getRangedRandom(
                               map.regions[targetRegionIndex].indicesNeighboringRegions.length - 1
                           )
                       ]
                     : neighboringRegionsSmallerMaxSize[
-                          randomizer.getRandom(neighboringRegionsSmallerMaxSize.length - 1)
+                          randomizer.getRangedRandom(neighboringRegionsSmallerMaxSize.length - 1)
                       ];
             const condition =
                 neighboringRegionsSmallerMaxSize.length === 0
@@ -329,7 +333,7 @@ const generateMap = (mapGenerationConfig) => {
                           borderingTilesToRegion.length !== 0;
             const borderingTilesToRegion = getBorderingTilesToRegion(targetRegionIndex, chosenRegionIndex);
             while (condition()) {
-                const chosenIndex = randomizer.getRandom(borderingTilesToRegion.length - 1);
+                const chosenIndex = randomizer.getRangedRandom(borderingTilesToRegion.length - 1);
                 const chosenTile = borderingTilesToRegion[chosenIndex];
                 borderingTilesToRegion.splice(chosenIndex, 1);
 
@@ -428,211 +432,10 @@ const generateMap = (mapGenerationConfig) => {
         recursivelyResizeRegions(chosenRegionIndex);
     }
 
-    const addSeaRegion = (regionIndex) => {
-        map.regions[regionIndex].regionType = tileTypes.SEA;
-        map.regions[regionIndex].tilesRegion.forEach((tile) => {
-            map.matrix[tile[0]][tile[1]].tileType = tileTypes.SEA;
-        });
-    };
-    for (let col = 0; col < mapSizes.width; col++) {
-        if (map.matrix[0][col].tileType !== tileTypes.SEA) {
-            addSeaRegion(map.matrix[0][col].partRegion.regionIndex);
-        }
-    }
-    for (let row = 1; row < mapSizes.height; row++) {
-        if (map.matrix[row][mapSizes.width - 1].tileType !== tileTypes.SEA) {
-            addSeaRegion(map.matrix[row][mapSizes.width - 1].partRegion.regionIndex);
-        }
-    }
-    for (let col = 0; col < mapSizes.width - 1; col++) {
-        if (map.matrix[mapSizes.height - 1][col].tileType !== tileTypes.SEA) {
-            addSeaRegion(map.matrix[mapSizes.height - 1][col].partRegion.regionIndex);
-        }
-    }
-    for (let row = 1; row < mapSizes.height - 1; row++) {
-        if (map.matrix[row][0].tileType !== tileTypes.SEA) {
-            addSeaRegion(map.matrix[row][0].partRegion.regionIndex);
-        }
-    }
-    /*
-    const elevationAssignment = (elevation, tile) => {
-        if (elevation > 0.90) {
-            tile.biomType = biomTypes.MOUNTAIN;
-        } else if (elevation > 0.60) {
-            tile.areaType = areaTypes.HILLS;
-        }
-    }
-    const moistureAndTemperatureAssignment = (moisture, temperature, tile) => {
-        if (temperature > 2) {
-            if (moisture > 0.55) {
-                tile.biomType = biomTypes.GRASSLAND;
-            } else if (moisture > 0.25) {
-                tile.biomType = biomTypes.FLATLAND;
-            } else {
-                tile.biomType = biomTypes.DESERT;
-            }
-
-            if (tile.areaType !== areaTypes.HILLS && tile.biomType !== biomTypes.DESERT && treesFlags[tile.row][tile.col] === true) {
-                tile.areaType = areaTypes.JUNGLE;
-            }
-        } else if (temperature > 0.5) {
-            if (moisture > 0.5) {
-                tile.biomType = biomTypes.GRASSLAND;
-            } else {
-                tile.biomType = biomTypes.FLATLAND;
-            }
-
-            if (tile.areaType !== areaTypes.HILLS && treesFlags[tile.row][tile.col] === true) {
-                tile.areaType = areaTypes.FOREST;
-            }
-        } else {
-            if (moisture > 0.75) {
-                tile.biomType = biomTypes.FLATLAND;
-            } else {
-                tile.biomType = biomTypes.TUNDRA;
-            }
-
-            if (tile.areaType !== areaTypes.HILLS && treesFlags[tile.row][tile.col] === true) {
-                tile.areaType = areaTypes.FOREST;
-            }
-        }
-    }
-    const genE = createNoise2D();
-    const genM = createNoise2D();
-    const genT = createNoise2D();
-    const noiseE = (nRow, nCol) => genE(nRow, nCol) / 2 + 0.5;
-    const noiseM = (nRow, nCol) => genM(nRow, nCol) / 2 + 0.5;
-    const noiseT = (nRow, nCol) => genT(nRow, nCol) / 2 + 0.5;
-    const poles = -1;
-    const equator = 3.5;
-    const treesFlags = Array.from(Array(mapSizes.height), () => new Array(mapSizes.width));
-    const p = new PoissonDiskSampling({
-        shape: [mapSizes.height, mapSizes.width],
-        minDistance: 10,
-        maxDistance: 10,
-        tries: 30,
-    });
-    const lowFrequencyPoints = p.fill();
-    lowFrequencyPoints.forEach((lowFrequencyPoint) => {
-        const lowRow = Math.trunc(lowFrequencyPoint[0]);
-        const lowCol = Math.trunc(lowFrequencyPoint[1]);
-        treesFlags[lowRow][lowCol] = true;
-        const p = new PoissonDiskSampling({
-            shape: [5, 5],
-            minDistance: 1,
-            maxDistance: 1,
-            tries: 5,
-        });
-        const highFrequencyPoints = p.fill();
-        highFrequencyPoints.forEach((highFrequencyPoint) => {
-            const radiusRow = Math.trunc(highFrequencyPoint[0]);
-            const radiusCol = Math.trunc(highFrequencyPoint[1]);
-            const vector = [0, 0];
-            vector[0] = (2 === radiusRow) ? 0 : radiusRow - 2;
-            vector[1] = (2 === radiusCol) ? 0 : radiusCol - 2;
-            const highRow = vector[0] + lowRow;
-            const highCol = vector[1] + lowCol;
-
-            if (highRow >= 0 && highRow < mapSizes.height && highCol >= 0 && highCol < mapSizes.width) {
-                treesFlags[highRow][highCol] = true;
-            }
-        });
-    });
-
-    for (let row = 0; row < mapSizes.height; row++) {
-        for (let col = 0; col < mapSizes.width; col++) {
-            const nRow = (row / mapSizes.height) - 0.5;
-            const nCol = (col / mapSizes.width) - 0.5;
-
-            const elevation = noiseE(4.0 * nRow, 4.0 * nCol);
-            const moisture = noiseM(4.0 * nRow, 4.0 * nCol);
-            const temperature = noiseT(4.0 * nRow, 4.0 * nCol);
-            const normalizedTemperature = temperature * temperature
-                + poles
-                + equator * Math.sin(Math.PI * (row / mapSizes.height));
-
-            if (map.matrix[row][col].partRegion !== 'none') {
-                elevationAssignment(elevation, map.matrix[row][col]);
-
-                if (map.matrix[row][col].biomType !== biomTypes.MOUNTAIN) {
-                    moistureAndTemperatureAssignment(moisture, normalizedTemperature, map.matrix[row][col]);
-                }
-            }
-        }
-    }
-    */
-    // ТЕСТ
-    const centerRow = mapSizes.height / 2 - 1;
-
-    const desertRegions = [];
-    const addDesertRegion = (regionIndex) => {
-        map.regions[regionIndex].biomType = biomTypes.DESERT;
-        desertRegions.push(regionIndex);
-        map.regions[regionIndex].tilesRegion.forEach((tile) => {
-            map.matrix[tile[0]][tile[1]].biomType = biomTypes.DESERT;
-        });
-    };
-    for (let col = 0; col < mapSizes.width; col++) {
-        if (
-            map.matrix[centerRow][col].tileType !== tileTypes.SEA &&
-            map.matrix[centerRow][col].biomType !== biomTypes.DESERT
-        ) {
-            addDesertRegion(map.matrix[centerRow][col].partRegion.regionIndex);
-        }
-    }
-
-    const flatlandRegions = [];
-    const addFlatlandRegion = (regionIndex) => {
-        map.regions[regionIndex].biomType = biomTypes.FLATLAND;
-        flatlandRegions.push(regionIndex);
-        map.regions[regionIndex].tilesRegion.forEach((tile) => {
-            map.matrix[tile[0]][tile[1]].biomType = biomTypes.FLATLAND;
-        });
-    };
-    desertRegions.forEach((regionIndex) => {
-        map.regions[regionIndex].indicesNeighboringRegions.forEach((regionIndex) => {
-            if (map.regions[regionIndex].biomType !== biomTypes.DESERT) {
-                addFlatlandRegion(regionIndex);
-            }
-        });
-    });
-
-    const grasslandRegions = [];
-    const addGrasslandRegion = (regionIndex) => {
-        map.regions[regionIndex].biomType = biomTypes.GRASSLAND;
-        grasslandRegions.push(regionIndex);
-        map.regions[regionIndex].tilesRegion.forEach((tile) => {
-            map.matrix[tile[0]][tile[1]].biomType = biomTypes.GRASSLAND;
-        });
-    };
-    flatlandRegions.forEach((regionIndex) => {
-        map.regions[regionIndex].indicesNeighboringRegions.forEach((regionIndex) => {
-            if (
-                map.regions[regionIndex].biomType !== biomTypes.FLATLAND &&
-                map.regions[regionIndex].biomType !== biomTypes.DESERT
-            ) {
-                addGrasslandRegion(regionIndex);
-            }
-        });
-    });
-
-    const addTundraRegion = (regionIndex) => {
-        map.regions[regionIndex].biomType = biomTypes.TUNDRA;
-        map.regions[regionIndex].tilesRegion.forEach((tile) => {
-            map.matrix[tile[0]][tile[1]].biomType = biomTypes.TUNDRA;
-        });
-    };
-    grasslandRegions.forEach((regionIndex) => {
-        map.regions[regionIndex].indicesNeighboringRegions.forEach((regionIndex) => {
-            if (
-                map.regions[regionIndex].biomType !== biomTypes.FLATLAND &&
-                map.regions[regionIndex].biomType !== biomTypes.GRASSLAND
-            ) {
-                addTundraRegion(regionIndex);
-            }
-        });
-    });
-    // ТЕСТ
+    defineRegionsType(map);
+    defineRegionsBiom(map, randomizer);
+    defineElevation(map, randomizer);
+    defineFlora(map, randomizer);
 
     return map;
 };
