@@ -1,42 +1,41 @@
 import { Sprite } from "pixi.js";
 import { areaTypes, biomTypes, tileTypes } from "models/map";
-import { spritesheetTextureTypes } from "../constants.js";
+import { spritesheetTextureNames } from "../constants.js";
 
-const areaTypeToSpritesheetTextureType = {
+const areaTypeToSpritesheetTextureName = {
     [areaTypes.NONE]: {
-        [biomTypes.DESERT]: spritesheetTextureTypes.DESERT,
-        [biomTypes.FLATLAND]: spritesheetTextureTypes.FLATLAND,
-        [biomTypes.GRASSLAND]: spritesheetTextureTypes.GRASSLAND,
-        [biomTypes.MOUNTAIN]: spritesheetTextureTypes.MOUNTAIN,
-        [biomTypes.TUNDRA]: spritesheetTextureTypes.TUNDRA,
-        [biomTypes.JUNGLE]: spritesheetTextureTypes.JUNGLE,
+        [biomTypes.DESERT]: spritesheetTextureNames.DESERT,
+        [biomTypes.FLATLAND]: spritesheetTextureNames.FLATLAND,
+        [biomTypes.GRASSLAND]: spritesheetTextureNames.GRASSLAND,
+        [biomTypes.MOUNTAIN]: spritesheetTextureNames.MOUNTAIN,
+        [biomTypes.TUNDRA]: spritesheetTextureNames.TUNDRA,
+        [biomTypes.JUNGLE]: spritesheetTextureNames.JUNGLE,
     },
     [areaTypes.HILLS]: {
-        [biomTypes.FLATLAND]: spritesheetTextureTypes.HILLS_FLATLAND,
-        [biomTypes.GRASSLAND]: spritesheetTextureTypes.HILLS_GRASSLAND,
-        [biomTypes.DESERT]: spritesheetTextureTypes.HILLS_DESERT,
-        [biomTypes.TUNDRA]: spritesheetTextureTypes.HILLS_TUNDRA,
+        [biomTypes.FLATLAND]: spritesheetTextureNames.HILLS_FLATLAND,
+        [biomTypes.GRASSLAND]: spritesheetTextureNames.HILLS_GRASSLAND,
+        [biomTypes.DESERT]: spritesheetTextureNames.HILLS_DESERT,
+        [biomTypes.TUNDRA]: spritesheetTextureNames.HILLS_TUNDRA,
     },
     [areaTypes.FOREST]: {
-        [biomTypes.GRASSLAND]: spritesheetTextureTypes.FOREST_GRASSLAND,
-        [biomTypes.FLATLAND]: spritesheetTextureTypes.FOREST_FLATLAND,
-        [biomTypes.TUNDRA]: spritesheetTextureTypes.FOREST_TUNDRA,
+        [biomTypes.GRASSLAND]: spritesheetTextureNames.FOREST_GRASSLAND,
+        [biomTypes.FLATLAND]: spritesheetTextureNames.FOREST_FLATLAND,
+        [biomTypes.TUNDRA]: spritesheetTextureNames.FOREST_TUNDRA,
     },
     [areaTypes.FOREST_HILLS]: {
-        [biomTypes.GRASSLAND]: spritesheetTextureTypes.FOREST_HILLS_GRASSLAND,
-        [biomTypes.FLATLAND]: spritesheetTextureTypes.FOREST_HILLS_FLATLAND,
-        [biomTypes.TUNDRA]: spritesheetTextureTypes.FOREST_HILLS_TUNDRA,
+        [biomTypes.GRASSLAND]: spritesheetTextureNames.FOREST_HILLS_GRASSLAND,
+        [biomTypes.FLATLAND]: spritesheetTextureNames.FOREST_HILLS_FLATLAND,
+        [biomTypes.TUNDRA]: spritesheetTextureNames.FOREST_HILLS_TUNDRA,
     },
 };
 
 export class SpriteCreator {
-    constructor(textureNames, tileDimensions) {
-        this._textureNames = textureNames;
+    constructor(tileDimensions) {
         this._tileDimensions = tileDimensions;
     }
 
     fromMapTile(mapTile, mapBiomsSpriteSheet) {
-        const textureName = this._getTextureName(this._textureNames, mapTile);
+        const textureName = this._getTextureName(mapTile);
         const tile = new Sprite(mapBiomsSpriteSheet.textures[textureName]);
 
         const rowParity = mapTile.row & 1;
@@ -46,15 +45,14 @@ export class SpriteCreator {
         return tile;
     }
 
-    _getTextureName = (textureNames, mapTile) => {
+    _getTextureName = (mapTile) => {
         if (mapTile.tileType === null) {
-            return textureNames[spritesheetTextureTypes.LAND];
+            return spritesheetTextureNames.LAND;
         }
         if (mapTile.tileType === tileTypes.LAND && mapTile.biomType !== biomTypes.NONE) {
-            const textureName = areaTypeToSpritesheetTextureType[mapTile.areaType][mapTile.biomType];
-            return textureNames[textureName];
+            return areaTypeToSpritesheetTextureName[mapTile.areaType][mapTile.biomType];
         }
 
-        return textureNames[spritesheetTextureTypes.WATER];
+        return spritesheetTextureNames.WATER;
     };
 }

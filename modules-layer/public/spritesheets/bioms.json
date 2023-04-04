@@ -363,7 +363,7 @@
 	},
 	"meta": {
 		"version": "1.0",
-		"image": "spritesheet.png",
+		"image": "bioms.png",
 		"format": "RGBA8888",
 		"size": {
 			"w": 230,

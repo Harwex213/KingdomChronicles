@@ -1,0 +1,9 @@
+const BUILD_ACTIONS = {
+    POWER_CENTER: "BUILD_POWER_CENTER",
+};
+
+const POSSIBLE_ACTIONS = {
+    BUILD_ACTIONS,
+};
+
+export { POSSIBLE_ACTIONS };

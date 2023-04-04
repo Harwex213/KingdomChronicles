@@ -1,10 +1,15 @@
 import { generateMap, MapGenerationConfig } from "map-generator";
+import { GameState } from "./gameState";
+import { handleNextTick } from "./model-actions/handleNextTick";
+import { ActionManager } from "./game-actions/actionManager";
 
 class GameModel {
-    map;
+    gameState;
+    #actionManager;
 
-    constructor({ map }) {
-        this.map = map;
+    constructor(gameState) {
+        this.gameState = gameState;
+        this.#actionManager = new ActionManager(this.gameState);
     }
 
     static fromJson() {
@@ -17,10 +22,21 @@ class GameModel {
         mapGenerationConfig.mapSizeType = mapSizeType;
 
         const map = generateMap(mapGenerationConfig);
+        const gameState = new GameState({ map });
 
-        return new GameModel({
-            map,
-        });
+        return new GameModel(gameState);
+    }
+
+    get map() {
+        return this.gameState.map;
+    }
+
+    nextTick() {
+        handleNextTick(this.gameState);
+    }
+
+    applyAction(name, params) {
+        this.#actionManager.handleAction(name, params);
     }
 }
 

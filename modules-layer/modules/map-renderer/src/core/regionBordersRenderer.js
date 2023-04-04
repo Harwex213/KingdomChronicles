@@ -28,7 +28,8 @@ class RegionBordersRenderer {
             bordersSprite.y = this.#tilePositionCalculator.calcY(firstTopTile) + 2;
             bordersSprite.x = this.#tilePositionCalculator.calcX(firstLeftTile) + 1.5;
 
-            bordersSprite.tint = 0xffffff * Math.random();
+            bordersSprite.alpha = 0.25;
+            bordersSprite.tint = 0x000000;
 
             mapContainer.addChild(bordersSprite);
         }

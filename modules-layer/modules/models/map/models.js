@@ -40,14 +40,19 @@ export class Map {
                 const diff = ODDR_DIRECTION_DIFFERENCES[parity];
                 const copyDiff = Object.assign({}, diff);
 
-                Object.keys(copyDiff).forEach(direction => {
+                Object.keys(copyDiff).forEach((direction) => {
                     const neighboringTile = [row + copyDiff[direction][0], col + copyDiff[direction][1]];
-                    copyDiff[direction] = (neighboringTile[0] >= 0 && neighboringTile[0] < this.height &&
-                        neighboringTile[1] >= 0 && neighboringTile[1] < this.width) ? [neighboringTile[0], neighboringTile[1]] : "none"
+                    copyDiff[direction] =
+                        neighboringTile[0] >= 0 &&
+                        neighboringTile[0] < this.height &&
+                        neighboringTile[1] >= 0 &&
+                        neighboringTile[1] < this.width
+                            ? [neighboringTile[0], neighboringTile[1]]
+                            : "none";
                 });
 
-                return new MapTile(row, col, copyDiff)
-            })
+                return new MapTile(row, col, copyDiff);
+            });
         });
         this.regions = [];
     }

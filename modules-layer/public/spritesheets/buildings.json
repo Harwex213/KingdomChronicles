@@ -1,0 +1,815 @@
+{
+	"frames": {
+		"farm hills.png": {
+			"frame": {
+				"x": 1,
+				"y": 1,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"farm noHills.png": {
+			"frame": {
+				"x": 47,
+				"y": 1,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power center desert.png": {
+			"frame": {
+				"x": 93,
+				"y": 1,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power center desert (hills).png": {
+			"frame": {
+				"x": 139,
+				"y": 1,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power center flatland.png": {
+			"frame": {
+				"x": 185,
+				"y": 1,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power center flatland (forest).png": {
+			"frame": {
+				"x": 231,
+				"y": 1,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power center flatland (hills).png": {
+			"frame": {
+				"x": 1,
+				"y": 46,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power center flatland (hills+forest).png": {
+			"frame": {
+				"x": 47,
+				"y": 46,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power center grassland.png": {
+			"frame": {
+				"x": 93,
+				"y": 46,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power center grassland (forest).png": {
+			"frame": {
+				"x": 139,
+				"y": 46,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power center grassland (hills).png": {
+			"frame": {
+				"x": 185,
+				"y": 46,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power center grassland (hills+forest).png": {
+			"frame": {
+				"x": 231,
+				"y": 46,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power center jungle.png": {
+			"frame": {
+				"x": 1,
+				"y": 91,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power center tundra.png": {
+			"frame": {
+				"x": 47,
+				"y": 91,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power center tundra (hills).png": {
+			"frame": {
+				"x": 93,
+				"y": 91,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power center tundra (hills+forest).png": {
+			"frame": {
+				"x": 139,
+				"y": 91,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"power cetner tundra (forest).png": {
+			"frame": {
+				"x": 185,
+				"y": 91,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill desert.png": {
+			"frame": {
+				"x": 231,
+				"y": 91,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill desert (hills).png": {
+			"frame": {
+				"x": 1,
+				"y": 136,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill flatland.png": {
+			"frame": {
+				"x": 47,
+				"y": 136,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill flatland (forest).png": {
+			"frame": {
+				"x": 93,
+				"y": 136,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill flatland (hills).png": {
+			"frame": {
+				"x": 139,
+				"y": 136,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill flatland (hills+forest).png": {
+			"frame": {
+				"x": 185,
+				"y": 136,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill grassland.png": {
+			"frame": {
+				"x": 231,
+				"y": 136,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill grassland (forest).png": {
+			"frame": {
+				"x": 1,
+				"y": 181,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill grassland (hills).png": {
+			"frame": {
+				"x": 47,
+				"y": 181,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill grassland (hills+forest).png": {
+			"frame": {
+				"x": 93,
+				"y": 181,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill jungle.png": {
+			"frame": {
+				"x": 139,
+				"y": 181,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill tundra.png": {
+			"frame": {
+				"x": 185,
+				"y": 181,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill tundra (forest).png": {
+			"frame": {
+				"x": 231,
+				"y": 181,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill tundra (hills).png": {
+			"frame": {
+				"x": 1,
+				"y": 226,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"sawmill tundra (hills+forest).png": {
+			"frame": {
+				"x": 47,
+				"y": 226,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"stone quarry.png": {
+			"frame": {
+				"x": 93,
+				"y": 226,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"woodcutter flatland (forest).png": {
+			"frame": {
+				"x": 139,
+				"y": 226,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"woodcutter flatland (hills+forest).png": {
+			"frame": {
+				"x": 185,
+				"y": 226,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"woodcutter grassland (forest).png": {
+			"frame": {
+				"x": 231,
+				"y": 226,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"woodcutter grassland (hills+forest).png": {
+			"frame": {
+				"x": 277,
+				"y": 1,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"woodcutter jungle.png": {
+			"frame": {
+				"x": 277,
+				"y": 46,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"woodcutter tundra (forest).png": {
+			"frame": {
+				"x": 277,
+				"y": 91,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		},
+		"woodcutter tundra (hills+forest).png": {
+			"frame": {
+				"x": 277,
+				"y": 136,
+				"w": 44,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 44,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 44,
+				"h": 43
+			}
+		}
+	},
+	"meta": {
+		"app": "http://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"image": "spritesheet.png",
+		"format": "RGBA8888",
+		"size": {
+			"w": 322,
+			"h": 270
+		},
+		"scale": "1"
+	}
+}

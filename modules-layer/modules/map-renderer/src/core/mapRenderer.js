@@ -1,6 +1,6 @@
 import { Application, Container, Assets } from "pixi.js";
 import { Viewport } from "pixi-viewport";
-import { oddTileOffsetPercent } from "../constants.js";
+import { oddTileOffsetPercent, TILE_DIMENSIONS } from "../constants.js";
 import { ElementResizeObserver } from "../utils/elementResizeObserver.js";
 import { SpriteCreator } from "./spriteCreator.js";
 import { BorderGraphics } from "./borderGraphics";
@@ -42,6 +42,7 @@ export class MapRenderer {
     _initPixiApp() {
         this._pixiApp = new Application({
             background: "#000",
+            antialias: false,
         });
     }
 
@@ -72,23 +73,19 @@ export class MapRenderer {
     }
 
     _calculateTileDimensions() {
-        const { tileDimensions } = this._config;
-
         this._tileDimensions = {
-            width: tileDimensions.width,
-            height: tileDimensions.height,
-            widthOffset: [0, tileDimensions.width * oddTileOffsetPercent],
+            width: TILE_DIMENSIONS.WIDTH,
+            height: TILE_DIMENSIONS.HEIGHT,
+            widthOffset: [0, TILE_DIMENSIONS.WIDTH * oddTileOffsetPercent],
         };
     }
 
     _loadSpriteSheet() {
-        const { path } = this._config.spriteSheet;
-
-        this._spriteSheetLoadPromise = Assets.load(path);
+        this._spriteSheetLoadPromise = Assets.load(this._config.spriteSheetPath);
     }
 
     _initSpriteCreator() {
-        this._spriteCreator = new SpriteCreator(this._config.spriteSheet.textureNames, this._tileDimensions);
+        this._spriteCreator = new SpriteCreator(this._tileDimensions);
     }
 
     mountView(containerSelector) {
