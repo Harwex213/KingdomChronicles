@@ -3,7 +3,7 @@ export const PLAYER_VALUES = {
 };
 
 export const REGION_VALUES = {
-    INITIAL_PROVISION: 10,
+    INITIAL_PROVISION: 0,
     PROVISION_INCREASING_DELTA: 10,
 };
 
@@ -11,4 +11,8 @@ export const POWER_CENTER_VALUES = {
     INITIAL_COST: 100,
     TICKS_BUILD_TIME: 5,
     TICKS_DESTROY_TIME: 5,
+};
+
+export const ROAD_VALUES = {
+    COST: 10,
 };

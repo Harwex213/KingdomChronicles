@@ -1,5 +1,6 @@
 import { tileTypes, biomTypes, areaTypes } from "./enums.js";
 import { ODDR_DIRECTION_DIFFERENCES } from "./constants.js";
+import { makeObservable, observable } from "mobx";
 
 export class MapTile {
     constructor(row = 0, col = 0, neighboringTiles) {
@@ -17,15 +18,24 @@ export class MapTile {
     addRegionToMapTile(region, index) {
         this.partRegion = { regionIndex: index };
         region.tilesRegion.push([this.row, this.col]);
+        region.index = index;
     }
 }
 
 export class MapRegion {
     constructor() {
+        this.index = -1;
         this.tilesRegion = [];
         this.indicesNeighboringRegions = [];
         this.regionType = tileTypes.LAND;
         this.biomType = "none";
+
+        this.ownerIndex = -1;
+        this.borderColor = 0x000;
+
+        makeObservable(this, {
+            ownerIndex: observable,
+        });
     }
 }
 

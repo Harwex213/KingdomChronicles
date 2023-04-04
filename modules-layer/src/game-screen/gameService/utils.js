@@ -1,15 +1,16 @@
 import { mapSizeTypes } from "models/map";
 
-export const getMapGenerationConfig = () => {
-    const mapGenerationConfig = localStorage.getItem("mapGenerationConfig");
-    return mapGenerationConfig
-        ? JSON.parse(mapGenerationConfig)
+export const getGameCreationConfig = () => {
+    const gameCreationConfig = localStorage.getItem("gameCreationConfig");
+    return gameCreationConfig
+        ? JSON.parse(gameCreationConfig)
         : {
               seedRandom: undefined,
               mapSizeType: mapSizeTypes.SMALL,
+              playersAmount: 2,
           };
 };
 
-export const saveMapGenerationConfig = (mapGenerationConfig) => {
-    localStorage.setItem("mapGenerationConfig", JSON.stringify(mapGenerationConfig));
+export const saveGameCreationConfig = (gameCreationConfig) => {
+    localStorage.setItem("gameCreationConfig", JSON.stringify(gameCreationConfig));
 };

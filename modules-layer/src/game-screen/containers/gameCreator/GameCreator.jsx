@@ -4,6 +4,8 @@ import { mapSizeTypes } from "models/map";
 import { gameService } from "../../gameService";
 import { useEffect } from "react";
 
+const PLAYERS_OPTIONS = [...Array(4)].map((_, index) => index + 1);
+
 const GameCreator = observer(() => {
     useEffect(() => {
         gameService.startNewGame();
@@ -15,13 +17,19 @@ const GameCreator = observer(() => {
             <Select
                 placeholder="Map size"
                 options={Object.values(mapSizeTypes)}
-                value={gameService.mapGenerationConfig.mapSizeType}
+                value={gameService.gameCreationConfig.mapSizeType}
                 onChange={(value) => gameService.setMapSizeType(value)}
             />
             <Input
                 placeholder="Random seed"
-                value={gameService.mapGenerationConfig.seedRandom}
+                value={gameService.gameCreationConfig.seedRandom}
                 onChange={(value) => gameService.setSeedRandom(value)}
+            />
+            <Select
+                placeholder="Players amount"
+                options={PLAYERS_OPTIONS}
+                value={gameService.gameCreationConfig.playersAmount}
+                onChange={(value) => gameService.setPlayersAmount(value)}
             />
         </Container>
     );

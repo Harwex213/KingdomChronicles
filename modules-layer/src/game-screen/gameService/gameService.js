@@ -1,43 +1,53 @@
 import { GameModel } from "game";
 import { makeObservable, observable, action } from "mobx";
 import { mapRenderer } from "./mapRenderer";
-import { getMapGenerationConfig, saveMapGenerationConfig } from "./utils";
+import { getGameCreationConfig, saveGameCreationConfig } from "./utils";
+import { playerInfoSamples } from "./playerInfoSamples";
 
 class GameService {
     #gameModel = null;
 
     constructor() {
         this.lastGameCreated = new Date();
-        this.mapGenerationConfig = getMapGenerationConfig();
+        this.gameCreationConfig = getGameCreationConfig();
 
         makeObservable(this, {
             lastGameCreated: observable,
-            mapGenerationConfig: observable,
+            gameCreationConfig: observable,
             startNewGame: action,
             setMapSizeType: action,
             setSeedRandom: action,
         });
     }
 
-    startNewGame() {
+    async startNewGame() {
         this.lastGameCreated = new Date();
-        this.#gameModel = GameModel.createNew(this.mapGenerationConfig);
-        saveMapGenerationConfig(this.mapGenerationConfig);
-        mapRenderer.render(this.#gameModel.map);
+        this.#gameModel = GameModel.createNew({
+            seedRandom: this.gameCreationConfig.seedRandom,
+            mapSizeType: this.gameCreationConfig.mapSizeType,
+            playersInfo: playerInfoSamples.slice(0, this.gameCreationConfig.playersAmount),
+        });
+        saveGameCreationConfig(this.gameCreationConfig);
+        await mapRenderer.render(this.#gameModel.map);
     }
 
     setMapSizeType(newMapSizeType) {
-        this.mapGenerationConfig.mapSizeType = newMapSizeType;
+        this.gameCreationConfig.mapSizeType = newMapSizeType;
         this.startNewGame();
     }
 
     setSeedRandom(newSeedRandom) {
         if (newSeedRandom === "") {
-            this.mapGenerationConfig.seedRandom = null;
+            this.gameCreationConfig.seedRandom = null;
         } else {
-            this.mapGenerationConfig.seedRandom = newSeedRandom;
+            this.gameCreationConfig.seedRandom = newSeedRandom;
         }
 
+        this.startNewGame();
+    }
+
+    setPlayersAmount(newAmount) {
+        this.gameCreationConfig.playersAmount = newAmount;
         this.startNewGame();
     }
 

@@ -33,3 +33,5 @@ export const BORDER_STYLES = {
     COLOR: 0xffffff,
     WIDTH: 2,
 };
+
+export const MAP_EMPTY_SPACE_BORDER_OFFSET = 200;

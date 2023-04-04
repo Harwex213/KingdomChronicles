@@ -1,5 +1,6 @@
 import { Container, Sprite } from "pixi.js";
 import { directionsTypes } from "models/map";
+import { reaction } from "mobx";
 
 class RegionBordersRenderer {
     #matrix;
@@ -14,7 +15,7 @@ class RegionBordersRenderer {
         this.#renderer = renderer;
     }
 
-    render(mapContainer, matrix, regions) {
+    render(container, matrix, regions) {
         this.#matrix = matrix;
         this.#regions = regions;
 
@@ -28,10 +29,15 @@ class RegionBordersRenderer {
             bordersSprite.y = this.#tilePositionCalculator.calcY(firstTopTile) + 2;
             bordersSprite.x = this.#tilePositionCalculator.calcX(firstLeftTile) + 1.5;
 
-            bordersSprite.alpha = 0.25;
-            bordersSprite.tint = 0x000000;
+            this.#colorBorder(bordersSprite, region);
+            reaction(
+                () => region.ownerIndex,
+                () => {
+                    this.#colorBorder(bordersSprite, region);
+                }
+            );
 
-            mapContainer.addChild(bordersSprite);
+            container.addChild(bordersSprite);
         }
     }
 
@@ -99,6 +105,16 @@ class RegionBordersRenderer {
 
         const [row, col] = sortedByColumnTilesRegion[chosenIndex];
         return this.#matrix[row][col];
+    }
+
+    #colorBorder(bordersSprite, region) {
+        if (region.ownerIndex !== -1) {
+            bordersSprite.alpha = 1;
+            bordersSprite.tint = region.borderColor;
+        } else {
+            bordersSprite.alpha = 0.25;
+            bordersSprite.tint = 0x000000;
+        }
     }
 }
 
