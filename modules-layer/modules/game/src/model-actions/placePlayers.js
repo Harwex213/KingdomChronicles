@@ -1,20 +1,5 @@
 import { biomTypes } from "models/map";
 import { Player } from "models/game/player/player";
-import { PLAYER_VALUES } from "models/game-variables";
-
-const createPlayer = (playerInfo, playerIndex) => {
-    const player = new Player();
-
-    player.index = playerIndex;
-
-    player.info = { ...playerInfo };
-    player.info.colorStr = player.info.color;
-    player.info.color = parseInt(player.info.color.substring(1), 16);
-
-    player.economic.treasure = PLAYER_VALUES.INITIAL_TREASURE;
-
-    return player;
-};
 
 const getPlayerInitialRegion = ({ randomizer, regions, acceptableForPlacementRegionsIndices }) => {
     const randomizedIndex = randomizer.getRangedRandom(acceptableForPlacementRegionsIndices.length - 1);
@@ -33,7 +18,14 @@ const placePlayers = ({ randomizer, gameState, playersInfo }) => {
     for (let i = 0; i < playersInfo.length; i++) {
         const playerInfo = playersInfo[i];
 
-        const player = createPlayer(playerInfo, i);
+        const player = new Player({
+            index: i,
+            info: {
+                ...playerInfo,
+                colorStr: playerInfo.color,
+                color: parseInt(playerInfo.color.substring(1), 16),
+            },
+        });
         gameState.players.push(player);
 
         const playerInitialRegion = getPlayerInitialRegion({
@@ -43,6 +35,7 @@ const placePlayers = ({ randomizer, gameState, playersInfo }) => {
         });
 
         player.addRegion(playerInitialRegion);
+        playerInitialRegion.assignOwner(player);
     }
 };
 

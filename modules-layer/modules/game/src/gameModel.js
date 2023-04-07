@@ -33,10 +33,6 @@ class GameModel {
         return new GameModel(gameState);
     }
 
-    get map() {
-        return this.gameState.map;
-    }
-
     nextTick() {
         handleNextTick(this.gameState);
     }

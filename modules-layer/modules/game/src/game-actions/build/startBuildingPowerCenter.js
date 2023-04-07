@@ -1,4 +1,4 @@
-import { GAME_VALIDATIONS, GLOBAL_BUILDING_TYPES, PendingGlobalBuilding } from "models/game";
+import { GAME_ACTIONS, GAME_VALIDATIONS, GLOBAL_BUILDING_TYPES, PendingGlobalBuilding } from "models/game";
 import { POWER_CENTER_VALUES } from "models/game-variables";
 import { generateRandomId } from "../../utils";
 
@@ -36,7 +36,7 @@ const startBuildingPowerCenter = ({ gameState, gameValidator, playerIndex, row, 
         pendingGlobalBuilding.type,
         pendingGlobalBuilding.remainedTicks
     );
-    gameState.players[playerIndex].onStartBuildPowerCenter();
+    gameState.players[playerIndex].onStartBuild(GAME_ACTIONS.START_BUILD_POWER_CENTER);
 };
 
 export { startBuildingPowerCenter };

@@ -4,7 +4,8 @@ import { Validator, GameModel } from "game";
 import { playerInfoSamples } from "./playerInfoSamples";
 import { MapRenderer, MapRendererConfig } from "map-renderer";
 import { CurrentPlayer, GAME_ACTIONS, GAME_VALIDATIONS } from "models/game";
-import { REQUIRES_ON_MAP_CONFIRMATION_GAME_ACTIONS } from "models/game/enums/actions";
+
+const PLACE_GLOBAL_BUILDING_ACTIONS = [GAME_ACTIONS.START_BUILD_POWER_CENTER, GAME_ACTIONS.START_BUILD_ROAD];
 
 class GameService {
     #gameModel;
@@ -128,22 +129,22 @@ class GameService {
             gameValidator: this.#gameValidator,
             onTileClick: this.#handleTileClick.bind(this),
         });
+        this.updateActionBoolMap();
     }
 
     #handleTileClick(tile) {
         if (tile === null) {
-            this.currentPlayer.clearActionThatRequiresConfirmationOnMap();
-            this.currentPlayer.abortSelectingObject();
+            this.currentPlayer.abortAction();
             return;
         }
 
-        if (this.currentPlayer.currentActionThatRequiresConfirmationOnMap !== null) {
-            this.#gameModel.applyAction(this.currentPlayer.currentActionThatRequiresConfirmationOnMap, {
+        if (this.currentPlayer.tryingPlaceGlobalBuildingActionName !== null) {
+            this.#gameModel.applyAction(this.currentPlayer.tryingPlaceGlobalBuildingActionName, {
                 playerIndex: this.currentPlayer.index,
                 row: tile.row,
                 col: tile.col,
             });
-            this.currentPlayer.clearActionThatRequiresConfirmationOnMap();
+            this.currentPlayer.onPlacedGlobalBuilding();
             this.updateActionBoolMap();
             return;
         }
@@ -155,24 +156,18 @@ class GameService {
         this.#gameModel.nextTick();
     }
 
-    handlePlayerActionThatRequiresConfirmationOnMap(actionName) {
-        if (REQUIRES_ON_MAP_CONFIRMATION_GAME_ACTIONS.includes(actionName) === false) {
+    handlePlacingGlobalBuilding(actionName) {
+        if (
+            !(PLACE_GLOBAL_BUILDING_ACTIONS.includes(actionName) && this.canPlayerDoActionBoolMap[actionName])
+        ) {
             return;
         }
 
-        if (this.currentPlayer.currentActionThatRequiresConfirmationOnMap === actionName) {
-            this.currentPlayer.clearActionThatRequiresConfirmationOnMap();
-        } else {
-            this.currentPlayer.setActionThatRequiresConfirmationOnMap(actionName);
-        }
+        this.currentPlayer.startPlacingGlobalBuilding(actionName);
     }
 
     handleActionAbort() {
-        if (this.currentPlayer.currentActionThatRequiresConfirmationOnMap !== null) {
-            this.currentPlayer.clearActionThatRequiresConfirmationOnMap();
-        } else {
-            this.currentPlayer.abortSelectingObject();
-        }
+        this.currentPlayer.abortAction();
     }
 }
 

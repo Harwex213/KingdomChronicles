@@ -4,6 +4,7 @@ import { CURRENT_PLAYER_SELECTED_OBJECT_STATES, GAME_ACTIONS, GAME_VALIDATIONS }
 import { RENDERER_CONFIG, SPRITESHEET_PLAYER_ACTIONS_NAMES } from "../constants";
 import { TileBorder } from "./tileBorder";
 import { RegionBorderByTile } from "./regionBorderByTile";
+import { BuildIndicator } from "./buildIndicator";
 
 class CurrentPlayerActionsRenderer {
     #ticker;
@@ -12,20 +13,19 @@ class CurrentPlayerActionsRenderer {
     #tilePositionCalculator;
     #spritesheet;
     #reactionDisposers;
-
-    #mapToRender;
     #container;
+    #mapToRender;
     #gameValidator;
 
     #sprite;
     #isSpriteRemoved;
     #mousePos;
-    #lastTilePos;
     #validation;
     #canDoActionTextureName;
     #cannotDoActionTextureName;
 
     #selectedPowerCenterTileBorder;
+    #buildIndicator;
 
     constructor({ ticker, renderer, viewport, tilePositionCalculator, reactionDisposers }) {
         this.#ticker = ticker;
@@ -41,15 +41,6 @@ class CurrentPlayerActionsRenderer {
         this.#mousePos = {
             x: 0,
             y: 0,
-        };
-        this.#lastTilePos = {
-            row: -1,
-            col: -1,
-        };
-
-        this.#validation = {
-            name: "",
-            params: {},
         };
     }
 
@@ -111,37 +102,35 @@ class CurrentPlayerActionsRenderer {
             )
         );
 
-        const updateSpritePosition = this.#updateSpritePosition.bind(this);
+        this.#buildIndicator = new BuildIndicator({
+            spritesheet: this.#spritesheet,
+            ticker: this.#ticker,
+            container: this.#container,
+            viewport: this.#viewport,
+            mousePos: this.#mousePos,
+            mapToRender: mapToRender,
+            tilePositionCalculator: this.#tilePositionCalculator,
+            gameValidator: this.#gameValidator,
+            playerIndex: currentPlayer.index,
+        });
         this.#reactionDisposers.push(
             reaction(
-                () => currentPlayer.currentActionThatRequiresConfirmationOnMap,
+                () => currentPlayer.tryingPlaceGlobalBuildingActionName,
                 (action) => {
                     if (action === null) {
-                        this.#ticker.remove(updateSpritePosition);
-                        this.#removeSprite();
+                        this.#buildIndicator.hide();
                         return;
                     }
 
+                    let validationName;
                     if (action === GAME_ACTIONS.START_BUILD_POWER_CENTER) {
-                        this.#validation = {
-                            name: GAME_VALIDATIONS.CAN_PLACE_POWER_CENTER,
-                            params: {
-                                playerIndex: currentPlayer.index,
-                            },
-                        };
-                        this.#canDoActionTextureName = SPRITESHEET_PLAYER_ACTIONS_NAMES.CAN_BUILD;
-                        this.#cannotDoActionTextureName = SPRITESHEET_PLAYER_ACTIONS_NAMES.CANNOT_BUILD;
+                        validationName = GAME_VALIDATIONS.CAN_PLACE_POWER_CENTER;
                     }
-
                     if (action === GAME_ACTIONS.START_BUILD_ROAD) {
-                        // TODO
+                        validationName = GAME_VALIDATIONS.CAN_PLACE_ROAD;
                     }
 
-                    if (action === GAME_ACTIONS.START_DESTROY_ROAD) {
-                        // TODO
-                    }
-
-                    this.#ticker.add(updateSpritePosition);
+                    this.#buildIndicator.show(validationName);
                 }
             )
         );
@@ -162,53 +151,6 @@ class CurrentPlayerActionsRenderer {
             );
         }
         return regionBordersByTile;
-    }
-
-    #updateSpritePosition() {
-        const worldPoint = this.#viewport.toWorld(this.#mousePos.x, this.#mousePos.y);
-        const tilePoint = this.#tilePositionCalculator.fromMousePos(worldPoint.x, worldPoint.y);
-
-        const tilesRow = this.#mapToRender.matrix[tilePoint[0]];
-        if (!tilesRow) {
-            this.#removeSprite();
-            return;
-        }
-
-        const tile = tilesRow[tilePoint[1]];
-        if (!tile) {
-            this.#removeSprite();
-            return;
-        } else if (this.#isSpriteRemoved) {
-            this.#addSprite();
-        }
-
-        if (this.#lastTilePos.row === tile.row && this.#lastTilePos.col === tile.col) {
-            return;
-        }
-
-        this.#lastTilePos.row = tile.row;
-        this.#lastTilePos.col = tile.col;
-
-        this.#sprite.x = tile.renderPosition.x;
-        this.#sprite.y = tile.renderPosition.y;
-
-        this.#validation.params.row = tile.row;
-        this.#validation.params.col = tile.col;
-        if (this.#gameValidator.validate(this.#validation.name, this.#validation.params)) {
-            this.#sprite.texture = this.#spritesheet.textures[this.#canDoActionTextureName];
-        } else {
-            this.#sprite.texture = this.#spritesheet.textures[this.#cannotDoActionTextureName];
-        }
-    }
-
-    #removeSprite() {
-        this.#isSpriteRemoved = true;
-        this.#container.removeChild(this.#sprite);
-    }
-
-    #addSprite() {
-        this.#isSpriteRemoved = false;
-        this.#container.addChild(this.#sprite);
     }
 }
 

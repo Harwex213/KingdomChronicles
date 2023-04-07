@@ -4,7 +4,7 @@ import { Tooltip } from "../../../components/tooltip/Tooltip";
 import { gameService } from "../../gameService/gameService";
 
 const PlayerAction = observer(({ name, cost, value, description, onClick }) => {
-    const isActive = gameService.currentPlayer?.currentActionThatRequiresConfirmationOnMap === value;
+    const isActive = gameService.currentPlayer?.tryingPlaceGlobalBuildingActionName === value;
 
     return (
         <Tooltip text={description}>

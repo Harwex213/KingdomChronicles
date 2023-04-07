@@ -15,7 +15,8 @@ class CurrentPlayer {
         this.index = index;
         this.#gameState = gameState;
         this.player = gameState.players[index];
-        this.currentActionThatRequiresConfirmationOnMap = null;
+
+        this.tryingPlaceGlobalBuildingActionName = null;
 
         this.selectedObject = {
             state: CURRENT_PLAYER_SELECTED_OBJECT_STATES.IDLE,
@@ -25,9 +26,11 @@ class CurrentPlayer {
         makeObservable(this, {
             economic: computed,
 
-            currentActionThatRequiresConfirmationOnMap: observable,
-            setActionThatRequiresConfirmationOnMap: action,
-            clearActionThatRequiresConfirmationOnMap: action,
+            abortAction: action,
+
+            tryingPlaceGlobalBuildingActionName: observable,
+            startPlacingGlobalBuilding: action,
+            onPlacedGlobalBuilding: action,
 
             selectedObject: observable,
             trySelectObject: action,
@@ -41,20 +44,32 @@ class CurrentPlayer {
         return this.player.info;
     }
 
-    get economic() {
-        return this.player.economic;
-    }
-
     get firstRegion() {
         return this.player.domain.regions[0];
     }
 
-    setActionThatRequiresConfirmationOnMap(action) {
-        this.currentActionThatRequiresConfirmationOnMap = action;
+    get economic() {
+        return this.player.economic;
     }
 
-    clearActionThatRequiresConfirmationOnMap() {
-        this.currentActionThatRequiresConfirmationOnMap = null;
+    abortAction() {
+        if (this.tryingPlaceGlobalBuildingActionName !== null) {
+            this.tryingPlaceGlobalBuildingActionName = null;
+            return;
+        }
+
+        this.abortSelectingObject();
+    }
+
+    startPlacingGlobalBuilding(actionName) {
+        if (actionName !== GLOBAL_BUILDING_TYPES.OUTER_BUILDING) {
+            this.abortSelectingObject();
+        }
+        this.tryingPlaceGlobalBuildingActionName = actionName;
+    }
+
+    onPlacedGlobalBuilding() {
+        this.tryingPlaceGlobalBuildingActionName = null;
     }
 
     trySelectObject(tile) {

@@ -1,43 +1,45 @@
 import { action, makeObservable, observable } from "mobx";
-import { POWER_CENTER_VALUES, REGION_VALUES, ROAD_VALUES } from "../../game-variables";
+import { PLAYER_VALUES, POWER_CENTER_VALUES, REGION_VALUES, ROAD_VALUES } from "../../game-variables";
+import { GAME_ACTIONS } from "../enums/actions";
 
 const sumArithmeticProgression = (firstMember, delta, n) => ((2 * firstMember + delta * (n - 1)) / 2) * n;
 
-class Player {
-    constructor() {
-        this.index = -1;
+const ACTION_NAME_TO_COST = {
+    [GAME_ACTIONS.START_BUILD_POWER_CENTER]: POWER_CENTER_VALUES.COST,
+    [GAME_ACTIONS.START_BUILD_ROAD]: ROAD_VALUES.COST,
+};
 
-        this.economic = {
+class Player {
+    constructor({
+        index,
+        economic = {
             income: 0,
             outcome: 0,
-            treasure: 0,
-        };
-        this.outcome = {
+            treasure: PLAYER_VALUES.INITIAL_TREASURE,
+        },
+        outcome = {
             withinRegions: 0,
-            withinPowerCenters: 0,
-        };
-
-        this.info = {
-            name: "",
-            kingdomName: "",
-            motto: "",
-            colorStr: "#000",
-            color: 0x000,
-        };
-
-        this.domain = {
+        },
+        info,
+        domain = {
             regions: [],
             powerCenters: [],
-        };
+        },
+    }) {
+        this.index = index;
+        this.economic = economic;
+        this.outcome = outcome;
+        this.info = info;
+        this.domain = domain;
 
         makeObservable(this, {
             economic: observable,
             doEconomicDelta: action,
+            onStartBuild: action,
 
             addRegion: action,
             removeRegion: action,
-            onStartBuildPowerCenter: action,
-            onStartBuildRoad: action,
+
             addPowerCenter: action,
             removePowerCenter: action,
         });
@@ -64,9 +66,6 @@ class Player {
 
     addRegion(region) {
         this.domain.regions.push(region.index);
-        region.ownerIndex = this.index;
-        region.borderColor = this.info.color;
-
         this.#recalcOutcome();
     }
 
@@ -74,18 +73,15 @@ class Player {
         const index = this.domain.regions.findIndex((i) => i === region.index);
         if (index !== -1) {
             this.domain.regions.splice(index, 1);
-            region.ownerIndex = -1;
-
             this.#recalcOutcome();
         }
     }
 
-    onStartBuildPowerCenter() {
-        this.economic.treasure -= POWER_CENTER_VALUES.COST;
-    }
-
-    onStartBuildRoad() {
-        this.economic.treasure -= ROAD_VALUES.COST;
+    onStartBuild(actionName) {
+        const cost = ACTION_NAME_TO_COST[actionName];
+        if (cost) {
+            this.economic.treasure -= cost;
+        }
     }
 
     addPowerCenter(powerCenterId) {
