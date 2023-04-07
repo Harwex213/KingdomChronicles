@@ -1,9 +1,9 @@
 import { generateMap, MapGenerationConfig } from "map-generator";
-import { GameState } from "./gameState";
-import { handleNextTick } from "./model-actions/handleNextTick";
+import { placePlayers } from "./model-actions/placePlayers";
+import { handleNextTick } from "./handleNextTick/handleNextTick";
 import { ActionManager } from "./game-actions/actionManager";
 import Randomizer from "models/randomizer";
-import { placePlayers } from "./model-actions/placePlayers";
+import { GameState } from "models/game";
 
 class GameModel {
     gameState;

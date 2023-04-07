@@ -17,11 +17,12 @@
     position: relative;
 }
 
-.gameInfo {
+.playerInfo {
     position: absolute;
-    height: 400px;
-    width: 400px;
     background: #000;
+    padding: 15px;
+    border: 2px silver solid;
+    top: 0;
 }
 
 .map {
@@ -36,5 +37,23 @@
     right: 0;
     top: 0;
     width: 200px;
+    height: 270px;
+    border: 2px silver solid;
+}
+
+.gameProcessManager {
+    position: absolute;
+    right: 0;
+    top: 270px;
+    width: 200px;
+    border: 2px silver solid;
+    border-top: none;
+}
+
+.playerActions {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
     border: 2px silver solid;
 }

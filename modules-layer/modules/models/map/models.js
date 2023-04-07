@@ -1,6 +1,7 @@
 import { tileTypes, biomTypes, areaTypes } from "./enums.js";
 import { ODDR_DIRECTION_DIFFERENCES } from "./constants.js";
-import { makeObservable, observable } from "mobx";
+import { action, makeObservable, observable } from "mobx";
+import { GLOBAL_BUILDING_TYPES } from "../game";
 
 export class MapTile {
     constructor(row = 0, col = 0, neighboringTiles) {
@@ -12,13 +13,62 @@ export class MapTile {
         this.neighboringTiles = neighboringTiles;
         this.neighboringTilesRegion = [];
         this.partRegion = "none";
-        this.forDevOnly = { temperature: null, moisture: null };
+
+        this.renderPosition = {
+            x: null,
+            y: null,
+        };
+
+        this.globalBuilding = {
+            type: GLOBAL_BUILDING_TYPES.NONE,
+            id: null,
+            remainedTicksToBuild: 0,
+            remainedTicksToDestroy: 0,
+        };
+
+        makeObservable(this, {
+            globalBuilding: observable,
+            onStartBuildingGlobalBuilding: action,
+            onBuiltGlobalBuilding: action,
+            decreaseRemainedTicksToBuild: action,
+            decreaseRemainedTicksToDestroy: action,
+        });
     }
 
     addRegionToMapTile(region, index) {
         this.partRegion = { regionIndex: index };
         region.tilesRegion.push([this.row, this.col]);
         region.index = index;
+    }
+
+    onStartBuildingGlobalBuilding(type, remainedTicks) {
+        this.globalBuilding.type = type;
+        this.globalBuilding.remainedTicksToBuild = remainedTicks;
+    }
+
+    onBuiltGlobalBuilding(id) {
+        this.globalBuilding.id = id;
+    }
+
+    decreaseRemainedTicksToBuild() {
+        this.globalBuilding.remainedTicksToBuild--;
+    }
+
+    decreaseRemainedTicksToDestroy() {
+        this.globalBuilding.remainedTicksToDestroy--;
+        if (this.globalBuilding.remainedTicksToDestroy === 0) {
+            this.globalBuilding.type = GLOBAL_BUILDING_TYPES.NONE;
+            this.globalBuilding.id = null;
+            this.globalBuilding.remainedTicksToBuild = 0;
+        }
+    }
+
+    get isGlobalBuildingExist() {
+        return (
+            this.globalBuilding.id !== null &&
+            this.globalBuilding.remainedTicksToBuild === 0 &&
+            this.globalBuilding.remainedTicksToDestroy === 0
+        );
     }
 }
 
@@ -32,6 +82,9 @@ export class MapRegion {
 
         this.ownerIndex = -1;
         this.borderColor = 0x000;
+
+        this.firstTopTile = null;
+        this.firstLeftTile = null;
 
         makeObservable(this, {
             ownerIndex: observable,

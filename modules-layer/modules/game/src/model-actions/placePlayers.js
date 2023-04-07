@@ -1,6 +1,6 @@
 import { biomTypes } from "models/map";
-import { Player } from "models/game/player";
-import { PLAYER_VALUES, POWER_CENTER_VALUES, ROAD_VALUES } from "../../constants/game";
+import { Player } from "models/game/player/player";
+import { PLAYER_VALUES } from "models/game-variables";
 
 const createPlayer = (playerInfo, playerIndex) => {
     const player = new Player();
@@ -8,12 +8,10 @@ const createPlayer = (playerInfo, playerIndex) => {
     player.index = playerIndex;
 
     player.info = { ...playerInfo };
+    player.info.colorStr = player.info.color;
     player.info.color = parseInt(player.info.color.substring(1), 16);
 
     player.economic.treasure = PLAYER_VALUES.INITIAL_TREASURE;
-
-    player.currentBuildingsCost.road = ROAD_VALUES.COST;
-    player.currentBuildingsCost.powerCenter = POWER_CENTER_VALUES.INITIAL_COST;
 
     return player;
 };
@@ -23,12 +21,6 @@ const getPlayerInitialRegion = ({ randomizer, regions, acceptableForPlacementReg
     const chosenRegionIndex = acceptableForPlacementRegionsIndices[randomizedIndex];
     acceptableForPlacementRegionsIndices.splice(randomizedIndex, 1);
     return regions[chosenRegionIndex];
-};
-
-const assignRegionToPlayer = (region, player) => {
-    player.domain.regions.push(region.index);
-    region.ownerIndex = player.index;
-    region.borderColor = player.info.color;
 };
 
 const placePlayers = ({ randomizer, gameState, playersInfo }) => {
@@ -41,7 +33,7 @@ const placePlayers = ({ randomizer, gameState, playersInfo }) => {
     for (let i = 0; i < playersInfo.length; i++) {
         const playerInfo = playersInfo[i];
 
-        const player = createPlayer(playerInfo);
+        const player = createPlayer(playerInfo, i);
         gameState.players.push(player);
 
         const playerInitialRegion = getPlayerInitialRegion({
@@ -50,7 +42,7 @@ const placePlayers = ({ randomizer, gameState, playersInfo }) => {
             acceptableForPlacementRegionsIndices,
         });
 
-        assignRegionToPlayer(playerInitialRegion, player);
+        player.addRegion(playerInitialRegion);
     }
 };
 

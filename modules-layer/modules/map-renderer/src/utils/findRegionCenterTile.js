@@ -8,7 +8,7 @@ const getAverage = (regionTiles, sortIndex) => {
     return Math.round((sortedByRow[0][sortIndex] + sortedByRow[sortedByRow.length - 1][sortIndex]) / 2);
 };
 
-export const findRegionsCenterTile = (region) => {
+export const findRegionCenterTile = (region) => {
     const regionTiles = region.tilesRegion;
 
     const averageRow = getAverage(regionTiles, SORT_BY_ROW);

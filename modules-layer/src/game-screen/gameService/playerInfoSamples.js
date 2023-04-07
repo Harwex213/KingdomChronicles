@@ -13,13 +13,13 @@ export const playerInfoSamples = [
     },
     {
         name: "Arthur",
-        kingdom: "Camelot",
+        kingdomName: "Camelot",
         motto: "In a world of darkness, we are the light.",
         color: "#1de117",
     },
     {
         name: "Lancelot",
-        kingdom: "Avalon",
+        kingdomName: "Avalon",
         motto: "To protect the weak and vanquish the wicked.",
         color: "#eac124",
     },

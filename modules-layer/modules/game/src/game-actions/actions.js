@@ -1,8 +1,10 @@
-import { POSSIBLE_ACTIONS } from "../../constants/possibleActions";
-import { buildPowerCenter } from "./build/buildPowerCenter";
+import { GAME_ACTIONS } from "models/game";
+import { powerCenterBuilded } from "../handleNextTick/powerCenterBuilded";
+import { startBuildingPowerCenter } from "./build/startBuildingPowerCenter";
 
 const actions = {
-    [POSSIBLE_ACTIONS.BUILD_ACTIONS.POWER_CENTER]: buildPowerCenter,
+    [GAME_ACTIONS.POWER_CENTER_BUILDED]: powerCenterBuilded,
+    [GAME_ACTIONS.START_BUILD_POWER_CENTER]: startBuildingPowerCenter,
 };
 
 export { actions };

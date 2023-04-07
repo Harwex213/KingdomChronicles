@@ -2,7 +2,7 @@ import { MapRenderer, MapRendererConfig } from "map-renderer";
 import { renderDevBioms } from "./renderDevBioms.js";
 
 export const mapRendererConfig = new MapRendererConfig();
-mapRendererConfig.spriteSheetPath = "/spritesheets/bioms.json";
+mapRendererConfig.spriteSheetPath = "/spritesheets/spritesheet.json";
 mapRendererConfig.viewport = {
     minScale: null,
     maxScale: null,
@@ -27,7 +27,13 @@ const renderMap = async (map, { devBiomsRender, devRegionsRender }) => {
         map.matrix.forEach((row) => row.forEach((mapTile) => (mapTile.tileType = null)));
         map.regions.forEach((region) => (region.tint = Math.random() * 0xffffff));
     }
-    await mapRenderer.render(map);
+    await mapRenderer.loadSpritesheet();
+    mapRenderer.render({
+        mapToRender: map,
+        onTileClick: (event, mapTile) => {
+            console.log(event.button, mapTile);
+        },
+    });
 };
 
 export { initRenderer, disposeRenderer, renderMap };

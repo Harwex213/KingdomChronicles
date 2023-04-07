@@ -10,11 +10,20 @@ const Select = observer(({ placeholder, options, value, onChange }) => {
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
             >
-                {options.map((option) => (
-                    <option key={option} value={option}>
-                        {option}
-                    </option>
-                ))}
+                {options.map((option) => {
+                    if (typeof option === "object") {
+                        return (
+                            <option key={option.value} value={option.value}>
+                                {option.name}
+                            </option>
+                        );
+                    }
+                    return (
+                        <option key={option} value={option}>
+                            {option}
+                        </option>
+                    );
+                })}
             </select>
         </div>
     );

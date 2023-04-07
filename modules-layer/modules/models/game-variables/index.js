@@ -1,3 +1,5 @@
+import { POWER_CENTER_TIERS } from "../game/buildings/buildings";
+
 export const PLAYER_VALUES = {
     INITIAL_TREASURE: 100,
 };
@@ -8,7 +10,11 @@ export const REGION_VALUES = {
 };
 
 export const POWER_CENTER_VALUES = {
-    INITIAL_COST: 100,
+    COST: 100,
+
+    INITIAL_TIER: POWER_CENTER_TIERS.FIRST,
+    INITIAL_LEVEL: 1,
+
     TICKS_BUILD_TIME: 5,
     TICKS_DESTROY_TIME: 5,
 };

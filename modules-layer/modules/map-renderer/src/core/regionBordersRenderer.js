@@ -1,78 +1,83 @@
 import { Container, Sprite } from "pixi.js";
 import { directionsTypes } from "models/map";
 import { reaction } from "mobx";
+import { RENDERER_CONFIG, SPRITESHEET_REGION_BORDER_NAMES } from "../constants";
 
 class RegionBordersRenderer {
     #matrix;
-    #regions;
-    #tilePositionCalculator;
-    #borderGraphics;
     #renderer;
+    #spritesheet;
+    #reactionDisposers;
 
-    constructor({ tilePositionCalculator, borderGraphics, renderer }) {
-        this.#tilePositionCalculator = tilePositionCalculator;
-        this.#borderGraphics = borderGraphics;
+    constructor({ renderer, reactionDisposers }) {
         this.#renderer = renderer;
+        this.#reactionDisposers = reactionDisposers;
     }
 
-    render(container, matrix, regions) {
+    setSpritesheet(spritesheet) {
+        this.#spritesheet = spritesheet;
+    }
+
+    render(container, mapToRender) {
+        const { matrix, regions } = mapToRender;
         this.#matrix = matrix;
-        this.#regions = regions;
 
-        for (const region of this.#regions) {
-            const firstLeftTile = this.#getFirstLeftTile(region);
-            const firstTopTile = this.#getFirstTopTile(region);
-
-            const regionBordersTexture = this.#getRegionBordersTexture(region);
-            const bordersSprite = new Sprite(regionBordersTexture);
-
-            bordersSprite.y = this.#tilePositionCalculator.calcY(firstTopTile) + 2;
-            bordersSprite.x = this.#tilePositionCalculator.calcX(firstLeftTile) + 1.5;
-
-            this.#colorBorder(bordersSprite, region);
-            reaction(
-                () => region.ownerIndex,
-                () => {
-                    this.#colorBorder(bordersSprite, region);
-                }
-            );
-
-            container.addChild(bordersSprite);
+        for (const mapRegion of regions) {
+            container.addChild(this.#getRegionBorder(mapRegion));
         }
+    }
+
+    #getRegionBorder(mapRegion) {
+        const firstLeftTile = this.#getFirstLeftTile(mapRegion);
+        const firstTopTile = this.#getFirstTopTile(mapRegion);
+
+        const regionBordersTexture = this.#getRegionBordersTexture(mapRegion);
+        const regionBorders = new Sprite(regionBordersTexture);
+
+        regionBorders.zIndex = RENDERER_CONFIG.LAYERS.REGION_BORDER;
+        regionBorders.x = firstLeftTile.renderPosition.x;
+        regionBorders.y = firstTopTile.renderPosition.y;
+
+        this.#colorBorder(regionBorders, mapRegion);
+        const disposer = reaction(
+            () => mapRegion.ownerIndex,
+            () => {
+                this.#colorBorder(regionBorders, mapRegion);
+            }
+        );
+        this.#reactionDisposers.push(disposer);
+
+        return regionBorders;
     }
 
     #getRegionBordersTexture(region) {
         const bordersContainer = new Container();
-        bordersContainer.interactiveChilds = false;
 
         for (const [mapTileRow, mapTileCol] of region.tilesRegion) {
             const mapTile = this.#matrix[mapTileRow][mapTileCol];
-
-            const [x, y] = this.#tilePositionCalculator.calc(mapTile);
-
             const tileBorderContainer = new Container();
 
             if (mapTile.neighboringTilesRegion[directionsTypes.LEFT_UP] === "none") {
-                tileBorderContainer.addChild(this.#borderGraphics.leftUp);
+                this.#addBorder(tileBorderContainer, SPRITESHEET_REGION_BORDER_NAMES.TOP_LEFT);
             }
             if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT_UP] === "none") {
-                tileBorderContainer.addChild(this.#borderGraphics.rightUp);
+                this.#addBorder(tileBorderContainer, SPRITESHEET_REGION_BORDER_NAMES.TOP_RIGHT);
             }
             if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT] === "none") {
-                tileBorderContainer.addChild(this.#borderGraphics.rightMiddle);
+                this.#addBorder(tileBorderContainer, SPRITESHEET_REGION_BORDER_NAMES.RIGHT);
             }
             if (mapTile.neighboringTilesRegion[directionsTypes.LEFT] === "none") {
-                tileBorderContainer.addChild(this.#borderGraphics.leftMiddle);
+                this.#addBorder(tileBorderContainer, SPRITESHEET_REGION_BORDER_NAMES.LEFT);
             }
             if (mapTile.neighboringTilesRegion[directionsTypes.LEFT_DOWN] === "none") {
-                tileBorderContainer.addChild(this.#borderGraphics.leftDown);
+                this.#addBorder(tileBorderContainer, SPRITESHEET_REGION_BORDER_NAMES.BOTTOM_LEFT);
             }
             if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT_DOWN] === "none") {
-                tileBorderContainer.addChild(this.#borderGraphics.rightDown);
+                this.#addBorder(tileBorderContainer, SPRITESHEET_REGION_BORDER_NAMES.BOTTOM_RIGHT);
             }
 
-            tileBorderContainer.x = x;
-            tileBorderContainer.y = y;
+            tileBorderContainer.x = mapTile.renderPosition.x;
+            tileBorderContainer.y = mapTile.renderPosition.y;
 
             bordersContainer.addChild(tileBorderContainer);
         }
@@ -80,16 +85,21 @@ class RegionBordersRenderer {
         return this.#renderer.generateTexture(bordersContainer);
     }
 
-    #getFirstTopTile(region) {
-        const sortedByRowTilesRegion = [...region.tilesRegion];
-        sortedByRowTilesRegion.sort((a, b) => a[0] - b[0]);
-
-        const [row, col] = sortedByRowTilesRegion[0];
-        return this.#matrix[row][col];
+    #addBorder(container, textureName) {
+        container.addChild(new Sprite(this.#spritesheet.textures[textureName]));
     }
 
-    #getFirstLeftTile(region) {
-        const sortedByColumnTilesRegion = [...region.tilesRegion];
+    #getFirstTopTile(mapRegion) {
+        const sortedByRowTilesRegion = [...mapRegion.tilesRegion];
+        sortedByRowTilesRegion.sort((a, b) => a[0] - b[0]);
+
+        const firstTopTilePoint = sortedByRowTilesRegion[0];
+        mapRegion.firstTopTile = firstTopTilePoint;
+        return this.#matrix[firstTopTilePoint[0]][firstTopTilePoint[1]];
+    }
+
+    #getFirstLeftTile(mapRegion) {
+        const sortedByColumnTilesRegion = [...mapRegion.tilesRegion];
         sortedByColumnTilesRegion.sort((a, b) => a[1] - b[1]);
 
         let chosenIndex = 0;
@@ -103,8 +113,9 @@ class RegionBordersRenderer {
             }
         }
 
-        const [row, col] = sortedByColumnTilesRegion[chosenIndex];
-        return this.#matrix[row][col];
+        const firstLeftTilePoint = sortedByColumnTilesRegion[chosenIndex];
+        mapRegion.firstLeftTile = firstLeftTilePoint;
+        return this.#matrix[firstLeftTilePoint[0]][firstLeftTilePoint[1]];
     }
 
     #colorBorder(bordersSprite, region) {
@@ -112,8 +123,8 @@ class RegionBordersRenderer {
             bordersSprite.alpha = 1;
             bordersSprite.tint = region.borderColor;
         } else {
-            bordersSprite.alpha = 0.25;
-            bordersSprite.tint = 0x000000;
+            bordersSprite.alpha = RENDERER_CONFIG.NEUTRAL_BORDER_STYLE.ALPHA;
+            bordersSprite.tint = RENDERER_CONFIG.NEUTRAL_BORDER_STYLE.COLOR;
         }
     }
 }
