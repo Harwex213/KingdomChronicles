@@ -1,28 +1,25 @@
 .container {
     display: flex;
     flex-direction: row;
-    gap: 15px;
 }
 
 .flag {
     width: 75px;
     height: 98px;
-    border: 2px silver solid;
 }
 
 .info {
     display: flex;
     flex-direction: column;
     color: #fff;
+    margin: 0 15px;
 }
 
 .kingdomName {
-    font-size: 28px;
+    line-height: 1;
 }
 
 .motto {
-    font-size: 16px;
-    color: #bebebe;
 }
 
 .tick {
@@ -30,10 +27,17 @@
 }
 
 .economic {
-    font-size: 14px;
     display: flex;
     flex-direction: row;
-    gap: 5px;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+    margin: auto 0;
+}
+
+.money {
+    width: 22px;
+    height: 22px;
 }
 
 .income {

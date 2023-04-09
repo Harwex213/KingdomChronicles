@@ -1,6 +1,6 @@
 export { Map } from "./map";
 export { MapRegion } from "./mapRegion";
-export { MapTile } from "./mapTile";
+export { MapTile, AXIAL_NEIGHBOR_DIRECTION_VECTORS } from "./mapTile";
 export {
     biomTypes,
     areaTypes,

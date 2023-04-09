@@ -33,10 +33,10 @@ export const areaTypes = {
 };
 
 export const directionsTypes = {
-    LEFT_DOWN: "left-down",
-    RIGHT_DOWN: "right-down",
     RIGHT: "right",
     RIGHT_UP: "right-up",
     LEFT_UP: "left-up",
     LEFT: "left",
+    LEFT_DOWN: "left-down",
+    RIGHT_DOWN: "right-down",
 };

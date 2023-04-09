@@ -154,6 +154,8 @@ class GameService {
 
     handleNextTick() {
         this.#gameModel.nextTick();
+
+        console.log(this.#gameModel.gameState.serialize().length);
     }
 
     handlePlacingGlobalBuilding(actionName) {
@@ -168,6 +170,10 @@ class GameService {
 
     handleActionAbort() {
         this.currentPlayer.abortAction();
+    }
+
+    abortSelectingObject() {
+        this.currentPlayer.abortSelectingObject();
     }
 }
 

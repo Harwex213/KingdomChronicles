@@ -11,6 +11,7 @@ class RegionBorderByTile {
     #isAdded;
     #sprite;
     #highlightFunc;
+    #highlightUp;
 
     constructor({ container, mapToRender, renderer, ticker, spritesheet, region }) {
         this.#spritesheet = spritesheet;
@@ -26,6 +27,7 @@ class RegionBorderByTile {
 
         this.#sprite.zIndex = RENDERER_CONFIG.LAYERS.REGION_BORDER;
         this.#sprite.tint = 0x000;
+        this.#highlightUp = true;
 
         const firstLeftTile = this.#getFirstLeftTile(region);
         const firstTopTile = this.#getFirstTopTile(region);
@@ -48,22 +50,22 @@ class RegionBorderByTile {
             const tileBorderContainer = new Container();
 
             const mapTile = this.#mapToRender.matrix[mapTileRow][mapTileCol];
-            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT_UP] === "none") {
+            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT_UP] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_TILE_BORDER_NAMES.TOP_LEFT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT_UP] === "none") {
+            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT_UP] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_TILE_BORDER_NAMES.TOP_RIGHT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT] === "none") {
+            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_TILE_BORDER_NAMES.RIGHT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT] === "none") {
+            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_TILE_BORDER_NAMES.LEFT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT_DOWN] === "none") {
+            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT_DOWN] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_TILE_BORDER_NAMES.BOTTOM_LEFT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT_DOWN] === "none") {
+            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT_DOWN] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_TILE_BORDER_NAMES.BOTTOM_RIGHT);
             }
 
@@ -81,10 +83,17 @@ class RegionBorderByTile {
     }
 
     #highlight() {
-        if (this.#sprite.tint < 0xffffff) {
+        if (this.#highlightUp) {
             this.#sprite.tint += 0x050505;
         } else {
-            this.#sprite.tint = 0x000000;
+            this.#sprite.tint -= 0x050505;
+        }
+
+        if (this.#sprite.tint === 0xffffff) {
+            this.#highlightUp = false;
+        }
+        if (this.#sprite.tint === 0x000000) {
+            this.#highlightUp = true;
         }
     }
 
@@ -101,6 +110,7 @@ class RegionBorderByTile {
             this.#container.removeChild(this.#sprite);
             this.#ticker.remove(this.#highlightFunc);
             this.#sprite.tint = 0x000;
+            this.#highlightUp = true;
             this.#isAdded = false;
         }
     }

@@ -57,22 +57,22 @@ class RegionBordersRenderer {
             const mapTile = this.#matrix[mapTileRow][mapTileCol];
             const tileBorderContainer = new Container();
 
-            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT_UP] === "none") {
+            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT_UP] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_REGION_BORDER_NAMES.TOP_LEFT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT_UP] === "none") {
+            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT_UP] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_REGION_BORDER_NAMES.TOP_RIGHT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT] === "none") {
+            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_REGION_BORDER_NAMES.RIGHT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT] === "none") {
+            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_REGION_BORDER_NAMES.LEFT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT_DOWN] === "none") {
+            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT_DOWN] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_REGION_BORDER_NAMES.BOTTOM_LEFT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT_DOWN] === "none") {
+            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT_DOWN] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_REGION_BORDER_NAMES.BOTTOM_RIGHT);
             }
 

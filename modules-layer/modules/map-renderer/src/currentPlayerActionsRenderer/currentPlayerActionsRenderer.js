@@ -1,10 +1,11 @@
 import { Sprite } from "pixi.js";
 import { reaction } from "mobx";
 import { CURRENT_PLAYER_SELECTED_OBJECT_STATES, GAME_ACTIONS, GAME_VALIDATIONS } from "models/game";
-import { RENDERER_CONFIG, SPRITESHEET_PLAYER_ACTIONS_NAMES } from "../constants";
+import { RENDERER_CONFIG } from "../constants";
 import { TileBorder } from "./tileBorder";
 import { RegionBorderByTile } from "./regionBorderByTile";
 import { BuildIndicator } from "./buildIndicator";
+import { PowerCenterControlArea } from "./powerCenterControlArea";
 
 class CurrentPlayerActionsRenderer {
     #ticker;
@@ -20,12 +21,6 @@ class CurrentPlayerActionsRenderer {
     #sprite;
     #isSpriteRemoved;
     #mousePos;
-    #validation;
-    #canDoActionTextureName;
-    #cannotDoActionTextureName;
-
-    #selectedPowerCenterTileBorder;
-    #buildIndicator;
 
     constructor({ ticker, renderer, viewport, tilePositionCalculator, reactionDisposers }) {
         this.#ticker = ticker;
@@ -60,13 +55,19 @@ class CurrentPlayerActionsRenderer {
 
         let lastSelectedNeutralRegionIndex = null;
         const regionBordersByTile = this.#getRegionBordersByTile();
-        this.#selectedPowerCenterTileBorder = new TileBorder({
+        const selectedPowerCenterTileBorder = new TileBorder({
             spritesheet: this.#spritesheet,
             renderer: this.#renderer,
             ticker: this.#ticker,
             bitmask: 0x111111,
             container: container,
             mustHighlight: true,
+        });
+        const selectedPowerCenterControlArea = new PowerCenterControlArea({
+            spritesheet: this.#spritesheet,
+            renderer: this.#renderer,
+            ticker: this.#ticker,
+            container: container,
         });
         this.#reactionDisposers.push(
             reaction(
@@ -75,19 +76,25 @@ class CurrentPlayerActionsRenderer {
                     if (lastSelectedNeutralRegionIndex !== null) {
                         regionBordersByTile[lastSelectedNeutralRegionIndex].hide();
                     }
-                    this.#selectedPowerCenterTileBorder.hide();
+                    selectedPowerCenterTileBorder.hide();
+                    selectedPowerCenterControlArea.hide();
 
                     if (
                         currentPlayer.selectedObject.state ===
                         CURRENT_PLAYER_SELECTED_OBJECT_STATES.POWER_CENTER
                     ) {
-                        const powerCenter = currentPlayer.selectedPowerCenter;
-                        const mapTile = mapToRender.matrix[powerCenter.tile.row][powerCenter.tile.col];
-                        this.#selectedPowerCenterTileBorder.updatePos(
-                            mapTile.renderPosition.x,
-                            mapTile.renderPosition.y
+                        const selectedPowerCenter = currentPlayer.selectedPowerCenter;
+                        const selectedPowerCenterTile = selectedPowerCenter.getTile(mapToRender);
+                        selectedPowerCenterTileBorder.updatePos(
+                            selectedPowerCenterTile.renderPosition.x,
+                            selectedPowerCenterTile.renderPosition.y
                         );
-                        this.#selectedPowerCenterTileBorder.show();
+                        selectedPowerCenterTileBorder.show();
+                        selectedPowerCenterControlArea.show(
+                            selectedPowerCenter.id,
+                            selectedPowerCenter.getControlArea(mapToRender)
+                        );
+                        // TODO: react on control area change
                     }
 
                     if (
@@ -102,7 +109,7 @@ class CurrentPlayerActionsRenderer {
             )
         );
 
-        this.#buildIndicator = new BuildIndicator({
+        const buildIndicator = new BuildIndicator({
             spritesheet: this.#spritesheet,
             ticker: this.#ticker,
             container: this.#container,
@@ -118,7 +125,7 @@ class CurrentPlayerActionsRenderer {
                 () => currentPlayer.tryingPlaceGlobalBuildingActionName,
                 (action) => {
                     if (action === null) {
-                        this.#buildIndicator.hide();
+                        buildIndicator.hide();
                         return;
                     }
 
@@ -130,7 +137,7 @@ class CurrentPlayerActionsRenderer {
                         validationName = GAME_VALIDATIONS.CAN_PLACE_ROAD;
                     }
 
-                    this.#buildIndicator.show(validationName);
+                    buildIndicator.show(validationName);
                 }
             )
         );

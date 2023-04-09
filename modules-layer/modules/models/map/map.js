@@ -20,7 +20,7 @@ class Map {
                         neighboringTile[1] >= 0 &&
                         neighboringTile[1] < this.width
                             ? [neighboringTile[0], neighboringTile[1]]
-                            : "none";
+                            : null;
                 });
 
                 return new MapTile(row, col, copyDiff);

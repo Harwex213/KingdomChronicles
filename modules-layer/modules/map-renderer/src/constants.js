@@ -80,6 +80,11 @@ export const SPRITESHEET_POWER_CENTER_NAMES = {
     FOREST_HILLS_TUNDRA: "power center tundra (hills+forest).png",
 };
 
+export const SPRITESHEET_FARM_NAMES = {
+    PLATEAU: "farm noHills.png",
+    HILLS: "farm hills.png",
+};
+
 export const SPRITESHEET_REGION_BORDER_NAMES = {
     BOTTOM_LEFT: "region-border-bottom-left.png",
     BOTTOM_RIGHT: "region-border-bottom-right.png",

@@ -10,8 +10,20 @@ class TileBorder {
     #mustHighlight;
     #sprite;
     #highlightFunc;
+    #highlightUp;
 
-    constructor({ spritesheet, renderer, ticker, bitmask, container, mustHighlight = false }) {
+    constructor({
+        spritesheet,
+        renderer,
+        ticker,
+        container,
+        bitmask,
+        mustHighlight = false,
+        alpha = 1,
+        instantShow = false,
+        x = 0,
+        y = 0,
+    }) {
         this.#spritesheet = spritesheet;
         this.#ticker = ticker;
         this.#container = container;
@@ -22,7 +34,11 @@ class TileBorder {
 
         this.#sprite = new Sprite();
         this.#sprite.zIndex = RENDERER_CONFIG.LAYERS.CURRENT_PLAYER_ACTIONS;
+        this.#sprite.alpha = alpha;
         this.#sprite.tint = 0x000;
+        this.#highlightUp = true;
+        this.#sprite.x = x;
+        this.#sprite.y = y;
 
         const tileBorder = new Container();
         if (bitmask && TILE_BITMASK_SIDES.TOP_LEFT) {
@@ -44,6 +60,10 @@ class TileBorder {
             this.#addBorder(tileBorder, SPRITESHEET_TILE_BORDER_NAMES.BOTTOM_RIGHT);
         }
         this.#sprite.texture = renderer.generateTexture(tileBorder);
+
+        if (instantShow) {
+            this.show();
+        }
     }
 
     #addBorder(container, textureName) {
@@ -56,10 +76,17 @@ class TileBorder {
     }
 
     #highlight() {
-        if (this.#sprite.tint < 0xffffff) {
+        if (this.#highlightUp) {
             this.#sprite.tint += 0x050505;
         } else {
-            this.#sprite.tint = 0x000000;
+            this.#sprite.tint -= 0x050505;
+        }
+
+        if (this.#sprite.tint === 0xffffff) {
+            this.#highlightUp = false;
+        }
+        if (this.#sprite.tint === 0x000000) {
+            this.#highlightUp = true;
         }
     }
 
@@ -80,8 +107,13 @@ class TileBorder {
                 this.#ticker.remove(this.#highlightFunc);
             }
             this.#sprite.tint = 0x000;
+            this.#highlightUp = true;
             this.#isAdded = false;
         }
+    }
+
+    destroy() {
+        this.#sprite.destroy();
     }
 }
 

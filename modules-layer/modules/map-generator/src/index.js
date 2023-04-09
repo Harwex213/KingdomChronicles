@@ -92,7 +92,7 @@ const generateMap = (mapGenerationConfig) => {
             const tileDirection = map.matrix[point[0]][point[1]].neighboringTiles[direction];
 
             if (
-                tileDirection !== "none" &&
+                tileDirection !== null &&
                 map.matrix[tileDirection[0]][tileDirection[1]].tileType !== tileTypes.LAND &&
                 !coasts.isCoast(tileDirection) &&
                 !assignedForRegion.isAssignedTile(tileDirection) &&
@@ -183,8 +183,7 @@ const generateMap = (mapGenerationConfig) => {
         const neighboringRegions = getIndexesNeighboringRegions(
             tile,
             (tileDirection) =>
-                tileDirection !== "none" &&
-                map.matrix[tileDirection[0]][tileDirection[1]].partRegion !== "none"
+                tileDirection !== null && map.matrix[tileDirection[0]][tileDirection[1]].partRegion !== "none"
         );
         const chosenRegionIndex =
             neighboringRegions[randomizer.getRangedRandom(neighboringRegions.length - 1)];
@@ -196,7 +195,7 @@ const generateMap = (mapGenerationConfig) => {
         const neighboringRegions = getIndexesNeighboringRegions(
             tile,
             (tileDirection) =>
-                tileDirection !== "none" &&
+                tileDirection !== null &&
                 map.matrix[tileDirection[0]][tileDirection[1]].partRegion.regionIndex !== currentRegionIndex
         );
 
@@ -215,10 +214,10 @@ const generateMap = (mapGenerationConfig) => {
             const tileDirection = map.matrix[tile[0]][tile[1]].neighboringTiles[direction];
 
             if (
-                tileDirection !== "none" &&
+                tileDirection !== null &&
                 map.matrix[tileDirection[0]][tileDirection[1]].partRegion.regionIndex !== currentRegionIndex
             ) {
-                map.matrix[tile[0]][tile[1]].neighboringTilesRegion[direction] = "none";
+                map.matrix[tile[0]][tile[1]].neighboringTilesRegion[direction] = null;
             }
         });
     };
@@ -237,7 +236,7 @@ const generateMap = (mapGenerationConfig) => {
                 const tileDirection = map.matrix[tile[0]][tile[1]].neighboringTiles[direction];
 
                 if (
-                    tileDirection !== "none" &&
+                    tileDirection !== null &&
                     map.matrix[tileDirection[0]][tileDirection[1]].partRegion.regionIndex ===
                         targetRegionIndex
                 ) {
@@ -283,7 +282,7 @@ const generateMap = (mapGenerationConfig) => {
                                 map.matrix[countedTile[0]][countedTile[1]].neighboringTilesRegion[direction];
 
                             if (
-                                tileDirection !== "none" &&
+                                tileDirection !== null &&
                                 !isCountedTile(tileDirection) &&
                                 JSON.stringify(tileDirection) !== JSON.stringify(tile)
                             ) {
@@ -345,7 +344,7 @@ const generateMap = (mapGenerationConfig) => {
                             (tile) => JSON.stringify(tile) === JSON.stringify(tileDirection)
                         );
 
-                        if (tileDirection !== "none" && isBorderTile === -1) {
+                        if (tileDirection !== null && isBorderTile === -1) {
                             borderingTilesToRegion.push([tileDirection[0], tileDirection[1]]);
                         }
                     }
@@ -403,7 +402,7 @@ const generateMap = (mapGenerationConfig) => {
                             const tileDirection =
                                 map.matrix[chosenTile[0]][chosenTile[1]].neighboringTilesRegion[direction];
 
-                            if (tileDirection !== "none") {
+                            if (tileDirection !== null) {
                                 addNeighboringTilesRegion(tileDirection, regionIndex);
                             }
                         }

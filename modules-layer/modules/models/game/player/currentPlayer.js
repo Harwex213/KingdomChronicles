@@ -73,7 +73,11 @@ class CurrentPlayer {
     }
 
     trySelectObject(tile) {
-        if (tile.isGlobalBuildingExist && tile.globalBuilding.type === GLOBAL_BUILDING_TYPES.POWER_CENTER) {
+        if (
+            tile.isGlobalBuildingExist &&
+            tile.globalBuilding.type === GLOBAL_BUILDING_TYPES.POWER_CENTER &&
+            this.#gameState.powerCenters[tile.globalBuilding.id].ownerIndex === this.index
+        ) {
             this.selectedObject.state = CURRENT_PLAYER_SELECTED_OBJECT_STATES.POWER_CENTER;
             this.selectedObject.identifier = tile.globalBuilding.id;
             return;

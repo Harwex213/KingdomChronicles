@@ -1,7 +1,12 @@
 import { Sprite, Text, TextStyle } from "pixi.js";
 import { areaTypes, biomTypes, tileTypes } from "models/map";
 import { GLOBAL_BUILDING_TYPES } from "models/game";
-import { RENDERER_CONFIG, SPRITESHEET_BIOM_NAMES, SPRITESHEET_UNSORTED_NAMES } from "../constants.js";
+import {
+    RENDERER_CONFIG,
+    SPRITESHEET_BIOM_NAMES,
+    SPRITESHEET_FARM_NAMES,
+    SPRITESHEET_UNSORTED_NAMES,
+} from "../constants.js";
 import { reaction } from "mobx";
 import {
     AREA_TYPE_TO_BIOM_SPRITESHEET_NAME,
@@ -144,6 +149,10 @@ export class TileRenderer {
             return SPRITESHEET_BIOM_NAMES.EMPTY;
         }
         if (mapTile.tileType === tileTypes.LAND && mapTile.biomType !== biomTypes.NONE) {
+            if (mapTile.globalBuilding.type === GLOBAL_BUILDING_TYPES.OUTER_BUILDING) {
+                return SPRITESHEET_FARM_NAMES.PLATEAU;
+            }
+
             if (mapTile.areaType === areaTypes.MOUNTAIN) {
                 return SPRITESHEET_BIOM_NAMES.MOUNTAIN;
             }

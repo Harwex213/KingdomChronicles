@@ -1,0 +1,66 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.stats {
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.level {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 130px;
+}
+
+.increaseLevelBtn {
+    height: 100%;
+}
+
+.economic {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    width: 170px;
+}
+
+.economicColumn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.recruitTransform {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1;
+}
+
+.people {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    flex: 1 1;
+}
+
+.recruitTransformRange {
+    display: flex;
+    flex-direction: column;
+}
+
+.resourceInfo {
+    height: 100px;
+}
+
+.resourceSelection {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,36 @@
+.text {
+    color: #fff;
+    font-size: 18px;
+}
+
+.text[data-size="small"] {
+    font-size: 18px;
+}
+
+.text[data-size="normal"] {
+    font-size: 24px;
+}
+
+.text[data-size="big"] {
+    font-size: 30px;
+}
+
+.text[data-variant="neutral"] {
+    color: #fff;
+}
+
+.text[data-variant="positive"] {
+    color: #8aff00;
+}
+
+.text[data-variant="negative"] {
+    color: #ff0000;
+}
+
+.text[data-family="morris roman"] {
+    font-family: "Morris Roman", sans-serif;
+}
+
+.text[data-family="dumbledor"] {
+    font-family: "Dumbledor 1", sans-serif;
+}
