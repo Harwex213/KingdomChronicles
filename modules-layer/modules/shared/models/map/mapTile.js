@@ -43,15 +43,21 @@ class MapTile {
         this.globalBuilding = {
             type: GLOBAL_BUILDING_TYPES.NONE,
             id: null,
+
             remainedTicksToBuild: 0,
             remainedTicksToDestroy: 0,
+
+            roadBitmask: null,
+            externalBuildingTypeName: null,
         };
+
+        this.influencedPowerCenterIds = new Set();
 
         makeObservable(this, {
             globalBuilding: observable,
-            onStartBuildingGlobalBuilding: action,
-            onBuiltGlobalBuilding: action,
+            onStartBuildGlobalBuilding: action,
             decreaseRemainedTicksToBuild: action,
+            onStartDestroyGlobalBuilding: action,
             decreaseRemainedTicksToDestroy: action,
         });
     }
@@ -81,17 +87,27 @@ class MapTile {
         region.index = index;
     }
 
-    onStartBuildingGlobalBuilding(type, remainedTicks) {
-        this.globalBuilding.type = type;
-        this.globalBuilding.remainedTicksToBuild = remainedTicks;
+    addPowerCenterInfluence(powerCenterId) {
+        this.influencedPowerCenterIds.add(powerCenterId);
     }
 
-    onBuiltGlobalBuilding(id) {
-        this.globalBuilding.id = id;
+    removePowerCenterInfluence(powerCenterId) {
+        this.influencedPowerCenterIds.delete(powerCenterId);
+    }
+
+    onStartBuildGlobalBuilding(pendingBuildGlobalBuilding, externalBuildingTypeName = null) {
+        this.globalBuilding.id = pendingBuildGlobalBuilding.id;
+        this.globalBuilding.type = pendingBuildGlobalBuilding.type;
+        this.globalBuilding.remainedTicksToBuild = pendingBuildGlobalBuilding.remainedTicks;
+        this.globalBuilding.externalBuildingTypeName = externalBuildingTypeName;
     }
 
     decreaseRemainedTicksToBuild() {
         this.globalBuilding.remainedTicksToBuild--;
+    }
+
+    onStartDestroyGlobalBuilding(remainedTicks) {
+        this.globalBuilding.remainedTicksToDestroy = remainedTicks;
     }
 
     decreaseRemainedTicksToDestroy() {
@@ -103,9 +119,9 @@ class MapTile {
         }
     }
 
-    get isGlobalBuildingExist() {
+    get hasGlobalBuilding() {
         return (
-            this.globalBuilding.id !== null &&
+            this.globalBuilding.type !== GLOBAL_BUILDING_TYPES.NONE &&
             this.globalBuilding.remainedTicksToBuild === 0 &&
             this.globalBuilding.remainedTicksToDestroy === 0
         );

@@ -5,7 +5,9 @@ export { MapTile } from "./map/mapTile";
 export { MapRegion } from "./map/mapRegion";
 
 export { GameState } from "./gameState/gameState";
-export { PendingGlobalBuilding } from "./gameState/pendingGlobalBuilding";
+export { PendingBuildGlobalBuilding } from "./gameState/pendingBuildGlobalBuilding";
+export { PendingDestroyGlobalBuilding } from "./gameState/pendingDestroyGlobalBuilding";
+export { PendingBuildInternalBuilding } from "./gameState/pendingBuildInternalBuilding";
 
 export { Resource } from "./resource/resource";
 export { RESOURCES, RESOURCE_LAYERS } from "./resource/resources";

@@ -1,4 +1,4 @@
-import { GLOBAL_BUILDING_TYPES, AREA_TYPES } from "shared/enums";
+import { GLOBAL_BUILDING_TYPES, AREA_TYPES, TILE_TYPES } from "shared/enums";
 
 const canPlacePowerCenter = ({ gameState, playerIndex, row, col }) => {
     const { map } = gameState;
@@ -6,15 +6,14 @@ const canPlacePowerCenter = ({ gameState, playerIndex, row, col }) => {
     const examinedMapTile = map.matrix[row][col];
     const examinedRegion = map.regions[examinedMapTile.partRegion.regionIndex];
 
-    if (examinedRegion.ownerIndex !== playerIndex) {
-        return false;
-    }
+    let isOkay = true;
 
-    if (examinedMapTile.areaType === AREA_TYPES.MOUNTAIN) {
-        return false;
-    }
+    isOkay &&= examinedRegion.ownerIndex === playerIndex;
+    isOkay &&= examinedMapTile.tileType === TILE_TYPES.LAND;
+    isOkay &&= examinedMapTile.areaType !== AREA_TYPES.MOUNTAIN;
+    isOkay &&= examinedMapTile.globalBuilding.type === GLOBAL_BUILDING_TYPES.NONE;
 
-    if (examinedMapTile.globalBuilding.type !== GLOBAL_BUILDING_TYPES.NONE) {
+    if (!isOkay) {
         return false;
     }
 

@@ -48,14 +48,14 @@ const getPossibleControlArea = (map, powerCenterTile, powerCenterRegion) => {
     };
 };
 
-const powerCenterBuilded = ({ gameState, row, col }) => {
-    const mapTile = gameState.map.matrix[row][col];
+const powerCenterBuilded = (gameState, pendingBuildGlobalBuilding) => {
+    const mapTile = pendingBuildGlobalBuilding.getTile(gameState.map);
     const mapRegion = gameState.map.regions[mapTile.partRegion.regionIndex];
 
     const powerCenter = new PowerCenter({
-        id: generateRandomId(),
-        row,
-        col,
+        id: pendingBuildGlobalBuilding.id,
+        row: mapTile.row,
+        col: mapTile.col,
         ownerIndex: mapRegion.ownerIndex,
         possibleControlArea: getPossibleControlArea(
             gameState.map,
@@ -65,9 +65,13 @@ const powerCenterBuilded = ({ gameState, row, col }) => {
         ),
     });
 
-    gameState.powerCenters[powerCenter.id] = powerCenter;
-    mapTile.onBuiltGlobalBuilding(powerCenter.id);
     powerCenter.increaseLevel();
+    for (const controlAreaMapTile of powerCenter.getControlArea(gameState.map)) {
+        controlAreaMapTile.addPowerCenterInfluence(powerCenter.id);
+    }
+
+    gameState.players[mapRegion.ownerIndex].addPowerCenter(powerCenter.id);
+    gameState.powerCenters[powerCenter.id] = powerCenter;
 };
 
 export { powerCenterBuilded };

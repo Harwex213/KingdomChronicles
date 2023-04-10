@@ -5,6 +5,7 @@ class Validator {
 
     constructor(gameState) {
         this.#gameState = gameState;
+        this.validate = this.validate.bind(this);
     }
 
     validate(name, params) {

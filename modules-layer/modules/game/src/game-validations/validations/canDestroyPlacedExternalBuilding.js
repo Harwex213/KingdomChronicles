@@ -1,6 +1,6 @@
 import { GLOBAL_BUILDING_TYPES } from "shared/enums";
 
-const canRemovePlacedRoad = ({ gameState, playerIndex, row, col }) => {
+const canDestroyPlacedExternalBuilding = ({ gameState, playerIndex, row, col }) => {
     const { map } = gameState;
 
     const examinedMapTile = map.matrix[row][col];
@@ -10,7 +10,10 @@ const canRemovePlacedRoad = ({ gameState, playerIndex, row, col }) => {
         return false;
     }
 
-    return examinedMapTile.globalBuilding.type === GLOBAL_BUILDING_TYPES.ROAD;
+    return (
+        examinedMapTile.hasGlobalBuilding &&
+        examinedMapTile.globalBuilding.type === GLOBAL_BUILDING_TYPES.EXTERNAL_BUILDING
+    );
 };
 
-export { canRemovePlacedRoad };
+export { canDestroyPlacedExternalBuilding };

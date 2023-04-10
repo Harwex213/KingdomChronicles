@@ -1,10 +1,10 @@
 class ExternalBuilding {
-    constructor({ id, powerCenterId, row, col, type }) {
+    constructor({ id, powerCenterId, row, col, typeName }) {
         this.id = id;
         this.powerCenterId = powerCenterId;
         this.row = row;
         this.col = col;
-        this.type = type;
+        this.typeName = typeName;
     }
 }
 export { ExternalBuilding };

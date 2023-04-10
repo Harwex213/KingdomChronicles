@@ -3,19 +3,31 @@ import { GLOBAL_BUILDING_TYPES } from "../../enums";
 
 class GameState {
     constructor({
+        currentTick = 1,
+
         map,
         players = [],
         powerCenters = {},
         externalBuildings = {},
-        pendingGlobalBuildings = {},
-        currentTick = 1,
+
+        pendingBuild = {
+            globalBuildings: {},
+            internalBuildings: {},
+        },
+
+        pendingDestroy = {
+            globalBuildings: {},
+        },
     }) {
+        this.currentTick = currentTick;
+
         this.map = map;
         this.players = players;
         this.powerCenters = powerCenters;
         this.externalBuildings = externalBuildings;
-        this.pendingGlobalBuildings = pendingGlobalBuildings;
-        this.currentTick = currentTick;
+
+        this.pendingBuild = pendingBuild;
+        this.pendingDestroy = pendingDestroy;
 
         makeObservable(this, {
             currentTick: observable,

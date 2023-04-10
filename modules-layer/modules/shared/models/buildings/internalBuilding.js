@@ -1,9 +1,9 @@
 class InternalBuilding {
-    constructor({ id, powerCenterId, placementCellPos, type }) {
+    constructor({ id, powerCenterId, placementCellPos, typeName }) {
         this.id = id;
         this.powerCenterId = powerCenterId;
         this.placementCellPos = placementCellPos;
-        this.type = type;
+        this.typeName = typeName;
     }
 }
 

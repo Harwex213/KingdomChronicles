@@ -14,7 +14,7 @@ export const EXTERNAL_BUILDING_TYPES = {
         production: {
             requiredResource: null,
             requiredAmountPerTick: 0,
-            producedAmountPerTick: 1,
+            producedAmountPerTick: 2,
         },
         costPerTick: 15,
     }),
@@ -29,7 +29,7 @@ export const EXTERNAL_BUILDING_TYPES = {
         production: {
             requiredResource: null,
             requiredAmountPerTick: 0,
-            producedAmountPerTick: 1,
+            producedAmountPerTick: 2,
         },
         costPerTick: 15,
     }),
@@ -45,7 +45,7 @@ export const EXTERNAL_BUILDING_TYPES = {
         production: {
             requiredResource: null,
             requiredAmountPerTick: 0,
-            producedAmountPerTick: 1,
+            producedAmountPerTick: 2,
         },
         costPerTick: 25,
     }),
@@ -61,8 +61,8 @@ export const EXTERNAL_BUILDING_TYPES = {
         ticksAmountToDestroy: 7,
         production: {
             requiredResource: RESOURCE_NAMES.WOOD,
-            requiredAmountPerTick: 1,
-            producedAmountPerTick: 1,
+            requiredAmountPerTick: 4,
+            producedAmountPerTick: 2,
         },
         costPerTick: 50,
     }),

@@ -1,12 +1,19 @@
 import { action, makeObservable, observable } from "mobx";
-import { EXTERNAL_BUILDING_TYPES } from "./externalBuildingTypes";
-import { EXTERNAL_BUILDING_TYPE_NAMES, RESOURCE_LAYER_INDEXES } from "../../enums";
+import {
+    EXTERNAL_BUILDING_TYPE_NAMES,
+    INTERNAL_BUILDING_TYPE_NAMES,
+    RESOURCE_LAYER_INDEXES,
+    RESOURCE_NAMES,
+} from "../../enums";
 import {
     POWER_CENTER_TIER_TO_INCREASE_LEVEL,
     POWER_CENTER_TIER_UPGRADE_THRESHOLD,
     POWER_CENTER_VALUES,
+    TAX_OFFICE_VALUES,
+    WAREHOUSE_VALUES,
 } from "../../constants";
 import { RESOURCE_LAYERS } from "../resource/resources";
+import { EXTERNAL_BUILDING_TYPES } from "./externalBuildingTypes";
 
 class PowerCenter {
     constructor({
@@ -30,7 +37,9 @@ class PowerCenter {
             growth: 0,
             civilians: POWER_CENTER_VALUES.INITIAL_CIVILIANS,
             recruits: 0,
+            canGrow: true,
         },
+        externalBuildingIds = [],
         externalBuildingsAmount = {
             [EXTERNAL_BUILDING_TYPE_NAMES.FARM]: 0,
             [EXTERNAL_BUILDING_TYPE_NAMES.WOODCUTTER]: 0,
@@ -39,6 +48,10 @@ class PowerCenter {
         },
         placementCellsMaxAmount = 0,
         internalBuildings = [],
+        bonusInternalBuildingsAmount = {
+            [INTERNAL_BUILDING_TYPE_NAMES.WAREHOUSE]: 0,
+            [INTERNAL_BUILDING_TYPE_NAMES.TAX_OFFICE]: 0,
+        },
     }) {
         this.id = id;
         this.ownerIndex = ownerIndex;
@@ -56,10 +69,13 @@ class PowerCenter {
 
         this.controlArea = controlArea;
         this.possibleControlArea = possibleControlArea;
+
+        this.externalBuildingIds = externalBuildingIds;
         this.externalBuildingsAmount = externalBuildingsAmount;
 
         this.placementCellsMaxAmount = placementCellsMaxAmount;
         this.internalBuildings = internalBuildings;
+        this.bonusInternalBuildingsAmount = bonusInternalBuildingsAmount;
 
         makeObservable(this, {
             tier: observable,
@@ -70,7 +86,6 @@ class PowerCenter {
             storage: observable,
             controlArea: observable,
             externalBuildingsAmount: observable,
-            placementCellsMaxAmount: observable,
             internalBuildings: observable,
 
             increaseLevel: action,
@@ -79,6 +94,10 @@ class PowerCenter {
 
     getTile(map) {
         return map.matrix[this.row][this.col];
+    }
+
+    getRegion(map) {
+        return map.regions[this.getTile(map).partRegion.regionIndex];
     }
 
     getControlArea(map) {
@@ -90,11 +109,18 @@ class PowerCenter {
     }
 
     #calcStorageCapacity() {
-        this.storageCapacity = this.tier * POWER_CENTER_VALUES.INITIAL_STORAGE_CAPACITY;
+        this.storageCapacity =
+            this.tier * POWER_CENTER_VALUES.INITIAL_STORAGE_CAPACITY +
+            WAREHOUSE_VALUES.STORAGE_CAPACITY_BONUS *
+                this.bonusInternalBuildingsAmount[INTERNAL_BUILDING_TYPE_NAMES.WAREHOUSE];
     }
 
     #calcIncome() {
         this.economic.income = this.people.civilians * this.tier;
+
+        for (let i = 0; i < this.bonusInternalBuildingsAmount[INTERNAL_BUILDING_TYPE_NAMES.TAX_OFFICE]; i++) {
+            this.economic.income *= TAX_OFFICE_VALUES.POWER_CENTER_TAX_BONUS;
+        }
     }
 
     #increaseTier() {
@@ -125,14 +151,37 @@ class PowerCenter {
 
     grow() {
         const requiredFoodAmount = this.people.civilians / POWER_CENTER_VALUES.PEOPLE_FOOD_PROVISION_RATIO;
+        const foodAmountDelta = Math.floor(this.storage[RESOURCE_NAMES.FOOD] - requiredFoodAmount);
+        if (this.people.canGrow && foodAmountDelta > 0) {
+            this.people.growth = foodAmountDelta * POWER_CENTER_VALUES.PEOPLE_FOOD_BORN_RATIO;
+        }
+        if (foodAmountDelta < 0) {
+            this.storage[RESOURCE_NAMES.FOOD] = 0;
+            this.people.growth = foodAmountDelta * POWER_CENTER_VALUES.PEOPLE_FOOD_BORN_RATIO;
+        } else {
+            this.storage[RESOURCE_NAMES.FOOD] -= requiredFoodAmount;
+        }
 
         this.people.civilians += this.people.growth;
         this.#calcIncome();
     }
 
+    #tryIncreaseStorage(resourceName, producedAmount) {
+        this.storage[resourceName] += Math.min(
+            producedAmount,
+            this.storageCapacity - this.storage[resourceName]
+        );
+    }
+
     produce() {
-        let storageCapacityLeft;
         let producedAmount;
+        for (const [resourceName, production] of Object.entries(
+            POWER_CENTER_VALUES.BASIC_PRODUCTION_PER_TICK
+        )) {
+            producedAmount = production * this.tier;
+            this.#tryIncreaseStorage(resourceName, producedAmount);
+        }
+
         let externalBuildingType;
         for (const resource of RESOURCE_LAYERS[RESOURCE_LAYER_INDEXES.FIRST]) {
             if (this.storageCapacity - this.storage[resource.name] === 0) {
@@ -144,8 +193,7 @@ class PowerCenter {
             producedAmount =
                 externalBuildingType.production.producedAmountPerTick *
                 this.externalBuildingsAmount[resource.name];
-            storageCapacityLeft = this.storageCapacity - this.storage[resource.name];
-            this.storage[resource.name] += Math.min(producedAmount, storageCapacityLeft);
+            this.#tryIncreaseStorage(resource.name, producedAmount);
         }
 
         let conversionRatio;
@@ -169,25 +217,45 @@ class PowerCenter {
                     externalBuildingType.production.producedAmountPerTick /
                     externalBuildingType.production.requiredAmountPerTick;
                 producedAmount = actuallyRawAmount * conversionRatio;
-                storageCapacityLeft = this.storageCapacity - this.storage[resource.name];
-                this.storage[resource.name] += Math.min(producedAmount, storageCapacityLeft);
+                this.#tryIncreaseStorage(resource.name, producedAmount);
             }
         }
     }
 
-    buildExternalBuilding(type) {
-        const externalBuildingType = EXTERNAL_BUILDING_TYPES[type];
-        for (const [resourceName, value] of Object.entries(externalBuildingType.buildCost)) {
+    subtractBuildCost(buildCost) {
+        for (const [resourceName, value] of Object.entries(buildCost)) {
+            if (resourceName === RESOURCE_NAMES.MONEY) {
+                continue;
+            }
             this.storage[resourceName] -= value;
         }
-
-        this.externalBuildingsAmount[type]++;
-        this.outcome += externalBuildingType.costPerTick;
     }
 
-    destroyExternalBuilding(type) {
-        this.externalBuildingsAmount[type]--;
-        this.outcome -= EXTERNAL_BUILDING_TYPES[type].costPerTick;
+    onExternalBuildingBuilded(externalBuilding) {
+        this.externalBuildingIds.push(externalBuilding.id);
+        this.externalBuildingsAmount[externalBuilding.typeName]++;
+        this.outcome += EXTERNAL_BUILDING_TYPES[externalBuilding.typeName].costPerTick;
+    }
+
+    onExternalBuildingDestroyed(externalBuilding) {
+        this.externalBuildingIds = this.externalBuildingIds.filter((id) => id !== externalBuilding.id);
+        this.externalBuildingsAmount[externalBuilding]--;
+        this.outcome -= EXTERNAL_BUILDING_TYPES[externalBuilding].costPerTick;
+    }
+
+    onInternalBuildingBuilded(internalBuilding) {
+        const previousType = this.internalBuildings[internalBuilding.placementCellPos];
+        if (previousType && this.bonusInternalBuildingsAmount[previousType]) {
+            this.bonusInternalBuildingsAmount[previousType]--;
+        }
+
+        this.internalBuildings[internalBuilding.placementCellPos] = internalBuilding.typeName;
+        if (this.bonusInternalBuildingsAmount[internalBuilding.typeName]) {
+            this.bonusInternalBuildingsAmount[internalBuilding.typeName]++;
+        }
+
+        this.#calcIncome();
+        this.#calcStorageCapacity();
     }
 }
 export { PowerCenter };
