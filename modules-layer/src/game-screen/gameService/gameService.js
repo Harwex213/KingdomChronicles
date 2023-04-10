@@ -1,9 +1,10 @@
 import { getGameCreationConfig, saveGameCreationConfig } from "./utils";
 import { action, makeObservable, observable, runInAction } from "mobx";
-import { Validator, GameModel } from "game";
 import { playerInfoSamples } from "./playerInfoSamples";
+import { Validator, GameModel } from "game";
 import { MapRenderer, MapRendererConfig } from "map-renderer";
-import { CurrentPlayer, GAME_ACTIONS, GAME_VALIDATIONS } from "models/game";
+import { CurrentPlayer } from "shared/models";
+import { GAME_ACTIONS, GAME_VALIDATIONS } from "shared/enums";
 
 const PLACE_GLOBAL_BUILDING_ACTIONS = [GAME_ACTIONS.START_BUILD_POWER_CENTER, GAME_ACTIONS.START_BUILD_ROAD];
 

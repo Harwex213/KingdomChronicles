@@ -1,10 +1,10 @@
 import styles from "./playerActions.module.css";
-import { PlayerAction } from "./PlayerAction";
-import { GAME_ACTIONS } from "models/game/enums/actions";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
+import { PlayerAction } from "./PlayerAction";
 import { gameService } from "../../gameService/gameService";
-import { POWER_CENTER_VALUES, ROAD_VALUES } from "models/game-variables";
+import { GAME_ACTIONS } from "shared/enums";
+import { POWER_CENTER_VALUES, ROAD_VALUES } from "shared/constants";
 
 const PlayerActions = observer(() => {
     useEffect(() => {

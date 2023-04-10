@@ -1,5 +1,5 @@
 import { generateMap as _generateMap, MapGenerationConfig } from "map-generator";
-import Randomizer from "models/randomizer";
+import { Randomizer } from "shared/models";
 
 const mapGeneratorConfig = new MapGenerationConfig();
 

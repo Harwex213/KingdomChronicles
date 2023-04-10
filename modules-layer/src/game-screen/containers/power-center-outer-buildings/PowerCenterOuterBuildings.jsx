@@ -1,8 +1,8 @@
 import styles from "./PowerCenterOuterBuildings.module.css";
+import React, { useState } from "react";
 import { Block, Button, Tab } from "../../../components-game";
 import { observer } from "mobx-react-lite";
-import React, { useState } from "react";
-import { POWER_CENTER_TIERS } from "models/game";
+import { POWER_CENTER_TIERS } from "shared/enums";
 import { gameService } from "../../gameService/gameService";
 
 const POWER_CENTER_TIER_TO_TABS = {

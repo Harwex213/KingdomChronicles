@@ -1,4 +1,5 @@
-import { Map, tileTypes, MapRegion } from "models/map";
+import { Map, MapRegion } from "shared/models";
+import { TILE_TYPES } from "shared/enums";
 import { MAP_SIZE_DIMENSIONS, REGION_SIZES } from "../constants";
 import { defineRegionsType } from "./defineRegionsType";
 import { defineRegionsBiom } from "./defineRegionsBiom";
@@ -52,7 +53,7 @@ const generateMap = (mapGenerationConfig) => {
             this.tilesForRegion.forEach((tile) => {
                 map.matrix[tile[0]][tile[1]].addRegionToMapTile(map.regions[region], region);
                 tilesForRegionsLeft.splice(tilesForRegionsLeft.indexOf(`${tile[0]}-${tile[1]}`), 1);
-                map.matrix[tile[0]][tile[1]].tileType = tileTypes.LAND;
+                map.matrix[tile[0]][tile[1]].tileType = TILE_TYPES.LAND;
             });
         },
         clearTilesForRegion() {
@@ -93,7 +94,7 @@ const generateMap = (mapGenerationConfig) => {
 
             if (
                 tileDirection !== null &&
-                map.matrix[tileDirection[0]][tileDirection[1]].tileType !== tileTypes.LAND &&
+                map.matrix[tileDirection[0]][tileDirection[1]].tileType !== TILE_TYPES.LAND &&
                 !coasts.isCoast(tileDirection) &&
                 !assignedForRegion.isAssignedTile(tileDirection) &&
                 !potentialRegionTiles.isPotentialTile(tileDirection)
@@ -179,7 +180,7 @@ const generateMap = (mapGenerationConfig) => {
     };
 
     tilesWithoutRegion.forEach((tile) => {
-        map.matrix[tile[0]][tile[1]].tileType = tileTypes.LAND;
+        map.matrix[tile[0]][tile[1]].tileType = TILE_TYPES.LAND;
         const neighboringRegions = getIndexesNeighboringRegions(
             tile,
             (tileDirection) =>

@@ -1,13 +1,12 @@
 import { Sprite, Text, TextStyle } from "pixi.js";
-import { areaTypes, biomTypes, tileTypes } from "models/map";
-import { GLOBAL_BUILDING_TYPES } from "models/game";
+import { reaction } from "mobx";
+import { AREA_TYPES, BIOM_TYPES, TILE_TYPES, GLOBAL_BUILDING_TYPES } from "shared/enums";
 import {
     RENDERER_CONFIG,
     SPRITESHEET_BIOM_NAMES,
     SPRITESHEET_FARM_NAMES,
     SPRITESHEET_UNSORTED_NAMES,
 } from "../constants.js";
-import { reaction } from "mobx";
 import {
     AREA_TYPE_TO_BIOM_SPRITESHEET_NAME,
     AREA_TYPE_TO_POWER_CENTER_SPRITESHEET_NAME,
@@ -148,12 +147,12 @@ export class TileRenderer {
         if (mapTile.tileType === null) {
             return SPRITESHEET_BIOM_NAMES.EMPTY;
         }
-        if (mapTile.tileType === tileTypes.LAND && mapTile.biomType !== biomTypes.NONE) {
-            if (mapTile.globalBuilding.type === GLOBAL_BUILDING_TYPES.OUTER_BUILDING) {
+        if (mapTile.tileType === TILE_TYPES.LAND && mapTile.biomType !== BIOM_TYPES.NONE) {
+            if (mapTile.globalBuilding.type === GLOBAL_BUILDING_TYPES.EXTERNAL_BUILDING) {
                 return SPRITESHEET_FARM_NAMES.PLATEAU;
             }
 
-            if (mapTile.areaType === areaTypes.MOUNTAIN) {
+            if (mapTile.areaType === AREA_TYPES.MOUNTAIN) {
                 return SPRITESHEET_BIOM_NAMES.MOUNTAIN;
             }
 

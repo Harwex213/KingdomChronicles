@@ -1,6 +1,6 @@
 import { Container, Sprite } from "pixi.js";
 import { RENDERER_CONFIG, SPRITESHEET_TILE_BORDER_NAMES } from "../constants";
-import { directionsTypes } from "models/map";
+import { HEXAGON_DIRECTION_TYPES } from "shared/enums";
 
 class RegionBorderByTile {
     #spritesheet;
@@ -50,22 +50,22 @@ class RegionBorderByTile {
             const tileBorderContainer = new Container();
 
             const mapTile = this.#mapToRender.matrix[mapTileRow][mapTileCol];
-            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT_UP] === null) {
+            if (mapTile.neighboringTilesRegion[HEXAGON_DIRECTION_TYPES.LEFT_UP] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_TILE_BORDER_NAMES.TOP_LEFT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT_UP] === null) {
+            if (mapTile.neighboringTilesRegion[HEXAGON_DIRECTION_TYPES.RIGHT_UP] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_TILE_BORDER_NAMES.TOP_RIGHT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT] === null) {
+            if (mapTile.neighboringTilesRegion[HEXAGON_DIRECTION_TYPES.RIGHT] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_TILE_BORDER_NAMES.RIGHT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT] === null) {
+            if (mapTile.neighboringTilesRegion[HEXAGON_DIRECTION_TYPES.LEFT] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_TILE_BORDER_NAMES.LEFT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.LEFT_DOWN] === null) {
+            if (mapTile.neighboringTilesRegion[HEXAGON_DIRECTION_TYPES.LEFT_DOWN] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_TILE_BORDER_NAMES.BOTTOM_LEFT);
             }
-            if (mapTile.neighboringTilesRegion[directionsTypes.RIGHT_DOWN] === null) {
+            if (mapTile.neighboringTilesRegion[HEXAGON_DIRECTION_TYPES.RIGHT_DOWN] === null) {
                 this.#addBorder(tileBorderContainer, SPRITESHEET_TILE_BORDER_NAMES.BOTTOM_RIGHT);
             }
 

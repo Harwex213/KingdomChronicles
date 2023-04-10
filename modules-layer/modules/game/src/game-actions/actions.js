@@ -1,9 +1,7 @@
-import { GAME_ACTIONS } from "models/game";
-import { powerCenterBuilded } from "../handleNextTick/powerCenterBuilded";
+import { GAME_ACTIONS } from "shared/enums";
 import { startBuildingPowerCenter } from "./build/startBuildingPowerCenter";
 
 const actions = {
-    [GAME_ACTIONS.POWER_CENTER_BUILDED]: powerCenterBuilded,
     [GAME_ACTIONS.START_BUILD_POWER_CENTER]: startBuildingPowerCenter,
 };
 

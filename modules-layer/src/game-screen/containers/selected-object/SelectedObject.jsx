@@ -1,7 +1,7 @@
 import styles from "./selectedObject.module.css";
 import { observer } from "mobx-react-lite";
 import { gameService } from "../../gameService/gameService";
-import { CURRENT_PLAYER_SELECTED_OBJECT_STATES } from "models/game";
+import { CURRENT_PLAYER_SELECTED_OBJECT_STATES } from "shared/enums";
 import { SelectedPowerCenter } from "../selected-power-center/SelectedPowerCenter";
 import { SelectedNeutralRegion } from "../selected-neutral-region/SelectedNeutralRegion";
 import { Block } from "../../../components-game";

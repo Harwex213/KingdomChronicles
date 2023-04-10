@@ -1,4 +1,4 @@
-import { areaTypes, biomTypes, tileTypes } from "models/map";
+import { AREA_TYPES, BIOM_TYPES, TILE_TYPES } from "shared/enums";
 
 export const renderDevBioms = (map) => {
     let row = 0;
@@ -6,7 +6,7 @@ export const renderDevBioms = (map) => {
         const scopeRow = row++;
         let scopeCol = 0;
         return (biomType) => {
-            map.matrix[scopeRow][scopeCol].tileType = tileTypes.LAND;
+            map.matrix[scopeRow][scopeCol].tileType = TILE_TYPES.LAND;
             map.matrix[scopeRow][scopeCol].biomType = biomType;
             map.matrix[scopeRow][scopeCol].areaType = areaType;
             scopeCol++;
@@ -15,35 +15,35 @@ export const renderDevBioms = (map) => {
 
     for (const tilesRow of map.matrix) {
         for (const mapTile of tilesRow) {
-            mapTile.tileType = tileTypes.SEA;
-            mapTile.biomType = biomTypes.NONE;
-            mapTile.areaType = areaTypes.NONE;
+            mapTile.tileType = TILE_TYPES.SEA;
+            mapTile.biomType = BIOM_TYPES.NONE;
+            mapTile.areaType = AREA_TYPES.NONE;
         }
     }
 
-    const setTileWithoutArea = createTileFiller(areaTypes.NONE);
-    setTileWithoutArea(biomTypes.GRASSLAND);
-    setTileWithoutArea(biomTypes.FLATLAND);
-    setTileWithoutArea(biomTypes.DESERT);
-    setTileWithoutArea(biomTypes.TUNDRA);
-    setTileWithoutArea(biomTypes.JUNGLE);
+    const setTileWithoutArea = createTileFiller(AREA_TYPES.NONE);
+    setTileWithoutArea(BIOM_TYPES.GRASSLAND);
+    setTileWithoutArea(BIOM_TYPES.FLATLAND);
+    setTileWithoutArea(BIOM_TYPES.DESERT);
+    setTileWithoutArea(BIOM_TYPES.TUNDRA);
+    setTileWithoutArea(BIOM_TYPES.JUNGLE);
 
-    const setTileWithMountain = createTileFiller(areaTypes.MOUNTAIN);
-    setTileWithMountain(biomTypes.FLATLAND);
+    const setTileWithMountain = createTileFiller(AREA_TYPES.MOUNTAIN);
+    setTileWithMountain(BIOM_TYPES.FLATLAND);
 
-    const setTileWithForest = createTileFiller(areaTypes.FOREST);
-    setTileWithForest(biomTypes.GRASSLAND);
-    setTileWithForest(biomTypes.FLATLAND);
-    setTileWithForest(biomTypes.TUNDRA);
+    const setTileWithForest = createTileFiller(AREA_TYPES.FOREST);
+    setTileWithForest(BIOM_TYPES.GRASSLAND);
+    setTileWithForest(BIOM_TYPES.FLATLAND);
+    setTileWithForest(BIOM_TYPES.TUNDRA);
 
-    const setTileWithForestAndHills = createTileFiller(areaTypes.FOREST_HILLS);
-    setTileWithForestAndHills(biomTypes.GRASSLAND);
-    setTileWithForestAndHills(biomTypes.FLATLAND);
-    setTileWithForestAndHills(biomTypes.TUNDRA);
+    const setTileWithForestAndHills = createTileFiller(AREA_TYPES.FOREST_HILLS);
+    setTileWithForestAndHills(BIOM_TYPES.GRASSLAND);
+    setTileWithForestAndHills(BIOM_TYPES.FLATLAND);
+    setTileWithForestAndHills(BIOM_TYPES.TUNDRA);
 
-    const setTileWithHills = createTileFiller(areaTypes.HILLS);
-    setTileWithHills(biomTypes.GRASSLAND);
-    setTileWithHills(biomTypes.FLATLAND);
-    setTileWithHills(biomTypes.DESERT);
-    setTileWithHills(biomTypes.TUNDRA);
+    const setTileWithHills = createTileFiller(AREA_TYPES.HILLS);
+    setTileWithHills(BIOM_TYPES.GRASSLAND);
+    setTileWithHills(BIOM_TYPES.FLATLAND);
+    setTileWithHills(BIOM_TYPES.DESERT);
+    setTileWithHills(BIOM_TYPES.TUNDRA);
 };

@@ -1,5 +1,6 @@
-import { GAME_ACTIONS, GAME_VALIDATIONS, GLOBAL_BUILDING_TYPES, PendingGlobalBuilding } from "models/game";
-import { POWER_CENTER_VALUES } from "models/game-variables";
+import { PendingGlobalBuilding } from "shared/models";
+import { GAME_ACTIONS, GAME_VALIDATIONS, GLOBAL_BUILDING_TYPES } from "shared/enums";
+import { POWER_CENTER_VALUES } from "shared/constants";
 import { generateRandomId } from "../../utils";
 
 const startBuildingPowerCenter = ({ gameState, gameValidator, playerIndex, row, col }) => {

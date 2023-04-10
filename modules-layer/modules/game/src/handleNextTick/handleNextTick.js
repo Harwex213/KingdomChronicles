@@ -1,4 +1,4 @@
-import { GLOBAL_BUILDING_TYPES } from "models/game";
+import { GLOBAL_BUILDING_TYPES } from "shared/enums";
 import { powerCenterBuilded } from "./powerCenterBuilded";
 
 const GLOBAL_BUILDING_TYPE_TO_EVENT = {

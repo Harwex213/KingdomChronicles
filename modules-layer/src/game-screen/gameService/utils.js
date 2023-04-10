@@ -1,4 +1,4 @@
-import { mapSizeTypes } from "models/map";
+import { MAP_SIZE_TYPES } from "shared/enums";
 
 export const getGameCreationConfig = () => {
     const gameCreationConfig = localStorage.getItem("gameCreationConfig");
@@ -6,7 +6,7 @@ export const getGameCreationConfig = () => {
         ? JSON.parse(gameCreationConfig)
         : {
               seedRandom: undefined,
-              mapSizeType: mapSizeTypes.SMALL,
+              mapSizeType: MAP_SIZE_TYPES.SMALL,
               playersAmount: 2,
           };
 };

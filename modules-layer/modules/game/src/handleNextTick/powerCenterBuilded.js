@@ -1,16 +1,16 @@
-import { POWER_CENTER_TIERS, PowerCenter } from "models/game";
+import { MapTile, PowerCenter } from "shared/models";
+import { POWER_CENTER_TIERS, HEXAGON_DIRECTION_TYPES } from "shared/enums";
 import { generateRandomId } from "../utils";
-import { AXIAL_NEIGHBOR_DIRECTION_VECTORS, directionsTypes, MapTile } from "models/map";
 
 const getTilesRing = (map, centerTile, radius) => {
     const axialPoints = [];
 
-    const vector = AXIAL_NEIGHBOR_DIRECTION_VECTORS[directionsTypes.LEFT_DOWN];
+    const vector = MapTile.axialNeighborDirectionVectors[HEXAGON_DIRECTION_TYPES.LEFT_DOWN];
     let axialPoint = {
         q: centerTile.axialCoordinates.q + vector[0] * radius,
         r: centerTile.axialCoordinates.r + vector[1] * radius,
     };
-    for (const direction of Object.values(directionsTypes)) {
+    for (const direction of Object.values(HEXAGON_DIRECTION_TYPES)) {
         for (let i = 0; i < radius; i++) {
             axialPoints.push(axialPoint);
             axialPoint = MapTile.axialNeighbor(axialPoint.q, axialPoint.r, direction);
@@ -61,7 +61,7 @@ const powerCenterBuilded = ({ gameState, row, col }) => {
             gameState.map,
             mapTile,
             mapRegion,
-            gameState.outerBuildings
+            gameState.externalBuildings
         ),
     });
 

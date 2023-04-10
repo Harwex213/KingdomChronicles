@@ -1,7 +1,7 @@
-import { POWER_CENTER_MAX_TIER_NUMBER } from "models/game/buildings/buildings";
+import { POWER_CENTER_MAX_TIER } from "shared/enums";
 import { TileBorder } from "./tileBorder";
 
-const CACHE_SIZE = (POWER_CENTER_MAX_TIER_NUMBER + 1) * POWER_CENTER_MAX_TIER_NUMBER * 3;
+const CACHE_SIZE = (POWER_CENTER_MAX_TIER + 1) * POWER_CENTER_MAX_TIER * 3;
 
 class PowerCenterControlArea {
     #isAdded;

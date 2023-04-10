@@ -1,5 +1,4 @@
-import { GLOBAL_BUILDING_TYPES } from "models/game";
-import { areaTypes } from "models/map";
+import { GLOBAL_BUILDING_TYPES, AREA_TYPES } from "shared/enums";
 
 const canPlacePowerCenter = ({ gameState, playerIndex, row, col }) => {
     const { map } = gameState;
@@ -11,7 +10,7 @@ const canPlacePowerCenter = ({ gameState, playerIndex, row, col }) => {
         return false;
     }
 
-    if (examinedMapTile.areaType === areaTypes.MOUNTAIN) {
+    if (examinedMapTile.areaType === AREA_TYPES.MOUNTAIN) {
         return false;
     }
 

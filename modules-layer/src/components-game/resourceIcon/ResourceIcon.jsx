@@ -1,5 +1,5 @@
 import styles from "./ResourceIcon.module.css";
-import { RESOURCE_NAMES } from "models/game";
+import { RESOURCE_NAMES } from "shared/enums";
 import money from "./resourceIcons/money_86.png";
 import wood from "./resourceIcons/wood_86.png";
 import stone from "./resourceIcons/stone_86.png";

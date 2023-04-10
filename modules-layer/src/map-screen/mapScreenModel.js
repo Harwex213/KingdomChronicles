@@ -1,11 +1,10 @@
-import { mapSizeTypes, waterBalanceTypes } from "models/map/index.js";
+import { MAP_SIZE_TYPES } from "shared/enums";
 import { makeAutoObservable } from "mobx";
 import { generateMap } from "./actions/generateMap.js";
 import { renderMap, initRenderer, disposeRenderer } from "./actions/renderMap/renderMap.js";
 
 class MapScreenModel {
-    mapSizesType = mapSizeTypes.SMALL;
-    waterBalanceType = waterBalanceTypes.BALANCE;
+    mapSizesType = MAP_SIZE_TYPES.SMALL;
     seedRandom = undefined;
     devBiomsRender = false;
     devRegionsRender = false;
@@ -52,7 +51,6 @@ class MapScreenModel {
         const map = generateMap({
             seedRandom: this.seedRandom,
             mapSizesType: this.mapSizesType,
-            waterBalanceType: this.waterBalanceType,
         });
         await renderMap(map, {
             devBiomsRender: this.devBiomsRender,
@@ -64,11 +62,6 @@ class MapScreenModel {
 
     setMapSizesType(newMapSizesType) {
         this.mapSizesType = newMapSizesType;
-        this.action();
-    }
-
-    setWaterBalanceType(newWaterBalanceType) {
-        this.waterBalanceType = newWaterBalanceType;
         this.action();
     }
 

@@ -6,6 +6,6 @@
     "pixi-viewport": "^5.0.1",
     "pixi.js": "^7.1.4",
     "mobx": "^6.9.0",
-    "models": "file:../models"
+    "shared": "file:../shared"
   }
 }

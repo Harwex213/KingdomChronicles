@@ -1,16 +1,16 @@
 import { createNoise2D } from "simplex-noise";
-import { areaTypes, biomTypes, tileTypes } from "models/map";
 import { normalizeNoise2D } from "./utils";
+import { AREA_TYPES, BIOM_TYPES, TILE_TYPES } from "shared/enums";
 
 let map = null;
 
 const assignElevation = (elevation, mapTile) => {
     if (elevation > 0.77) {
-        if (mapTile.biomType !== biomTypes.DESERT) {
-            mapTile.areaType = areaTypes.MOUNTAIN;
+        if (mapTile.biomType !== BIOM_TYPES.DESERT) {
+            mapTile.areaType = AREA_TYPES.MOUNTAIN;
         }
     } else if (elevation > 0.65) {
-        mapTile.areaType = areaTypes.HILLS;
+        mapTile.areaType = AREA_TYPES.HILLS;
     }
 };
 
@@ -38,7 +38,7 @@ const defineElevation = (pMap, randomizer) => {
         for (let col = 0; col < map.width; col++) {
             mapTile = map.matrix[row][col];
 
-            if (mapTile.tileType === tileTypes.SEA) {
+            if (mapTile.tileType === TILE_TYPES.SEA) {
                 continue;
             }
 

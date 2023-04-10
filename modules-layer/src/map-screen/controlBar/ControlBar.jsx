@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import styles from "./controlBar.module.css";
-import { mapSizeTypes, waterBalanceTypes } from "models/map";
+import { MAP_SIZE_TYPES } from "shared/enums";
 import { Button, Select, Input, Checkbox, Container } from "../../components/controls";
 import { mapScreenModel } from "../mapScreenModel.js";
 import { observer } from "mobx-react-lite";
@@ -30,15 +30,9 @@ const ControlBar = observer(() => {
                 />
                 <Select
                     placeholder="Map size"
-                    options={Object.values(mapSizeTypes)}
+                    options={Object.values(MAP_SIZE_TYPES)}
                     value={mapScreenModel.mapSizesType}
                     onChange={(value) => mapScreenModel.setMapSizesType(value)}
-                />
-                <Select
-                    placeholder="Water balance"
-                    options={Object.values(waterBalanceTypes)}
-                    value={mapScreenModel.waterBalanceType}
-                    onChange={(value) => mapScreenModel.setWaterBalanceType(value)}
                 />
                 <Input
                     placeholder="Random seed"

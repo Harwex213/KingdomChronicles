@@ -1,6 +1,6 @@
 import { Sprite } from "pixi.js";
 import { reaction } from "mobx";
-import { CURRENT_PLAYER_SELECTED_OBJECT_STATES, GAME_ACTIONS, GAME_VALIDATIONS } from "models/game";
+import { CURRENT_PLAYER_SELECTED_OBJECT_STATES, GAME_ACTIONS, GAME_VALIDATIONS } from "shared/enums";
 import { RENDERER_CONFIG } from "../constants";
 import { TileBorder } from "./tileBorder";
 import { RegionBorderByTile } from "./regionBorderByTile";

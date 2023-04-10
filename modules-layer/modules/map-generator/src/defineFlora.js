@@ -1,14 +1,14 @@
 import { createNoise2D } from "simplex-noise";
 import { normalizeNoise2D } from "./utils";
-import { areaTypes, biomTypes, tileTypes } from "models/map";
+import { AREA_TYPES, BIOM_TYPES, TILE_TYPES } from "shared/enums";
 
 let map = null;
 
-const ACCEPTABLE_BIOMS = [biomTypes.GRASSLAND, biomTypes.FLATLAND, biomTypes.TUNDRA];
+const ACCEPTABLE_BIOMS = [BIOM_TYPES.GRASSLAND, BIOM_TYPES.FLATLAND, BIOM_TYPES.TUNDRA];
 const AREA_TYPE_TRANSITION = {
-    [areaTypes.NONE]: areaTypes.FOREST,
-    [areaTypes.MOUNTAIN]: areaTypes.MOUNTAIN,
-    [areaTypes.HILLS]: areaTypes.FOREST_HILLS,
+    [AREA_TYPES.NONE]: AREA_TYPES.FOREST,
+    [AREA_TYPES.MOUNTAIN]: AREA_TYPES.MOUNTAIN,
+    [AREA_TYPES.HILLS]: AREA_TYPES.FOREST_HILLS,
 };
 
 const assignPlant = (plant, mapTile) => {
@@ -41,7 +41,7 @@ const defineFlora = (pMap, randomizer) => {
         for (let col = 0; col < map.width; col++) {
             mapTile = map.matrix[row][col];
 
-            if (mapTile.tileType === tileTypes.SEA) {
+            if (mapTile.tileType === TILE_TYPES.SEA) {
                 continue;
             }
 

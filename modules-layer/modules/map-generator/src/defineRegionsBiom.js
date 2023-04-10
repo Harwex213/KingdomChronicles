@@ -1,27 +1,27 @@
-import { biomTypes, tileTypes } from "models/map";
 import { createNoise2D } from "simplex-noise";
 import { normalizeNoise2D } from "./utils";
+import { BIOM_TYPES, TILE_TYPES } from "shared/enums";
 
 let map = null;
 
 const assignMoistureAndTemperature = (temperature, moisture, mapTile) => {
     if (temperature > 1.35) {
         if (moisture > 0.75) {
-            mapTile.biomType = biomTypes.GRASSLAND;
+            mapTile.biomType = BIOM_TYPES.GRASSLAND;
         } else {
-            mapTile.biomType = biomTypes.DESERT;
+            mapTile.biomType = BIOM_TYPES.DESERT;
         }
     } else if (temperature > 0) {
         if (moisture > 0.4) {
-            mapTile.biomType = biomTypes.GRASSLAND;
+            mapTile.biomType = BIOM_TYPES.GRASSLAND;
         } else {
-            mapTile.biomType = biomTypes.FLATLAND;
+            mapTile.biomType = BIOM_TYPES.FLATLAND;
         }
     } else {
         if (moisture > 0.75) {
-            mapTile.biomType = biomTypes.FLATLAND;
+            mapTile.biomType = BIOM_TYPES.FLATLAND;
         } else {
-            mapTile.biomType = biomTypes.TUNDRA;
+            mapTile.biomType = BIOM_TYPES.TUNDRA;
         }
     }
 };
@@ -40,7 +40,7 @@ const randomBioms = (getRandom) => {
         for (let col = 0; col < map.width; col++) {
             mapTile = map.matrix[row][col];
 
-            if (mapTile.tileType === tileTypes.SEA) {
+            if (mapTile.tileType === TILE_TYPES.SEA) {
                 continue;
             }
 

@@ -1,5 +1,5 @@
-import { biomTypes } from "models/map";
-import { Player } from "models/game/player/player";
+import { BIOM_TYPES } from "shared/enums";
+import { Player } from "shared/models";
 
 const getPlayerInitialRegion = ({ randomizer, regions, acceptableForPlacementRegionsIndices }) => {
     const randomizedIndex = randomizer.getRangedRandom(acceptableForPlacementRegionsIndices.length - 1);
@@ -12,7 +12,7 @@ const placePlayers = ({ randomizer, gameState, playersInfo }) => {
     const { map } = gameState;
 
     const acceptableForPlacementRegionsIndices = map.landRegions.filter(
-        (regionIndex) => map.regions[regionIndex].biomType !== biomTypes.DESERT
+        (regionIndex) => map.regions[regionIndex].biomType !== BIOM_TYPES.DESERT
     );
 
     for (let i = 0; i < playersInfo.length; i++) {

@@ -1,41 +1,34 @@
 import styles from "./ResourceSelection.module.css";
 import { Block, Container, Text } from "../../../components-game";
-import { FIRST_LAYER_RESOURCES, SECOND_LAYER_RESOURCES } from "models/game";
 import { ResourceIcon } from "../../../components-game/resourceIcon/ResourceIcon";
+import { POWER_CENTER_TIERS } from "shared/enums";
+import { RESOURCE_LAYERS } from "shared/models";
 
-const ResourceSelection = ({ className = "", selectedResource, onResourceSelect }) => {
+const POWER_CENTER_TIER_LABELS = {
+    [POWER_CENTER_TIERS.FIRST]: "I",
+    [POWER_CENTER_TIERS.SECOND]: "II",
+};
+
+const ResourceSelection = ({ className = "", onResourceSelect }) => {
     return (
         <Block className={styles.container + " " + className}>
-            <div className={styles.layer}>
-                <Container direction="row">
-                    {FIRST_LAYER_RESOURCES.map((resource) => (
-                        <ResourceIcon
-                            key={resource.name}
-                            type={resource.name}
-                            onClick={() => onResourceSelect(resource.name)}
-                        />
-                    ))}
-                </Container>
-                <div className={styles.layerTitle}>
-                    <Text>I</Text>
-                    <Text family="dumbledor">Layer</Text>
+            {RESOURCE_LAYERS.map((resourceLayer, index) => (
+                <div className={styles.layer} key={index}>
+                    <Container direction="row">
+                        {resourceLayer.map((resource) => (
+                            <ResourceIcon
+                                key={resource.name}
+                                type={resource.name}
+                                onClick={() => onResourceSelect(resource.name)}
+                            />
+                        ))}
+                    </Container>
+                    <div className={styles.layerTitle}>
+                        <Text>{POWER_CENTER_TIER_LABELS[index + 1]}</Text>
+                        <Text family="dumbledor">Layer</Text>
+                    </div>
                 </div>
-            </div>
-            <div className={styles.layer}>
-                <Container direction="row">
-                    {SECOND_LAYER_RESOURCES.map((resource) => (
-                        <ResourceIcon
-                            key={resource.name}
-                            type={resource.name}
-                            onClick={() => onResourceSelect(resource.name)}
-                        />
-                    ))}
-                </Container>
-                <div className={styles.layerTitle}>
-                    <Text>II</Text>
-                    <Text family="dumbledor">Layer</Text>
-                </div>
-            </div>
+            ))}
         </Block>
     );
 };

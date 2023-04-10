@@ -1,9 +1,9 @@
+import styles from "./playerInfo.module.css";
 import { observer } from "mobx-react-lite";
 import { gameService } from "../../gameService/gameService";
 import { Block, Container, Text } from "../../../components-game";
 import { ResourceIcon } from "../../../components-game/resourceIcon/ResourceIcon";
-import { RESOURCE_NAMES } from "models/game";
-import styles from "./playerInfo.module.css";
+import { RESOURCE_NAMES } from "shared/enums";
 
 const PlayerInfo = observer(() => {
     if (gameService.currentPlayer === null) {

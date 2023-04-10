@@ -1,29 +1,29 @@
-import { tileTypes } from "models/map";
+import { TILE_TYPES } from "shared/enums";
 
 const FIRST_ROW = 0;
 const FIRST_COL = 0;
 let map = null;
 
 const markRegionAsSeaByTile = (mapTile) => {
-    if (mapTile.tileType === tileTypes.SEA) {
+    if (mapTile.tileType === TILE_TYPES.SEA) {
         return;
     }
 
     const regionIndex = mapTile.partRegion.regionIndex;
     const region = map.regions[regionIndex];
     map.seaRegions.push(regionIndex);
-    region.regionType = tileTypes.SEA;
+    region.regionType = TILE_TYPES.SEA;
     for (const [row, col] of region.tilesRegion) {
-        map.matrix[row][col].tileType = tileTypes.SEA;
+        map.matrix[row][col].tileType = TILE_TYPES.SEA;
     }
 };
 
 const markRegionAsLand = (regionIndex) => {
     const region = map.regions[regionIndex];
     map.landRegions.push(regionIndex);
-    region.regionType = tileTypes.LAND;
+    region.regionType = TILE_TYPES.LAND;
     for (const [row, col] of region.tilesRegion) {
-        map.matrix[row][col].tileType = tileTypes.LAND;
+        map.matrix[row][col].tileType = TILE_TYPES.LAND;
     }
 };
 

@@ -1,4 +1,4 @@
-import { GLOBAL_BUILDING_TYPES } from "models/game";
+import { GLOBAL_BUILDING_TYPES } from "shared/enums";
 
 const canRemovePlacedRoad = ({ gameState, playerIndex, row, col }) => {
     const { map } = gameState;

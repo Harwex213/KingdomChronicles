@@ -1,4 +1,4 @@
-import { GAME_VALIDATIONS } from "models/game";
+import { GAME_VALIDATIONS } from "shared/enums";
 import { canBuildPowerCenter } from "./validations/canBuildPowerCenter";
 import { canPlacePowerCenter } from "./validations/canPlacePowerCenter";
 import { canRemovePlacedRoad } from "./validations/canRemovePlacedRoad";

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
-import { mapSizeTypes } from "models/map";
+import { MAP_SIZE_TYPES } from "shared/enums";
 import { Button, Container, Input, Select } from "../../../components/controls";
 import { gameService } from "../../gameService/gameService";
 
@@ -16,7 +16,7 @@ const GameCreator = observer(() => {
             <Button placeholder="Start new" onClick={() => gameService.startNewGame()} />
             <Select
                 placeholder="Map size"
-                options={Object.values(mapSizeTypes)}
+                options={Object.values(MAP_SIZE_TYPES)}
                 value={gameService.gameCreationConfig.mapSizeType}
                 onChange={(value) => gameService.updateGameCreationConfig("mapSizeType", value)}
             />

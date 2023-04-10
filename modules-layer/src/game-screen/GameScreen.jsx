@@ -2,7 +2,6 @@ import styles from "./gameScreen.module.css";
 import { Map } from "./containers/map/Map";
 import { GameCreator } from "./containers/game-creator/GameCreator";
 import { GameProcessManager } from "./containers/game-process-manager/GameProcessManager";
-import "../components-game/text/Text.module.css";
 import { PlayerInfo } from "./containers/player-info/PlayerInfo";
 import { PlayerActions } from "./containers/player-actions/PlayerActions";
 import { SelectedObject } from "./containers/selected-object/SelectedObject";
