@@ -1,7 +1,10 @@
 import { GLOBAL_BUILDING_TYPES } from "shared/enums";
-import { powerCenterBuilded } from "./powerCenterBuilded";
-import { externalBuildingBuilded } from "./externalBuildingBuilded";
-import { internalBuildingBuilded } from "./internalBuildingBuilded";
+import { powerCenterBuilded } from "./eventHandlers/powerCenterBuilded";
+import { externalBuildingBuilded } from "./eventHandlers/externalBuildingBuilded";
+import { internalBuildingBuilded } from "./eventHandlers/internalBuildingBuilded";
+import { roadBuilded } from "./eventHandlers/roadBuilded";
+import { roadDestroyed } from "./eventHandlers/roadDestroyed";
+import { powerCenterDestroyed } from "./eventHandlers/powerCenterDestroyed";
 
 const doPlayersEconomicDelta = (gameState) => {
     for (const player of gameState.players) {
@@ -20,13 +23,13 @@ const continueBuildGlobalBuildings = (gameState) => {
         pendingBuildGlobalBuilding.remainedTicks--;
         if (pendingBuildGlobalBuilding.remainedTicks === 0) {
             if (pendingBuildGlobalBuilding.type === GLOBAL_BUILDING_TYPES.POWER_CENTER) {
+                roadBuilded(gameState, pendingBuildGlobalBuilding);
+            }
+            if (pendingBuildGlobalBuilding.type === GLOBAL_BUILDING_TYPES.ROAD) {
                 powerCenterBuilded(gameState, pendingBuildGlobalBuilding);
             }
             if (pendingBuildGlobalBuilding.type === GLOBAL_BUILDING_TYPES.EXTERNAL_BUILDING) {
                 externalBuildingBuilded(gameState, pendingBuildGlobalBuilding);
-            }
-            if (pendingBuildGlobalBuilding.type === GLOBAL_BUILDING_TYPES.ROAD) {
-                // TODO
             }
 
             garbage.push(pendingBuildGlobalBuilding.id);
@@ -66,6 +69,12 @@ const continueDestroyGlobalBuildings = (gameState) => {
 
         pendingDestroyGlobalBuilding.remainedTicks--;
         if (pendingDestroyGlobalBuilding.remainedTicks === 0) {
+            if (pendingDestroyGlobalBuilding.type === GLOBAL_BUILDING_TYPES.POWER_CENTER) {
+                roadDestroyed(gameState, pendingDestroyGlobalBuilding);
+            }
+            if (pendingDestroyGlobalBuilding.type === GLOBAL_BUILDING_TYPES.ROAD) {
+                powerCenterDestroyed(gameState, pendingDestroyGlobalBuilding);
+            }
             garbage.push(pendingDestroyGlobalBuilding.id);
         }
     }

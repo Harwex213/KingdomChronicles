@@ -1,6 +1,6 @@
 import { PendingDestroyGlobalBuilding } from "shared/models";
-import { destroyExternalBuilding } from "./destroyExternalBuilding";
 import { POWER_CENTER_VALUES } from "shared/constants";
+import { destroyExternalBuilding, disconnectPowerCenters, findConnectedPowerCenter } from "../../utils";
 
 const startDestroyPowerCenter = ({ gameState, playerIndex, powerCenterId }) => {
     const player = gameState.players[playerIndex];
@@ -23,7 +23,19 @@ const startDestroyPowerCenter = ({ gameState, playerIndex, powerCenterId }) => {
         remainedTicks: POWER_CENTER_VALUES.TICKS_DESTROY_TIME,
     });
 
+    const mapTile = pendingDestroyGlobalBuilding.getTile(gameState.map);
+
+    const connectedPowerCenters = findConnectedPowerCenter(gameState, mapTile);
+    disconnectPowerCenters(connectedPowerCenters);
+
+    mapTile.onStartDestroyGlobalBuilding(pendingDestroyGlobalBuilding.remainedTicks);
+
+    for (const controlAreaMapTile of powerCenter.getControlArea(gameState.map)) {
+        controlAreaMapTile.removePowerCenterInfluence(powerCenter.id);
+    }
+
     player.removePowerCenter(powerCenterId);
+
     gameState.pendingDestroy.globalBuildings[pendingDestroyGlobalBuilding.id] = pendingDestroyGlobalBuilding;
     delete this.powerCenters[powerCenterId];
 };

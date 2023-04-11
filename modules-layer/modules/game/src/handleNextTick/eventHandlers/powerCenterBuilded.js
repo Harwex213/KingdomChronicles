@@ -1,6 +1,6 @@
 import { MapTile, PowerCenter } from "shared/models";
 import { POWER_CENTER_TIERS, HEXAGON_DIRECTION_TYPES } from "shared/enums";
-import { generateRandomId } from "../utils";
+import { findConnectedPowerCenter, connectPowerCenters } from "../../utils";
 
 const getTilesRing = (map, centerTile, radius) => {
     const axialPoints = [];
@@ -69,6 +69,9 @@ const powerCenterBuilded = (gameState, pendingBuildGlobalBuilding) => {
     for (const controlAreaMapTile of powerCenter.getControlArea(gameState.map)) {
         controlAreaMapTile.addPowerCenterInfluence(powerCenter.id);
     }
+
+    const connectedPowerCenters = findConnectedPowerCenter(gameState, mapTile);
+    connectPowerCenters(connectedPowerCenters);
 
     gameState.players[mapRegion.ownerIndex].addPowerCenter(powerCenter.id);
     gameState.powerCenters[powerCenter.id] = powerCenter;

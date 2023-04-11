@@ -52,6 +52,7 @@ class PowerCenter {
             [INTERNAL_BUILDING_TYPE_NAMES.WAREHOUSE]: 0,
             [INTERNAL_BUILDING_TYPE_NAMES.TAX_OFFICE]: 0,
         },
+        connectedPowerCenterIds = [],
     }) {
         this.id = id;
         this.ownerIndex = ownerIndex;
@@ -77,6 +78,8 @@ class PowerCenter {
         this.internalBuildings = internalBuildings;
         this.bonusInternalBuildingsAmount = bonusInternalBuildingsAmount;
 
+        this.connectedPowerCenterIds = new Set(connectedPowerCenterIds);
+
         makeObservable(this, {
             tier: observable,
             currentLevel: observable,
@@ -87,8 +90,17 @@ class PowerCenter {
             controlArea: observable,
             externalBuildingsAmount: observable,
             internalBuildings: observable,
+            connectedPowerCenterIds: observable,
 
             increaseLevel: action,
+            grow: action,
+            produce: action,
+            subtractBuildCost: action,
+            onExternalBuildingBuilded: action,
+            onExternalBuildingDestroyed: action,
+            onInternalBuildingBuilded: action,
+            addConnectedPowerCenterIds: action,
+            removeConnectedPowerCenterIds: action,
         });
     }
 
@@ -256,6 +268,18 @@ class PowerCenter {
 
         this.#calcIncome();
         this.#calcStorageCapacity();
+    }
+
+    addConnectedPowerCenterIds(connectedPowerCenterIds) {
+        for (const connectedPowerCenterId of connectedPowerCenterIds) {
+            this.connectedPowerCenterIds.add(connectedPowerCenterId);
+        }
+    }
+
+    removeConnectedPowerCenterIds(connectedPowerCenterIds) {
+        for (const connectedPowerCenterId of connectedPowerCenterIds) {
+            this.connectedPowerCenterIds.delete(connectedPowerCenterId);
+        }
     }
 }
 export { PowerCenter };

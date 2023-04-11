@@ -1,5 +1,5 @@
 import { GAME_VALIDATIONS } from "shared/enums";
-import { destroyExternalBuilding } from "./destroyExternalBuilding";
+import { destroyExternalBuilding } from "../../utils";
 
 const startDestroyExternalBuilding = ({ gameState, gameValidator, playerIndex, row, col }) => {
     if (

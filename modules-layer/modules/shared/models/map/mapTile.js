@@ -6,6 +6,7 @@ import {
     HEXAGON_DIRECTION_TYPES,
     GLOBAL_BUILDING_TYPES,
 } from "../../enums";
+import { TILE_BITMASK_SIDES } from "../../enums/mapEnums";
 
 const offsetCoordinatesToAxial = (row, col) => {
     return {
@@ -27,6 +28,7 @@ class MapTile {
     constructor(row = 0, col = 0, neighboringTiles) {
         this.row = row;
         this.col = col;
+        this.id = { row, col };
         this.axialCoordinates = offsetCoordinatesToAxial(row, col);
         this.tileType = TILE_TYPES.SEA;
         this.biomType = BIOM_TYPES.NONE;
@@ -59,6 +61,7 @@ class MapTile {
             decreaseRemainedTicksToBuild: action,
             onStartDestroyGlobalBuilding: action,
             decreaseRemainedTicksToDestroy: action,
+            setRoadBitmask: action,
         });
     }
 
@@ -81,6 +84,31 @@ class MapTile {
         };
     }
 
+    getNeighbor(map, direction) {
+        const neighborPoint = this.neighboringTiles[direction];
+        return map.matrix[neighborPoint[0]][neighborPoint[1]];
+    }
+
+    getNeighbors(map) {
+        return this.neighboringTiles.map((point) => map.matrix[point[0]][point[1]]);
+    }
+
+    getPowerCenter(gameState) {
+        return gameState.powerCenters[this.globalBuilding.id];
+    }
+
+    getRoadBitmask(gameState) {
+        let bitmask = 0x000000;
+        let neighbor;
+        for (const direction of Object.values(HEXAGON_DIRECTION_TYPES)) {
+            neighbor = this.getNeighbor(gameState.map, direction);
+            if (neighbor.hasRoad || neighbor.hasAlivePowerCenter) {
+                bitmask ||= TILE_BITMASK_SIDES[direction];
+            }
+        }
+        return bitmask;
+    }
+
     addRegionToMapTile(region, index) {
         this.partRegion = { regionIndex: index };
         region.tilesRegion.push([this.row, this.col]);
@@ -95,11 +123,22 @@ class MapTile {
         this.influencedPowerCenterIds.delete(powerCenterId);
     }
 
-    onStartBuildGlobalBuilding(pendingBuildGlobalBuilding, externalBuildingTypeName = null) {
+    onStartBuildGlobalBuilding(
+        pendingBuildGlobalBuilding,
+        optional = {
+            externalBuildingTypeName: null,
+            roadBitmask: null,
+        }
+    ) {
         this.globalBuilding.id = pendingBuildGlobalBuilding.id;
         this.globalBuilding.type = pendingBuildGlobalBuilding.type;
         this.globalBuilding.remainedTicksToBuild = pendingBuildGlobalBuilding.remainedTicks;
-        this.globalBuilding.externalBuildingTypeName = externalBuildingTypeName;
+        this.globalBuilding.externalBuildingTypeName = optional.externalBuildingTypeName;
+        this.globalBuilding.roadBitmask = optional.roadBitmask;
+    }
+
+    setRoadBitmask(roadBitmask) {
+        this.globalBuilding.roadBitmask = roadBitmask;
     }
 
     decreaseRemainedTicksToBuild() {
@@ -116,12 +155,42 @@ class MapTile {
             this.globalBuilding.type = GLOBAL_BUILDING_TYPES.NONE;
             this.globalBuilding.id = null;
             this.globalBuilding.remainedTicksToBuild = 0;
+
+            this.globalBuilding.externalBuildingTypeName = null;
+            this.globalBuilding.roadBitmask = null;
         }
     }
 
-    get hasGlobalBuilding() {
+    get hasBuildedGlobalBuilding() {
         return (
             this.globalBuilding.type !== GLOBAL_BUILDING_TYPES.NONE &&
+            this.globalBuilding.remainedTicksToBuild === 0 &&
+            this.globalBuilding.remainedTicksToDestroy === 0
+        );
+    }
+
+    get hasRoad() {
+        return this.globalBuilding.type === GLOBAL_BUILDING_TYPES.ROAD;
+    }
+
+    get hasBuildedRoad() {
+        return (
+            this.globalBuilding.type === GLOBAL_BUILDING_TYPES.ROAD &&
+            this.globalBuilding.remainedTicksToBuild === 0 &&
+            this.globalBuilding.remainedTicksToDestroy === 0
+        );
+    }
+
+    get hasAlivePowerCenter() {
+        return (
+            this.globalBuilding.type === GLOBAL_BUILDING_TYPES.POWER_CENTER &&
+            this.globalBuilding.remainedTicksToDestroy === 0
+        );
+    }
+
+    get hasBuildedPowerCenter() {
+        return (
+            this.globalBuilding.type === GLOBAL_BUILDING_TYPES.POWER_CENTER &&
             this.globalBuilding.remainedTicksToBuild === 0 &&
             this.globalBuilding.remainedTicksToDestroy === 0
         );

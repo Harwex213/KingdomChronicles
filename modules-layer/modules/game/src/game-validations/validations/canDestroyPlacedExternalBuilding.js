@@ -11,7 +11,7 @@ const canDestroyPlacedExternalBuilding = ({ gameState, playerIndex, row, col }) 
     }
 
     return (
-        examinedMapTile.hasGlobalBuilding &&
+        examinedMapTile.hasBuildedGlobalBuilding &&
         examinedMapTile.globalBuilding.type === GLOBAL_BUILDING_TYPES.EXTERNAL_BUILDING
     );
 };

@@ -26,15 +26,6 @@ export const RENDERER_CONFIG = {
     },
 };
 
-export const TILE_BITMASK_SIDES = {
-    TOP_LEFT: 0x100000,
-    LEFT: 0x010000,
-    BOTTOM_LEFT: 0x001000,
-    BOTTOM_RIGHT: 0x000100,
-    RIGHT: 0x000010,
-    TOP_RIGHT: 0x000001,
-};
-
 export const SPRITESHEET_BIOM_NAMES = {
     EMPTY: "empty.png",
     WATER: "sea.png",

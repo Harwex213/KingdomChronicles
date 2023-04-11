@@ -53,7 +53,7 @@ const startBuildExternalBuilding = ({
 
     pendingBuildGlobalBuilding
         .getTile(gameState.map)
-        .onStartBuildGlobalBuilding(pendingBuildGlobalBuilding, externalBuildingTypeName);
+        .onStartBuildGlobalBuilding(pendingBuildGlobalBuilding, { externalBuildingTypeName });
     gameState.pendingBuild.globalBuildings[pendingBuildGlobalBuilding.id] = pendingBuildGlobalBuilding;
 };
 
