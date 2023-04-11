@@ -12,6 +12,9 @@ import { canPlaceExternalBuilding } from "./validations/canPlaceExternalBuilding
 import { canDestroyPlacedExternalBuilding } from "./validations/canDestroyPlacedExternalBuilding";
 import { canBuildInternalBuilding } from "./validations/canBuildInternalBuilding";
 
+import { canCreateTradeRoute } from "./validations/canCreateTradeRoute";
+import { canSendTradeRoute } from "./validations/canSendTradeRoute";
+
 const validators = {
     [GAME_VALIDATIONS.CAN_BUILD_POWER_CENTER]: canBuildPowerCenter,
     [GAME_VALIDATIONS.CAN_PLACE_POWER_CENTER]: canPlacePowerCenter,
@@ -25,6 +28,9 @@ const validators = {
     [GAME_VALIDATIONS.CAN_DESTROY_PLACED_EXTERNAL_BUILDING]: canDestroyPlacedExternalBuilding,
 
     [GAME_VALIDATIONS.CAN_BUILD_INTERNAL_BUILDING]: canBuildInternalBuilding,
+
+    [GAME_VALIDATIONS.CAN_CREATE_TRADE_ROUTE]: canCreateTradeRoute,
+    [GAME_VALIDATIONS.CAN_SEND_TRADE_ROUTE]: canSendTradeRoute,
 };
 
 export { validators };

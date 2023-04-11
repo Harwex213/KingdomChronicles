@@ -1,10 +1,45 @@
 import { GLOBAL_BUILDING_TYPES } from "shared/enums";
+import { TradeRouteTransfer } from "shared/models";
 import { powerCenterBuilded } from "./eventHandlers/powerCenterBuilded";
 import { externalBuildingBuilded } from "./eventHandlers/externalBuildingBuilded";
 import { internalBuildingBuilded } from "./eventHandlers/internalBuildingBuilded";
 import { roadBuilded } from "./eventHandlers/roadBuilded";
 import { roadDestroyed } from "./eventHandlers/roadDestroyed";
 import { powerCenterDestroyed } from "./eventHandlers/powerCenterDestroyed";
+
+const createTradeRouteTransfers = (powerCenter, tradeRouteTransfers) => {
+    const powerCenterStorageSnapshot = { ...powerCenter.storage };
+    let actualTransferAmount = 0;
+    for (const tradeRoute of powerCenter.tradeRoutes) {
+        actualTransferAmount = Math.min(
+            powerCenterStorageSnapshot[tradeRoute.transferResourceName],
+            tradeRoute.transferAmount
+        );
+
+        if (actualTransferAmount !== 0) {
+            tradeRouteTransfers.push(
+                new TradeRouteTransfer({
+                    affectedPowerCenterId: tradeRoute.destinationPowerCenterId,
+                    resourceName: tradeRoute.transferResourceName,
+                    amount: actualTransferAmount,
+                })
+            );
+
+            powerCenterStorageSnapshot[tradeRoute.transferResourceName] -= actualTransferAmount;
+        }
+    }
+};
+
+const makeTradeRouteTransfers = (gameState, tradeRouteTransfers) => {
+    for (const tradeRouteTransfer of tradeRouteTransfers) {
+        tradeRouteTransfer
+            .getSourcePowerCenter(gameState)
+            .subtractResourceAmount(tradeRouteTransfer.resourceName, tradeRouteTransfer.amount);
+        tradeRouteTransfer
+            .getDestinationPowerCenter(gameState)
+            .addResourceAmount(tradeRouteTransfer.resourceName, tradeRouteTransfer.amount);
+    }
+};
 
 const doPlayersEconomicDelta = (gameState) => {
     for (const player of gameState.players) {
@@ -85,10 +120,14 @@ const continueDestroyGlobalBuildings = (gameState) => {
 };
 
 const handleNextTick = (gameState) => {
+    const tradeRouteTransfers = [];
     for (const powerCenter of gameState.powerCenters) {
         powerCenter.produce();
         powerCenter.grow();
+        createTradeRouteTransfers(powerCenter, tradeRouteTransfers);
     }
+
+    makeTradeRouteTransfers(gameState, tradeRouteTransfers);
 
     doPlayersEconomicDelta(gameState.players);
 

@@ -10,6 +10,11 @@ import { startDestroyExternalBuilding } from "./destroy/startDestroyExternalBuil
 
 import { startBuildInternalBuilding } from "./build/startBuildInternalBuilding";
 
+import { createTradeRoute } from "./trade/createTradeRoute";
+import { raiseTradeRouteOrder } from "./trade/raiseTradeRouteOrder";
+import { lowerTradeRouteOrder } from "./trade/lowerTradeRouteOrder";
+import { destroyTradeRoute } from "./trade/destroyTradeRoute";
+
 const actions = {
     [GAME_ACTIONS.START_BUILD_POWER_CENTER]: startBuildPowerCenter,
     [GAME_ACTIONS.START_DESTROY_POWER_CENTER]: startDestroyPowerCenter,
@@ -21,6 +26,11 @@ const actions = {
     [GAME_ACTIONS.START_DESTROY_EXTERNAL_BUILDING]: startDestroyExternalBuilding,
 
     [GAME_ACTIONS.START_BUILD_INTERNAL_BUILDING]: startBuildInternalBuilding,
+
+    [GAME_ACTIONS.CREATE_TRADE_ROUTE]: createTradeRoute,
+    [GAME_ACTIONS.INCREASE_TRADE_ROUTE_PRIORITY]: raiseTradeRouteOrder,
+    [GAME_ACTIONS.DECREASE_TRADE_ROUTER_PRIORITY]: lowerTradeRouteOrder,
+    [GAME_ACTIONS.DESTROY_TRADE_ROUTE]: destroyTradeRoute,
 };
 
 export { actions };

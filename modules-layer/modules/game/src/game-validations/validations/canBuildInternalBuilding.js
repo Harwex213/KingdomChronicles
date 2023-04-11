@@ -12,7 +12,7 @@ const canBuildInternalBuilding = ({
     const powerCenter = gameState.powerCenters[powerCenterId];
     const internalBuildingType = INTERNAL_BUILDING_TYPES[internalBuildingTypeName];
 
-    if (powerCenter.ownerIndex !== playerIndex) {
+    if (!powerCenter && powerCenter.ownerIndex !== playerIndex) {
         return false;
     }
 

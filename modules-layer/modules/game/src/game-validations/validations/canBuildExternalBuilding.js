@@ -6,7 +6,7 @@ const canBuildExternalBuilding = ({ gameState, playerIndex, powerCenterId, exter
     const powerCenter = gameState.powerCenters[powerCenterId];
     const buildCost = EXTERNAL_BUILDING_TYPES[externalBuildingTypeName].buildCost;
 
-    if (powerCenter.ownerIndex !== playerIndex) {
+    if (!powerCenter && powerCenter.ownerIndex !== playerIndex) {
         return false;
     }
 

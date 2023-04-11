@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
 import {
     EXTERNAL_BUILDING_TYPE_NAMES,
     INTERNAL_BUILDING_TYPE_NAMES,
@@ -53,6 +53,8 @@ class PowerCenter {
             [INTERNAL_BUILDING_TYPE_NAMES.TAX_OFFICE]: 0,
         },
         connectedPowerCenterIds = [],
+        totalThroughput = 0,
+        tradeRoutes = [],
     }) {
         this.id = id;
         this.ownerIndex = ownerIndex;
@@ -80,27 +82,48 @@ class PowerCenter {
 
         this.connectedPowerCenterIds = new Set(connectedPowerCenterIds);
 
+        this.totalThroughput = totalThroughput;
+        this.tradeRoutes = tradeRoutes;
+
         makeObservable(this, {
             tier: observable,
             currentLevel: observable,
+
             people: observable,
             economic: observable,
+
             storageCapacity: observable,
             storage: observable,
+
             controlArea: observable,
             externalBuildingsAmount: observable,
+
             internalBuildings: observable,
+
             connectedPowerCenterIds: observable,
+            totalThroughput: observable,
+            leftThroughput: computed,
+            tradeRoutes: observable,
 
             increaseLevel: action,
+
             grow: action,
             produce: action,
+
             subtractBuildCost: action,
+            subtractResourceAmount: action,
+            addResourceAmount: action,
             onExternalBuildingBuilded: action,
             onExternalBuildingDestroyed: action,
             onInternalBuildingBuilded: action,
+
             addConnectedPowerCenterIds: action,
             removeConnectedPowerCenterIds: action,
+
+            addTradeRoute: action,
+            raiseTradeRouteOrder: action,
+            lowerTradeRouteOrder: action,
+            removeTradeRoute: action,
         });
     }
 
@@ -127,6 +150,10 @@ class PowerCenter {
                 this.bonusInternalBuildingsAmount[INTERNAL_BUILDING_TYPE_NAMES.WAREHOUSE];
     }
 
+    #calcTotalThroughput() {
+        this.totalThroughput = this.tier * POWER_CENTER_VALUES.INITIAL_THROUGHPUT;
+    }
+
     #calcIncome() {
         this.economic.income = this.people.civilians * this.tier;
 
@@ -141,6 +168,7 @@ class PowerCenter {
         this.#increaseControlArea(this.possibleControlArea[this.tier]);
         this.#calcStorageCapacity();
         this.#calcIncome();
+        this.#calcTotalThroughput();
     }
 
     #subtractLevelIncreaseCost() {
@@ -243,6 +271,14 @@ class PowerCenter {
         }
     }
 
+    subtractResourceAmount(resourceName, amount) {
+        this.storage[resourceName] -= amount;
+    }
+
+    addResourceAmount(resourceName, amount) {
+        this.#tryIncreaseStorage(resourceName, amount);
+    }
+
     onExternalBuildingBuilded(externalBuilding) {
         this.externalBuildingIds.push(externalBuilding.id);
         this.externalBuildingsAmount[externalBuilding.typeName]++;
@@ -270,6 +306,13 @@ class PowerCenter {
         this.#calcStorageCapacity();
     }
 
+    get hasGuild() {
+        return (
+            this.internalBuildings.filter((typeName) => typeName === INTERNAL_BUILDING_TYPE_NAMES.GUILD)
+                .length >= 1
+        );
+    }
+
     addConnectedPowerCenterIds(connectedPowerCenterIds) {
         for (const connectedPowerCenterId of connectedPowerCenterIds) {
             this.connectedPowerCenterIds.add(connectedPowerCenterId);
@@ -280,6 +323,30 @@ class PowerCenter {
         for (const connectedPowerCenterId of connectedPowerCenterIds) {
             this.connectedPowerCenterIds.delete(connectedPowerCenterId);
         }
+    }
+
+    get leftThroughput() {
+        return (
+            this.totalThroughput - this.tradeRoutes.reduce((a, b) => a.transferAmount + b.transferAmount, 0)
+        );
+    }
+
+    addTradeRoute(tradeRoute) {
+        this.tradeRoutes.push(tradeRoute);
+    }
+
+    removeTradeRoute(index) {
+        this.tradeRoutes.splice(index, 1);
+    }
+
+    raiseTradeRouteOrder(tradeRouteIndex) {
+        const removedRoute = this.tradeRoutes.splice(tradeRouteIndex, 1)[0];
+        this.tradeRoutes.splice(tradeRouteIndex - 1, 0, removedRoute);
+    }
+
+    lowerTradeRouteOrder(tradeRouteIndex) {
+        const removedRoute = this.tradeRoutes.splice(tradeRouteIndex, 1)[0];
+        this.tradeRoutes.splice(tradeRouteIndex + 1, 0, removedRoute);
     }
 }
 export { PowerCenter };
