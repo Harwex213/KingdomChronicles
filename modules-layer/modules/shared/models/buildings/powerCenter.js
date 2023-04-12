@@ -139,6 +139,10 @@ class PowerCenter {
         return this.controlArea.map((point) => map.matrix[point[0]][point[1]]);
     }
 
+    getOwner(gameState) {
+        return gameState.players[this.ownerIndex];
+    }
+
     #increaseControlArea(tilePoints) {
         this.controlArea.push(...tilePoints);
     }
@@ -287,8 +291,8 @@ class PowerCenter {
 
     onExternalBuildingDestroyed(externalBuilding) {
         this.externalBuildingIds = this.externalBuildingIds.filter((id) => id !== externalBuilding.id);
-        this.externalBuildingsAmount[externalBuilding]--;
-        this.outcome -= EXTERNAL_BUILDING_TYPES[externalBuilding].costPerTick;
+        this.externalBuildingsAmount[externalBuilding.typeName]--;
+        this.outcome -= EXTERNAL_BUILDING_TYPES[externalBuilding.typeName].costPerTick;
     }
 
     onInternalBuildingBuilded(internalBuilding) {

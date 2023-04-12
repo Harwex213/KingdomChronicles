@@ -52,6 +52,7 @@ const generateMap = (mapGenerationConfig) => {
         sendTilesToRegion(region) {
             this.tilesForRegion.forEach((tile) => {
                 map.matrix[tile[0]][tile[1]].addRegionToMapTile(map.regions[region], region);
+                map.regions[region].addTile(map.matrix[tile[0]][tile[1]]);
                 tilesForRegionsLeft.splice(tilesForRegionsLeft.indexOf(`${tile[0]}-${tile[1]}`), 1);
                 map.matrix[tile[0]][tile[1]].tileType = TILE_TYPES.LAND;
             });
@@ -151,7 +152,7 @@ const generateMap = (mapGenerationConfig) => {
             assignedForRegion.addTile(centerPoint);
         }
 
-        map.regions.push(new MapRegion());
+        map.regions.push(new MapRegion({}));
         assignedForRegion.sendTilesToRegion(region);
         if (tilesForRegionsLeft.length === 0) {
             break;
@@ -190,6 +191,7 @@ const generateMap = (mapGenerationConfig) => {
             neighboringRegions[randomizer.getRangedRandom(neighboringRegions.length - 1)];
 
         map.matrix[tile[0]][tile[1]].addRegionToMapTile(map.regions[chosenRegionIndex], chosenRegionIndex);
+        map.regions[chosenRegionIndex].addTile(map.matrix[tile[0]][tile[1]]);
     });
 
     const addIndicesNeighboringRegions = (tile, currentRegionIndex) => {
@@ -353,6 +355,7 @@ const generateMap = (mapGenerationConfig) => {
                         map.regions[chosenRegionIndex],
                         chosenRegionIndex
                     );
+                    map.regions[chosenRegionIndex].addTile(map.matrix[chosenTile[0]][chosenTile[1]]);
                     map.regions[targetRegionIndex].tilesRegion.splice(
                         map.regions[targetRegionIndex].tilesRegion.indexOf(
                             map.regions[targetRegionIndex].tilesRegion.find(

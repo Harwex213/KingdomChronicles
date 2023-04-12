@@ -5,8 +5,8 @@ import {
     TILE_TYPES,
     HEXAGON_DIRECTION_TYPES,
     GLOBAL_BUILDING_TYPES,
+    TILE_BITMASK_SIDES,
 } from "../../enums";
-import { TILE_BITMASK_SIDES } from "../../enums/mapEnums";
 
 const offsetCoordinatesToAxial = (row, col) => {
     return {
@@ -111,7 +111,6 @@ class MapTile {
 
     addRegionToMapTile(region, index) {
         this.partRegion = { regionIndex: index };
-        region.tilesRegion.push([this.row, this.col]);
         region.index = index;
     }
 

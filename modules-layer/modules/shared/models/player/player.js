@@ -1,16 +1,13 @@
-import { action, makeObservable, observable } from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
 import { PLAYER_VALUES, POWER_CENTER_VALUES, REGION_VALUES } from "../../constants";
+import { EXTERNAL_BUILDING_TYPES } from "../buildings/externalBuildingTypes";
 
 const sumArithmeticProgression = (firstMember, delta, n) => ((2 * firstMember + delta * (n - 1)) / 2) * n;
 
 class Player {
     constructor({
         index,
-        economic = {
-            treasure: PLAYER_VALUES.INITIAL_TREASURE,
-            resultIncome: 0,
-            resultOutcome: 0,
-        },
+        treasure = PLAYER_VALUES.INITIAL_TREASURE,
         income = {
             withinPowerCenters: 0,
         },
@@ -18,21 +15,29 @@ class Player {
             withinRegions: 0,
             withinPowerCenters: 0,
             withinExternalBuildings: 0,
+            withinColonization: 0,
         },
         info,
         regions = [],
         powerCenters = [],
+        colonistAmount = 0,
+        currentColonizationRegionIndexes = [],
     }) {
         this.index = index;
-        this.economic = economic;
+        this.treasure = treasure;
         this.income = income;
         this.outcome = outcome;
         this.info = info;
         this.regions = regions;
         this.powerCenters = powerCenters;
 
+        this.colonistAmount = colonistAmount;
+        this.currentColonizationRegionIndexes = currentColonizationRegionIndexes;
+
         makeObservable(this, {
-            economic: observable,
+            treasure: observable,
+            resultOutcome: computed,
+            resultIncome: computed,
             income: observable,
             outcome: observable,
 
@@ -48,15 +53,22 @@ class Player {
             recalcPowerCentersIncome: action,
             decreaseTreasure: action,
             doEconomicDelta: action,
+
+            colonistAmount: observable,
+            addColonist: action,
+            removeColonist: action,
+            sendColonist: action,
+            revokeColonist: action,
+            freeColonistAmount: computed,
         });
     }
 
-    #calcResultOutcome() {
-        this.economic.resultOutcome = Object.values(this.outcome).reduce((a, b) => a + b, 0);
+    get resultOutcome() {
+        return Object.values(this.outcome).reduce((a, b) => a + b, 0);
     }
 
-    #calcResultIncome() {
-        this.economic.resultIncome = Object.values(this.income).reduce((a, b) => a + b, 0);
+    get resultIncome() {
+        return Object.values(this.income).reduce((a, b) => a + b, 0);
     }
 
     #recalcOutcomeWithinRegions() {
@@ -65,7 +77,6 @@ class Player {
             REGION_VALUES.COST_INCREASING_DELTA,
             this.regions.length
         );
-        this.#calcResultOutcome();
     }
 
     #recalcOutcomeWithinPowerCenters() {
@@ -74,17 +85,21 @@ class Player {
             POWER_CENTER_VALUES.COST_INCREASING_DELTA,
             this.powerCenters.length
         );
-        this.#calcResultOutcome();
     }
 
-    onExternalBuildingBuilded(powerCenter) {
-        this.outcome.withinExternalBuildings += powerCenter.economic.outcome;
-        this.#calcResultOutcome();
+    #recalcOutcomeWithinColonization() {
+        this.outcome.withinColonization =
+            this.currentColonizationRegionIndexes.length * PLAYER_VALUES.ONE_COLONIST_COST;
     }
 
-    onExternalBuildingDestroyed(powerCenter) {
-        this.outcome.withinExternalBuildings -= powerCenter.economic.outcome;
-        this.#calcResultOutcome();
+    onExternalBuildingBuilded(externalBuilding) {
+        this.outcome.withinExternalBuildings +=
+            EXTERNAL_BUILDING_TYPES[externalBuilding.typeName].costPerTick;
+    }
+
+    onExternalBuildingDestroyed(externalBuilding) {
+        this.outcome.withinExternalBuildings -=
+            EXTERNAL_BUILDING_TYPES[externalBuilding.typeName].costPerTick;
     }
 
     addRegion(region) {
@@ -119,16 +134,39 @@ class Player {
             powerCenter = gameState.powerCenters[powerCenterId];
             this.income.withinPowerCenters += powerCenter.economic.income;
         }
-
-        this.#calcResultIncome();
     }
 
     decreaseTreasure(amount) {
-        this.economic.treasure -= amount;
+        this.treasure -= amount;
     }
 
     doEconomicDelta() {
-        this.economic.treasure += this.economic.resultIncome - this.economic.resultOutcome;
+        this.treasure += this.resultIncome - this.resultOutcome;
+    }
+
+    addColonist() {
+        this.colonistAmount++;
+    }
+
+    removeColonist() {
+        this.colonistAmount--;
+    }
+
+    sendColonist(regionIndex) {
+        this.currentColonizationRegionIndexes.push(regionIndex);
+
+        this.#recalcOutcomeWithinColonization();
+    }
+
+    revokeColonist(regionIndex) {
+        const foundIndex = this.currentColonizationRegionIndexes.findIndex((i) => i === regionIndex);
+        this.currentColonizationRegionIndexes.splice(foundIndex, 1);
+
+        this.#recalcOutcomeWithinColonization();
+    }
+
+    get freeColonistAmount() {
+        return this.colonistAmount - this.currentColonizationRegionIndexes.length;
     }
 }
 

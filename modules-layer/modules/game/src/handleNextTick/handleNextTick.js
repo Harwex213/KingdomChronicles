@@ -6,6 +6,7 @@ import { internalBuildingBuilded } from "./eventHandlers/internalBuildingBuilded
 import { roadBuilded } from "./eventHandlers/roadBuilded";
 import { roadDestroyed } from "./eventHandlers/roadDestroyed";
 import { powerCenterDestroyed } from "./eventHandlers/powerCenterDestroyed";
+import { continueColonization } from "./eventHandlers/continueColonization";
 
 const createTradeRouteTransfers = (powerCenter, tradeRouteTransfers) => {
     const powerCenterStorageSnapshot = { ...powerCenter.storage };
@@ -134,6 +135,8 @@ const handleNextTick = (gameState) => {
     continueBuildGlobalBuildings(gameState);
     continueBuildInternalBuildings(gameState);
     continueDestroyGlobalBuildings(gameState);
+
+    continueColonization(gameState);
 
     gameState.nextTick();
 };

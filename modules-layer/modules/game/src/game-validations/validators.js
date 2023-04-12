@@ -15,6 +15,9 @@ import { canBuildInternalBuilding } from "./validations/canBuildInternalBuilding
 import { canCreateTradeRoute } from "./validations/canCreateTradeRoute";
 import { canSendTradeRoute } from "./validations/canSendTradeRoute";
 
+import { canSendColonist } from "./validations/canSendColonist";
+import { canRevokeColonist } from "./validations/canRevokeColonist";
+
 const validators = {
     [GAME_VALIDATIONS.CAN_BUILD_POWER_CENTER]: canBuildPowerCenter,
     [GAME_VALIDATIONS.CAN_PLACE_POWER_CENTER]: canPlacePowerCenter,
@@ -31,6 +34,9 @@ const validators = {
 
     [GAME_VALIDATIONS.CAN_CREATE_TRADE_ROUTE]: canCreateTradeRoute,
     [GAME_VALIDATIONS.CAN_SEND_TRADE_ROUTE]: canSendTradeRoute,
+
+    [GAME_VALIDATIONS.CAN_SEND_COLONIST]: canSendColonist,
+    [GAME_VALIDATIONS.CAN_REVOKE_COLONIST]: canRevokeColonist,
 };
 
 export { validators };

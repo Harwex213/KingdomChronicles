@@ -15,6 +15,9 @@ import { raiseTradeRouteOrder } from "./trade/raiseTradeRouteOrder";
 import { lowerTradeRouteOrder } from "./trade/lowerTradeRouteOrder";
 import { destroyTradeRoute } from "./trade/destroyTradeRoute";
 
+import { sendColonist } from "./colonization/sendColonist";
+import { revokeColonist } from "./colonization/revokeColonist";
+
 const actions = {
     [GAME_ACTIONS.START_BUILD_POWER_CENTER]: startBuildPowerCenter,
     [GAME_ACTIONS.START_DESTROY_POWER_CENTER]: startDestroyPowerCenter,
@@ -31,6 +34,9 @@ const actions = {
     [GAME_ACTIONS.INCREASE_TRADE_ROUTE_PRIORITY]: raiseTradeRouteOrder,
     [GAME_ACTIONS.DECREASE_TRADE_ROUTER_PRIORITY]: lowerTradeRouteOrder,
     [GAME_ACTIONS.DESTROY_TRADE_ROUTE]: destroyTradeRoute,
+
+    [GAME_ACTIONS.SEND_COLONIST]: sendColonist,
+    [GAME_ACTIONS.REVOKE_COLONIST]: revokeColonist,
 };
 
 export { actions };

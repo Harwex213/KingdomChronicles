@@ -1,5 +1,6 @@
 import { Container, Sprite } from "pixi.js";
-import { RENDERER_CONFIG, SPRITESHEET_TILE_BORDER_NAMES, TILE_BITMASK_SIDES } from "../constants";
+import { RENDERER_CONFIG, SPRITESHEET_TILE_BORDER_NAMES } from "../constants";
+import { TILE_BITMASK_SIDES } from "shared/enums";
 
 class TileBorder {
     #spritesheet;

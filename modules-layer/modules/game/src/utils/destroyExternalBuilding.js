@@ -19,7 +19,7 @@ const destroyExternalBuilding = (gameState, externalBuilding) => {
         .getTile(gameState.map)
         .onStartDestroyGlobalBuilding(pendingDestroyGlobalBuilding.remainedTicks);
     powerCenter.onExternalBuildingDestroyed(externalBuilding);
-    gameState.players[powerCenter.ownerIndex].onExternalBuildingDestroyed(powerCenter);
+    gameState.players[powerCenter.ownerIndex].onExternalBuildingDestroyed(externalBuilding);
     gameState.pendingDestroy.globalBuildings[pendingDestroyGlobalBuilding.id] = pendingDestroyGlobalBuilding;
     delete gameState.externalBuildings[externalBuilding.id];
 };
