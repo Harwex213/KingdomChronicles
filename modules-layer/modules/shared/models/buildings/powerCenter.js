@@ -107,6 +107,7 @@ class PowerCenter {
 
             increaseLevel: action,
 
+            switchCanGrow: action,
             grow: action,
             produce: action,
 
@@ -191,6 +192,10 @@ class PowerCenter {
         if (this.currentLevel >= POWER_CENTER_TIER_UPGRADE_THRESHOLD[this.tier]) {
             this.#increaseTier();
         }
+    }
+
+    switchCanGrow() {
+        this.people.canGrow = !this.people.canGrow;
     }
 
     grow() {

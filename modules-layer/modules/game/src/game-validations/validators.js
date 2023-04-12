@@ -1,5 +1,7 @@
 import { GAME_VALIDATIONS } from "shared/enums";
 
+import { isPlayerOwnPowerCenter } from "./validations/isPlayerOwnPowerCenter";
+
 import { canBuildPowerCenter } from "./validations/canBuildPowerCenter";
 import { canPlacePowerCenter } from "./validations/canPlacePowerCenter";
 
@@ -19,6 +21,8 @@ import { canSendColonist } from "./validations/canSendColonist";
 import { canRevokeColonist } from "./validations/canRevokeColonist";
 
 const validators = {
+    [GAME_VALIDATIONS.IS_PLAYER_OWN_POWER_CENTER]: isPlayerOwnPowerCenter,
+
     [GAME_VALIDATIONS.CAN_BUILD_POWER_CENTER]: canBuildPowerCenter,
     [GAME_VALIDATIONS.CAN_PLACE_POWER_CENTER]: canPlacePowerCenter,
 
