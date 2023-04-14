@@ -21,7 +21,6 @@ export { InternalBuildingType } from "./buildings/internalBuildingType";
 export { INTERNAL_BUILDING_TYPES } from "./buildings/internalBuildingTypes";
 
 export { Player } from "./player/player";
-export { CurrentPlayer } from "./player/currentPlayer";
 
 export { TradeRoute } from "./trade/tradeRoute";
 export { TradeRouteTransfer } from "./trade/tradeRouteTransfer";

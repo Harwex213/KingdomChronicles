@@ -122,7 +122,7 @@ const continueDestroyGlobalBuildings = (gameState) => {
 
 const handleNextTick = (gameState) => {
     const tradeRouteTransfers = [];
-    for (const powerCenter of gameState.powerCenters) {
+    for (const powerCenter of Object.values(gameState.powerCenters)) {
         powerCenter.produce();
         powerCenter.grow();
         createTradeRouteTransfers(powerCenter, tradeRouteTransfers);
@@ -130,7 +130,7 @@ const handleNextTick = (gameState) => {
 
     makeTradeRouteTransfers(gameState, tradeRouteTransfers);
 
-    doPlayersEconomicDelta(gameState.players);
+    doPlayersEconomicDelta(gameState);
 
     continueBuildGlobalBuildings(gameState);
     continueBuildInternalBuildings(gameState);

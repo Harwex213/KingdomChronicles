@@ -137,7 +137,22 @@ export class MapRenderer {
         });
     }
 
-    render({ mapToRender, currentPlayer = null, gameValidator = null, onTileClick }) {
+    renderMap({ mapToRender, onTileClick }) {
+        this.render({
+            mapToRender,
+            onTileClick,
+        });
+    }
+
+    renderGame({ currentPlayer, onTileClick }) {
+        this.render({
+            mapToRender: currentPlayer.gameState.map,
+            currentPlayer,
+            onTileClick,
+        });
+    }
+
+    render({ mapToRender, currentPlayer = null, onTileClick }) {
         if (this.#spritesheet === null || this.#spritesheet === true) {
             return;
         }
@@ -151,12 +166,7 @@ export class MapRenderer {
         this.#tileRenderer.render(this.#container, mapToRender);
         this.#regionBordersRenderer.render(this.#container, mapToRender);
         if (currentPlayer !== null) {
-            this.#currentPlayerActionsRenderer.render(
-                this.#container,
-                mapToRender,
-                currentPlayer,
-                gameValidator
-            );
+            this.#currentPlayerActionsRenderer.render(this.#container, mapToRender, currentPlayer);
         }
 
         this.#setUpTileClickEvent(mapToRender.matrix, onTileClick);
