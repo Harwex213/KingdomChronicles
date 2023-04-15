@@ -1,17 +1,13 @@
 import styles from "./PowerCenterInfo.module.css";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { CurrentPlayerContext } from "../../CurrentPlayerContext";
 import { observer } from "mobx-react-lite";
 import { Block, Button, Range, Text, Container } from "../../components";
+import { ResourceInfo } from "./ResourceInfo";
 
 const PowerCenterInfo = observer(() => {
     const currentPlayer = useContext(CurrentPlayerContext);
     const selectedPowerCenter = currentPlayer.selectedPowerCenter;
-    const [selectedResource, setSelectedResource] = useState(null);
-
-    const handleSelectResource = (name) => {
-        setSelectedResource(name);
-    };
 
     return (
         <div className={styles.container}>
@@ -57,12 +53,8 @@ const PowerCenterInfo = observer(() => {
                     </div>
                 </Block>
             </div>
-            {/*<ResourceInfo className={styles.resourceInfo} selectedResource={selectedResource} />*/}
-            {/*<ResourceSelection*/}
-            {/*    className={styles.resourceSelection}*/}
-            {/*    selectedResource={selectedResource}*/}
-            {/*    onResourceSelect={handleSelectResource}*/}
-            {/*/>*/}
+            <Block className={styles.armyCreate}></Block>
+            <ResourceInfo className={styles.resourceInfo} selectedPowerCenter={selectedPowerCenter} />
         </div>
     );
 });

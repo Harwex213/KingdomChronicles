@@ -1,5 +1,23 @@
 .container {
+}
+
+.layer {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 80% 20%;
+}
+
+.layerTitle {
     display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+.resourceContainer {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 5px;
 }

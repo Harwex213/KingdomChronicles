@@ -1,12 +1,35 @@
 import styles from "./ResourceInfo.module.css";
-import { Block, Text } from "../../../components";
+import { observer } from "mobx-react-lite";
+import { POWER_CENTER_TIERS } from "shared/enums";
+import { RESOURCE_LAYERS } from "shared/models";
+import { Block, Container, Text, ResourceIcon } from "../../components";
 
-const ResourceInfo = ({ className = "", selectedResource }) => {
+const POWER_CENTER_TIER_LABELS = {
+    [POWER_CENTER_TIERS.FIRST]: "I",
+    [POWER_CENTER_TIERS.SECOND]: "II",
+};
+
+const ResourceInfo = observer(({ className = "", selectedPowerCenter }) => {
     return (
-        <Block className={className + " " + styles.container}>
-            {selectedResource === null ? <Text centered>Select resource to overview</Text> : <div></div>}
+        <Block className={styles.container + " " + className}>
+            {RESOURCE_LAYERS.map((resourceLayer, index) => (
+                <div className={styles.layer} key={index}>
+                    <Container direction="row">
+                        {resourceLayer.map((resource) => (
+                            <div key={resource.name} className={styles.resourceContainer}>
+                                <ResourceIcon type={resource.name} />
+                                <Text>{selectedPowerCenter.storage[resource.name]}</Text>
+                            </div>
+                        ))}
+                    </Container>
+                    <div className={styles.layerTitle}>
+                        <Text>{POWER_CENTER_TIER_LABELS[index + 1]}</Text>
+                        <Text family="dumbledor">Layer</Text>
+                    </div>
+                </div>
+            ))}
         </Block>
     );
-};
+});
 
 export { ResourceInfo };

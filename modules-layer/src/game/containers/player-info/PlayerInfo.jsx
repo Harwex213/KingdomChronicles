@@ -25,6 +25,14 @@ const PlayerInfo = observer(({ className = "" }) => {
                 >
                     {playerInfo.motto}
                 </Text>
+                <Text
+                    style={{
+                        fontSize: "16px",
+                        lineHeight: 1,
+                    }}
+                >
+                    Current tick: {currentPlayer.gameState.currentTick}
+                </Text>
                 <Block className={styles.economic}>
                     <Container direction="row" centered="vertical">
                         <Text>{currentPlayer.treasure}</Text>

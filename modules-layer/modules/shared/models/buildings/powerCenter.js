@@ -108,6 +108,7 @@ class PowerCenter {
             increaseLevel: action,
 
             switchCanGrow: action,
+            eat: action,
             grow: action,
             produce: action,
 
@@ -160,7 +161,7 @@ class PowerCenter {
     }
 
     #calcIncome() {
-        this.economic.income = this.people.civilians * this.tier;
+        this.economic.income = this.people.civilians * this.tier * POWER_CENTER_VALUES.PEOPLE_TAX_RATIO;
 
         for (let i = 0; i < this.bonusInternalBuildingsAmount[INTERNAL_BUILDING_TYPE_NAMES.TAX_OFFICE]; i++) {
             this.economic.income *= TAX_OFFICE_VALUES.POWER_CENTER_TAX_BONUS;
@@ -198,17 +199,29 @@ class PowerCenter {
         this.people.canGrow = !this.people.canGrow;
     }
 
-    grow() {
-        const requiredFoodAmount = this.people.civilians / POWER_CENTER_VALUES.PEOPLE_FOOD_PROVISION_RATIO;
-        const foodAmountDelta = Math.floor(this.storage[RESOURCE_NAMES.FOOD] - requiredFoodAmount);
-        if (this.people.canGrow && foodAmountDelta > 0) {
-            this.people.growth = foodAmountDelta * POWER_CENTER_VALUES.PEOPLE_FOOD_BORN_RATIO;
-        }
-        if (foodAmountDelta < 0) {
-            this.storage[RESOURCE_NAMES.FOOD] = 0;
-            this.people.growth = foodAmountDelta * POWER_CENTER_VALUES.PEOPLE_FOOD_BORN_RATIO;
-        } else {
+    eat() {
+        this.people.growth = 0;
+
+        const requiredFoodAmount =
+            (this.people.civilians + this.people.recruits) * POWER_CENTER_VALUES.PEOPLE_EATS_FOOD_RATIO;
+        const foodAmountDelta = this.storage[RESOURCE_NAMES.FOOD] - requiredFoodAmount;
+
+        if (foodAmountDelta > 0) {
             this.storage[RESOURCE_NAMES.FOOD] -= requiredFoodAmount;
+        } else {
+            this.storage[RESOURCE_NAMES.FOOD] = 0;
+            this.people.growth = foodAmountDelta * POWER_CENTER_VALUES.PEOPLE_EATS_FOOD_RATIO;
+        }
+
+        this.storage[RESOURCE_NAMES.FOOD] = Number(this.storage[RESOURCE_NAMES.FOOD].toFixed(2));
+    }
+
+    grow() {
+        if (this.people.canGrow) {
+            const availableFoodAmount = Math.trunc(this.storage[RESOURCE_NAMES.FOOD]);
+            if (availableFoodAmount > 0) {
+                this.people.growth = availableFoodAmount * POWER_CENTER_VALUES.FOOD_BORN_PEOPLE_RATIO;
+            }
         }
 
         this.people.civilians += this.people.growth;
@@ -241,7 +254,7 @@ class PowerCenter {
 
             producedAmount =
                 externalBuildingType.production.producedAmountPerTick *
-                this.externalBuildingsAmount[resource.name];
+                this.externalBuildingsAmount[resource.producedOn];
             this.#tryIncreaseStorage(resource.name, producedAmount);
         }
 
@@ -254,11 +267,11 @@ class PowerCenter {
                     continue;
                 }
 
-                externalBuildingType = EXTERNAL_BUILDING_TYPES[resource.producedOn];
+                const externalBuildingType = EXTERNAL_BUILDING_TYPES[resource.producedOn];
 
                 requiredRawAmount =
                     externalBuildingType.production.requiredAmountPerTick *
-                    this.externalBuildingsAmount[resource.name];
+                    this.externalBuildingsAmount[resource.producedOn];
                 actuallyRawAmount = Math.min(this.storage[resource.name], requiredRawAmount);
                 this.storage[externalBuildingType.production.requiredResource] -= actuallyRawAmount;
 

@@ -124,11 +124,14 @@ const handleNextTick = (gameState) => {
     const tradeRouteTransfers = [];
     for (const powerCenter of Object.values(gameState.powerCenters)) {
         powerCenter.produce();
-        powerCenter.grow();
         createTradeRouteTransfers(powerCenter, tradeRouteTransfers);
     }
-
     makeTradeRouteTransfers(gameState, tradeRouteTransfers);
+
+    for (const powerCenter of Object.values(gameState.powerCenters)) {
+        powerCenter.eat();
+        powerCenter.grow();
+    }
 
     doPlayersEconomicDelta(gameState);
 

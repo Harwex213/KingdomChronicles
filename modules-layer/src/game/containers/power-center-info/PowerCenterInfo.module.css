@@ -53,11 +53,11 @@
     flex-direction: column;
 }
 
-.resourceInfo {
+.armyCreate {
     height: 100px;
 }
 
-.resourceSelection {
+.resourceInfo {
     flex: 1;
     display: flex;
     flex-direction: column;

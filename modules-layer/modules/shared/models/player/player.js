@@ -129,6 +129,7 @@ class Player {
     }
 
     recalcPowerCentersIncome(gameState) {
+        this.income.withinPowerCenters = 0;
         let powerCenter;
         for (const powerCenterId of this.powerCenters) {
             powerCenter = gameState.powerCenters[powerCenterId];
