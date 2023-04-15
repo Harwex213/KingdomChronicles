@@ -29,7 +29,9 @@ const startBuildRoad = ({ gameState, gameValidator, playerIndex, row, col }) => 
 
     const mapTile = pendingBuildGlobalBuilding.getTile(gameState.map);
 
-    mapTile.onStartBuildGlobalBuilding(pendingBuildGlobalBuilding);
+    mapTile.onStartBuildGlobalBuilding(pendingBuildGlobalBuilding, {
+        roadBitmask: mapTile.getRoadBitmask(gameState),
+    });
 
     updateRoadBitmask(gameState, mapTile);
 

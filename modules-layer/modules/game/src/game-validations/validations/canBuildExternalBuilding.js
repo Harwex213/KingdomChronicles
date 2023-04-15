@@ -12,7 +12,7 @@ const canBuildExternalBuilding = ({ gameState, playerIndex, powerCenterId, exter
 
     for (const [resourceName, value] of Object.entries(buildCost)) {
         if (resourceName === RESOURCE_NAMES.MONEY) {
-            if (player.economic.treasure - value < 0) {
+            if (player.treasure - value < 0) {
                 return false;
             }
             continue;

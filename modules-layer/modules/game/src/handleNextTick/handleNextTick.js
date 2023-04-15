@@ -59,10 +59,10 @@ const continueBuildGlobalBuildings = (gameState) => {
         pendingBuildGlobalBuilding.remainedTicks--;
         if (pendingBuildGlobalBuilding.remainedTicks === 0) {
             if (pendingBuildGlobalBuilding.type === GLOBAL_BUILDING_TYPES.POWER_CENTER) {
-                roadBuilded(gameState, pendingBuildGlobalBuilding);
+                powerCenterBuilded(gameState, pendingBuildGlobalBuilding);
             }
             if (pendingBuildGlobalBuilding.type === GLOBAL_BUILDING_TYPES.ROAD) {
-                powerCenterBuilded(gameState, pendingBuildGlobalBuilding);
+                roadBuilded(gameState, pendingBuildGlobalBuilding);
             }
             if (pendingBuildGlobalBuilding.type === GLOBAL_BUILDING_TYPES.EXTERNAL_BUILDING) {
                 externalBuildingBuilded(gameState, pendingBuildGlobalBuilding);
@@ -97,7 +97,7 @@ const continueBuildInternalBuildings = (gameState) => {
 };
 
 const continueDestroyGlobalBuildings = (gameState) => {
-    const pendingDestroyGlobalBuildings = gameState.pendingBuild.globalBuildings;
+    const pendingDestroyGlobalBuildings = gameState.pendingDestroy.globalBuildings;
     const garbage = [];
 
     for (const pendingDestroyGlobalBuilding of Object.values(pendingDestroyGlobalBuildings)) {

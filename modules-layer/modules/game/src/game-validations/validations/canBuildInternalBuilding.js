@@ -26,7 +26,7 @@ const canBuildInternalBuilding = ({
 
     for (const [resourceName, value] of Object.entries(internalBuildingType.buildCost)) {
         if (resourceName === RESOURCE_NAMES.MONEY) {
-            if (player.economic.treasure - value < 0) {
+            if (player.treasure - value < 0) {
                 return false;
             }
             continue;

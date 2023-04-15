@@ -59,10 +59,10 @@ class CurrentPlayerActionsRenderer {
         this.#spritesheet = spritesheet;
     }
 
-    render(container, mapToRender, currentPlayer, gameValidator) {
+    render(container, mapToRender, currentPlayer) {
         this.#mapToRender = mapToRender;
         this.#container = container;
-        this.#gameValidator = gameValidator;
+        this.#gameValidator = currentPlayer.gameValidator;
 
         this.#viewport.on("mousemove", this.#updateMousePos);
 
@@ -145,14 +145,21 @@ class CurrentPlayerActionsRenderer {
                     }
 
                     let validationName;
+                    let validationParams = {};
                     if (action === GAME_ACTIONS.START_BUILD_POWER_CENTER) {
                         validationName = GAME_VALIDATIONS.CAN_PLACE_POWER_CENTER;
                     }
                     if (action === GAME_ACTIONS.START_BUILD_ROAD) {
                         validationName = GAME_VALIDATIONS.CAN_PLACE_ROAD;
                     }
+                    if (action === GAME_ACTIONS.START_BUILD_EXTERNAL_BUILDING) {
+                        validationName = GAME_VALIDATIONS.CAN_BUILD_EXTERNAL_BUILDING;
+                        validationParams = {
+                            ...currentPlayer.placingExternalBuildingOptions,
+                        };
+                    }
 
-                    buildIndicator.show(validationName);
+                    buildIndicator.show(validationName, validationParams);
                 }
             )
         );

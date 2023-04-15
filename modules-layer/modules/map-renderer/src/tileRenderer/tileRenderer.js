@@ -17,10 +17,13 @@ import {
     toRoadSpritesheetName,
 } from "./spritesheetNames";
 
+const ROAD_INDEX = 0;
+
 export class TileRenderer {
     #tilePositionCalculator;
     #spritesheet;
     #reactionDisposers;
+    #container;
 
     constructor({ tilePositionCalculator }) {
         this.#tilePositionCalculator = tilePositionCalculator;
@@ -32,6 +35,7 @@ export class TileRenderer {
     }
 
     render(container, mapToRender) {
+        this.#container = container;
         const { matrix, regions } = mapToRender;
 
         for (const tilesRow of matrix) {
@@ -72,6 +76,12 @@ export class TileRenderer {
         tile.zIndex = RENDERER_CONFIG.LAYERS.TILES;
         tile.x = mapTile.renderPosition.x;
         tile.y = mapTile.renderPosition.y;
+
+        tile.addChild(new Sprite());
+        if (mapTile.globalBuilding.roadBitmask !== null) {
+            const roadTextureName = toRoadSpritesheetName(mapTile.globalBuilding.roadBitmask);
+            tile.children[ROAD_INDEX].texture = this.#spritesheet.textures[roadTextureName];
+        }
 
         this.#setTileTexture(tile, mapTile);
 
@@ -134,6 +144,16 @@ export class TileRenderer {
             )
         );
 
+        this.#reactionDisposers.push(
+            reaction(
+                () => mapTile.globalBuilding.roadBitmask,
+                (roadBitmask) => {
+                    const roadTextureName = toRoadSpritesheetName(roadBitmask);
+                    tile.children[ROAD_INDEX].texture = this.#spritesheet.textures[roadTextureName];
+                }
+            )
+        );
+
         return tile;
     }
 
@@ -179,10 +199,6 @@ export class TileRenderer {
                 ) {
                     return AREA_TYPE_TO_WOODCUTTER_SPRITESHEET_NAME[mapTile.areaType][mapTile.biomType];
                 }
-            }
-
-            if (mapTile.globalBuilding.type === GLOBAL_BUILDING_TYPES.ROAD) {
-                return toRoadSpritesheetName(mapTile.globalBuilding.roadBitmask);
             }
 
             return AREA_TYPE_TO_BIOM_SPRITESHEET_NAME[mapTile.areaType][mapTile.biomType];

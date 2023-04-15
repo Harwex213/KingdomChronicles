@@ -1,8 +1,13 @@
 import { findFirstPowerCenterWithinRoad } from "./findFirstPowerCenterWithinRoad";
+import { GLOBAL_BUILDING_TYPES } from "shared/enums";
 
 const findConnectedPowerCenter = (gameState, startingMapTile) => {
     const searchDirections = [];
     const connectedPowerCenters = [];
+
+    if (startingMapTile.globalBuilding.type === GLOBAL_BUILDING_TYPES.POWER_CENTER) {
+        connectedPowerCenters.push(startingMapTile.getPowerCenter(gameState));
+    }
 
     const neighborMapTiles = startingMapTile.getNeighbors(gameState.map);
     for (const neighborMapTile of neighborMapTiles) {

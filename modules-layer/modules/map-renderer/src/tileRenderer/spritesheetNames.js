@@ -103,4 +103,4 @@ export const AREA_TYPE_TO_FARM_SPRITESHEET_NAME = {
     [AREA_TYPES.HILLS]: SPRITESHEET_FARM_NAMES.HILLS,
 };
 
-export const toRoadSpritesheetName = (bitmask) => bitmask.toString(2) + ".png";
+export const toRoadSpritesheetName = (bitmask) => bitmask.toString(2).padStart(6, "0") + ".png";

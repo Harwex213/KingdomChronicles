@@ -65,6 +65,10 @@ const powerCenterBuilded = (gameState, pendingBuildGlobalBuilding) => {
         ),
     });
 
+    gameState.players[mapRegion.ownerIndex].addPowerCenter(powerCenter.id);
+
+    gameState.powerCenters[powerCenter.id] = powerCenter;
+
     powerCenter.increaseLevel();
     for (const controlAreaMapTile of powerCenter.getControlArea(gameState.map)) {
         controlAreaMapTile.addPowerCenterInfluence(powerCenter.id);
@@ -72,9 +76,6 @@ const powerCenterBuilded = (gameState, pendingBuildGlobalBuilding) => {
 
     const connectedPowerCenters = findConnectedPowerCenter(gameState, mapTile);
     connectPowerCenters(connectedPowerCenters);
-
-    gameState.players[mapRegion.ownerIndex].addPowerCenter(powerCenter.id);
-    gameState.powerCenters[powerCenter.id] = powerCenter;
 };
 
 export { powerCenterBuilded };

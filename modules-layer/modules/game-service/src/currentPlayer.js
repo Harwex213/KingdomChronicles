@@ -1,4 +1,4 @@
-import { makeObservable, action, computed, observable } from "mobx";
+import { makeObservable, action, computed, observable, runInAction } from "mobx";
 import {
     TILE_TYPES,
     GLOBAL_BUILDING_TYPES,
@@ -19,6 +19,7 @@ class CurrentPlayer {
     #gameValidatorParamCache;
 
     tryingPlaceGlobalBuildingActionName;
+    placingExternalBuildingOptions;
     tryingRemovePlacedGlobalBuildingActionName;
     selectedObject;
     globalActionPossibilities;
@@ -30,6 +31,10 @@ class CurrentPlayer {
         this.player = gameState.players[index];
 
         this.tryingPlaceGlobalBuildingActionName = null;
+        this.placingExternalBuildingOptions = {
+            externalBuildingTypeName: "",
+            powerCenterId: "",
+        };
         this.tryingRemovePlacedGlobalBuildingActionName = null;
         this.selectedObject = {
             state: CURRENT_PLAYER_SELECTED_OBJECT_STATES.IDLE,
@@ -55,6 +60,7 @@ class CurrentPlayer {
         this.globalActionPossibilities = {
             [GAME_ACTIONS.START_BUILD_POWER_CENTER]: false,
             [GAME_ACTIONS.START_BUILD_ROAD]: false,
+            [GAME_ACTIONS.START_DESTROY_ROAD]: true,
         };
 
         this.selectedPowerCenterActionPossibilities = {
@@ -71,6 +77,8 @@ class CurrentPlayer {
             [GAME_ACTIONS.SEND_COLONIST]: false,
             [GAME_ACTIONS.REVOKE_COLONIST]: false,
         };
+
+        this.#updateActionPossibilities();
 
         makeObservable(this, {
             tryingPlaceGlobalBuildingActionName: observable,
@@ -113,7 +121,9 @@ class CurrentPlayer {
                 row: tile.row,
                 col: tile.col,
             });
-            this.tryingPlaceGlobalBuildingActionName = null;
+            runInAction(() => {
+                this.tryingPlaceGlobalBuildingActionName = null;
+            });
             return;
         }
 
@@ -140,9 +150,17 @@ class CurrentPlayer {
         return this.player.regions[0];
     }
 
-    startPlacingGlobalBuilding(actionName) {
+    startPlacingGlobalBuilding(
+        actionName,
+        externalBuildingOptions = {
+            externalBuildingTypeName: "",
+            powerCenterId: "",
+        }
+    ) {
         if (actionName !== GLOBAL_BUILDING_TYPES.EXTERNAL_BUILDING) {
             this.abortSelectingObject();
+        } else {
+            this.placingExternalBuildingOptions = externalBuildingOptions;
         }
         this.tryingPlaceGlobalBuildingActionName = actionName;
     }

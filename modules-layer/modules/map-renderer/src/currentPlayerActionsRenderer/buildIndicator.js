@@ -13,6 +13,7 @@ class BuildIndicator {
     #gameValidator;
     #playerIndex;
     #validationName;
+    #validationParams;
 
     #isAdded;
     #sprite;
@@ -86,6 +87,7 @@ class BuildIndicator {
                 playerIndex: this.#playerIndex,
                 row: tile.row,
                 col: tile.col,
+                ...this.#validationParams,
             })
         ) {
             this.#sprite.texture = this.#spritesheet.textures[SPRITESHEET_PLAYER_ACTIONS_NAMES.CAN_BUILD];
@@ -104,8 +106,9 @@ class BuildIndicator {
         this.#isAdded = false;
     }
 
-    show(validationName) {
+    show(validationName, validationParams = {}) {
         this.#validationName = validationName;
+        this.#validationParams = validationParams;
         if (this.#isAdded === false) {
             this.#addSprite();
             this.#ticker.add(this.#updateSpritePosFunc);

@@ -90,7 +90,7 @@ class MapTile {
     }
 
     getNeighbors(map) {
-        return this.neighboringTiles.map((point) => map.matrix[point[0]][point[1]]);
+        return Object.values(this.neighboringTiles).map((point) => map.matrix[point[0]][point[1]]);
     }
 
     getPowerCenter(gameState) {
@@ -103,7 +103,7 @@ class MapTile {
         for (const direction of Object.values(HEXAGON_DIRECTION_TYPES)) {
             neighbor = this.getNeighbor(gameState.map, direction);
             if (neighbor.hasRoad || neighbor.hasAlivePowerCenter) {
-                bitmask ||= TILE_BITMASK_SIDES[direction];
+                bitmask += TILE_BITMASK_SIDES[direction];
             }
         }
         return bitmask;

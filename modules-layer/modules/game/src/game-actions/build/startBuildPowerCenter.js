@@ -1,7 +1,7 @@
 import { PendingBuildGlobalBuilding } from "shared/models";
 import { GAME_VALIDATIONS, GLOBAL_BUILDING_TYPES } from "shared/enums";
 import { POWER_CENTER_VALUES } from "shared/constants";
-import { generateRandomId } from "../../utils";
+import { generateRandomId, updateRoadBitmask } from "../../utils";
 
 const startBuildPowerCenter = ({ gameState, gameValidator, playerIndex, row, col }) => {
     let canDoAction = true;
@@ -29,8 +29,14 @@ const startBuildPowerCenter = ({ gameState, gameValidator, playerIndex, row, col
         remainedTicks: POWER_CENTER_VALUES.TICKS_BUILD_TIME,
     });
 
-    pendingBuildGlobalBuilding.getTile(gameState.map).onStartBuildGlobalBuilding(pendingBuildGlobalBuilding);
+    const powerCenterMapTile = pendingBuildGlobalBuilding.getTile(gameState.map);
+
+    powerCenterMapTile.onStartBuildGlobalBuilding(pendingBuildGlobalBuilding);
+
+    updateRoadBitmask(gameState, powerCenterMapTile);
+
     gameState.players[playerIndex].decreaseTreasure(POWER_CENTER_VALUES.BUILD_COST);
+
     gameState.pendingBuild.globalBuildings[pendingBuildGlobalBuilding.id] = pendingBuildGlobalBuilding;
 };
 

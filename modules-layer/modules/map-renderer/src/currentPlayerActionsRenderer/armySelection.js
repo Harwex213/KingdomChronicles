@@ -61,7 +61,6 @@ class ArmySelection {
     }
 
     render(container) {
-        console.log("alo");
         this.#container = container;
         this.#viewport.on("pointerdown", this.#handlePointerDown);
         this.#viewport.on("pointerup", this.#handlePointerUp);

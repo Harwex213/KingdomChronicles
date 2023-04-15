@@ -13,9 +13,10 @@ export const RENDERER_CONFIG = {
     MAP_EMPTY_SPACE_BORDER_OFFSET: 200,
     LAYERS: {
         TILES: 0,
-        CURRENT_PLAYER_ACTIONS: 2,
-        REGION_BORDER: 1,
-        ARMY_SELECTION: 3,
+        ROADS: 1,
+        REGION_BORDER: 2,
+        CURRENT_PLAYER_ACTIONS: 3,
+        ARMY_SELECTION: 4,
     },
 
     NEUTRAL_BORDER_STYLE: {

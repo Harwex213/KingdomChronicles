@@ -2,10 +2,19 @@ import styles from "./gameScreen.module.css";
 import { GameCreator } from "./containers/game-creator/GameCreator";
 import { GameProcessManager } from "./containers/game-process-manager/GameProcessManager";
 import { GameWrapper } from "./containers/game-wrapper/GameWrapper";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const getIsShowDev = () => {
+    const value = localStorage.getItem("isShowDev");
+    return value === "true";
+};
 
 const GameScreen = () => {
-    const [isShowDev, setIsShowDev] = useState(true);
+    const [isShowDev, setIsShowDev] = useState(getIsShowDev);
+
+    useEffect(() => {
+        localStorage.setItem("isShowDev", isShowDev.toString());
+    }, [isShowDev]);
 
     return (
         <div className={styles.screen}>
