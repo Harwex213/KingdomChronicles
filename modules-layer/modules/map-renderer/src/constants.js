@@ -1,7 +1,8 @@
 export const RENDERER_CONFIG = {
     VIEWPORT: {
-        DRAG_MOUSE_BUTTON: "left",
-        SMOOTH: 3.5,
+        DRAG_MOUSE_BUTTON: "middle",
+        DRAG_FACTOR: 1,
+        WHEEL_SMOOTH: 3.5,
     },
 
     TILE_DIMENSIONS: {
@@ -14,6 +15,7 @@ export const RENDERER_CONFIG = {
         TILES: 0,
         CURRENT_PLAYER_ACTIONS: 2,
         REGION_BORDER: 1,
+        ARMY_SELECTION: 3,
     },
 
     NEUTRAL_BORDER_STYLE: {
@@ -74,6 +76,38 @@ export const SPRITESHEET_POWER_CENTER_NAMES = {
 export const SPRITESHEET_FARM_NAMES = {
     PLATEAU: "farm noHills.png",
     HILLS: "farm hills.png",
+};
+
+export const SPRITESHEET_STONE_QUARRY_NAME = "stone quarry.png";
+
+export const SPRITESHEET_WOODCUTTER_NAMES = {
+    FOREST_FLATLAND: "woodcutter flatland (forest).png",
+    FOREST_GRASSLAND: "woodcutter grassland (forest).png",
+    FOREST_TUNDRA: "woodcutter tundra (forest).png",
+
+    FOREST_HILLS_FLATLAND: "woodcutter flatland (hills+forest).png",
+    FOREST_HILLS_GRASSLAND: "woodcutter grassland (hills+forest).png",
+    FOREST_HILLS_TUNDRA: "woodcutter tundra (hills+forest).png",
+};
+
+export const SPRITESHEET_SAWMILL_NAMES = {
+    DESERT: "sawmill desert.png",
+    FLATLAND: "sawmill flatland.png",
+    GRASSLAND: "sawmill grassland.png",
+    TUNDRA: "sawmill tundra.png",
+
+    HILLS_DESERT: "sawmill desert (hills).png",
+    HILLS_GRASSLAND: "sawmill grassland (hills).png",
+    HILLS_FLATLAND: "sawmill flatland (hills).png",
+    HILLS_TUNDRA: "sawmill tundra (hills).png",
+
+    FOREST_FLATLAND: "sawmill flatland (forest).png",
+    FOREST_GRASSLAND: "sawmill grassland (forest).png",
+    FOREST_TUNDRA: "sawmill tundra (forest).png",
+
+    FOREST_HILLS_FLATLAND: "sawmill flatland (hills+forest).png",
+    FOREST_HILLS_GRASSLAND: "sawmill grassland (hills+forest).png",
+    FOREST_HILLS_TUNDRA: "sawmill tundra (hills+forest).png",
 };
 
 export const SPRITESHEET_REGION_BORDER_NAMES = {

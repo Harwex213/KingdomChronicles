@@ -19,6 +19,11 @@ class MapRegion {
         this.regionType = TILE_TYPES.LAND;
         this.biomType = "none";
 
+        this.renderOptions = {
+            centerX: 0,
+            centerY: 0,
+        };
+
         this.ownerIndex = ownerIndex;
         this.borderColor = borderColor;
 
@@ -43,6 +48,17 @@ class MapRegion {
             removeColonist: action,
             addColonizationProgress: action,
         });
+    }
+
+    setRenderOptions(options) {
+        this.renderOptions = options;
+    }
+
+    get renderCenterPoint() {
+        return {
+            x: this.renderOptions.centerX,
+            y: this.renderOptions.centerY,
+        };
     }
 
     addTile(mapTile) {

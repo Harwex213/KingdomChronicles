@@ -1,4 +1,4 @@
-import { Sprite } from "pixi.js";
+import { Sprite, Graphics, Point } from "pixi.js";
 import { reaction } from "mobx";
 import { CURRENT_PLAYER_SELECTED_OBJECT_STATES, GAME_ACTIONS, GAME_VALIDATIONS } from "shared/enums";
 import { RENDERER_CONFIG } from "../constants";
@@ -6,6 +6,7 @@ import { TileBorder } from "./tileBorder";
 import { RegionBorderByTile } from "./regionBorderByTile";
 import { BuildIndicator } from "./buildIndicator";
 import { PowerCenterControlArea } from "./powerCenterControlArea";
+import { ArmySelection } from "./armySelection";
 
 class CurrentPlayerActionsRenderer {
     #ticker;
@@ -21,22 +22,37 @@ class CurrentPlayerActionsRenderer {
     #sprite;
     #isSpriteRemoved;
     #mousePos;
+    #updateMousePos;
+    #isPointerDown;
 
-    constructor({ ticker, renderer, viewport, tilePositionCalculator, reactionDisposers }) {
+    #armySelection;
+
+    constructor({ ticker, renderer, viewport, tilePositionCalculator }) {
         this.#ticker = ticker;
         this.#renderer = renderer;
         this.#viewport = viewport;
         this.#tilePositionCalculator = tilePositionCalculator;
-        this.#reactionDisposers = reactionDisposers;
+        this.#reactionDisposers = [];
 
         this.#sprite = new Sprite();
         this.#sprite.zIndex = RENDERER_CONFIG.LAYERS.CURRENT_PLAYER_ACTIONS;
         this.#isSpriteRemoved = true;
 
+        this.#isPointerDown = false;
         this.#mousePos = {
             x: 0,
             y: 0,
         };
+        this.#updateMousePos = (event) => {
+            this.#mousePos.x = event.global.x;
+            this.#mousePos.y = event.global.y;
+        };
+
+        this.#armySelection = new ArmySelection({
+            ticker,
+            viewport,
+            mousePos: this.#mousePos,
+        });
     }
 
     setSpritesheet(spritesheet) {
@@ -48,10 +64,9 @@ class CurrentPlayerActionsRenderer {
         this.#container = container;
         this.#gameValidator = gameValidator;
 
-        this.#viewport.on("mousemove", (event) => {
-            this.#mousePos.x = event.global.x;
-            this.#mousePos.y = event.global.y;
-        });
+        this.#viewport.on("mousemove", this.#updateMousePos);
+
+        this.#armySelection.render(container);
 
         let lastSelectedNeutralRegionIndex = null;
         const regionBordersByTile = this.#getRegionBordersByTile();
@@ -59,7 +74,7 @@ class CurrentPlayerActionsRenderer {
             spritesheet: this.#spritesheet,
             renderer: this.#renderer,
             ticker: this.#ticker,
-            bitmask: 0x111111,
+            bitmask: 0b111111,
             container: container,
             mustHighlight: true,
         });
@@ -141,6 +156,17 @@ class CurrentPlayerActionsRenderer {
                 }
             )
         );
+    }
+
+    clean() {
+        this.#viewport.off("mousemove", this.#updateMousePos);
+
+        for (const reactionDisposer of this.#reactionDisposers) {
+            reactionDisposer();
+        }
+        this.#reactionDisposers.splice(0, this.#reactionDisposers.length);
+
+        this.#armySelection.clean();
     }
 
     #getRegionBordersByTile() {

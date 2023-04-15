@@ -6,7 +6,7 @@ import { PlayerAction } from "./PlayerAction";
 import { GAME_ACTIONS } from "shared/enums";
 import { POWER_CENTER_VALUES, ROAD_VALUES } from "shared/constants";
 
-const PlayerActions = observer(() => {
+const PlayerActions = observer(({ className }) => {
     const currentPlayer = useContext(CurrentPlayerContext);
 
     useEffect(() => {
@@ -41,7 +41,7 @@ const PlayerActions = observer(() => {
     };
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container + " " + className}>
             <PlayerAction
                 name="+PC"
                 description="Build power center"

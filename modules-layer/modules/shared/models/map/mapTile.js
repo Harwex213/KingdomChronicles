@@ -98,7 +98,7 @@ class MapTile {
     }
 
     getRoadBitmask(gameState) {
-        let bitmask = 0x000000;
+        let bitmask = 0b000000;
         let neighbor;
         for (const direction of Object.values(HEXAGON_DIRECTION_TYPES)) {
             neighbor = this.getNeighbor(gameState.map, direction);

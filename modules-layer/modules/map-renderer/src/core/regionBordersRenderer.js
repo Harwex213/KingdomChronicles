@@ -9,9 +9,9 @@ class RegionBordersRenderer {
     #spritesheet;
     #reactionDisposers;
 
-    constructor({ renderer, reactionDisposers }) {
+    constructor({ renderer }) {
         this.#renderer = renderer;
-        this.#reactionDisposers = reactionDisposers;
+        this.#reactionDisposers = [];
     }
 
     setSpritesheet(spritesheet) {
@@ -25,6 +25,13 @@ class RegionBordersRenderer {
         for (const mapRegion of regions) {
             container.addChild(this.#getRegionBorder(mapRegion));
         }
+    }
+
+    clean() {
+        for (const reactionDisposer of this.#reactionDisposers) {
+            reactionDisposer();
+        }
+        this.#reactionDisposers.splice(0, this.#reactionDisposers.length);
     }
 
     #getRegionBorder(mapRegion) {
@@ -47,7 +54,19 @@ class RegionBordersRenderer {
         );
         this.#reactionDisposers.push(disposer);
 
+        this.#setRenderPosition(mapRegion, regionBorders);
+
         return regionBorders;
+    }
+
+    #setRenderPosition(mapRegion, regionBordersSprite) {
+        const centerX = regionBordersSprite.x + regionBordersSprite.width / 2;
+        const centerY = regionBordersSprite.y + regionBordersSprite.height / 2;
+
+        mapRegion.setRenderOptions({
+            centerX,
+            centerY,
+        });
     }
 
     #getRegionBordersTexture(region) {
@@ -81,6 +100,8 @@ class RegionBordersRenderer {
 
             bordersContainer.addChild(tileBorderContainer);
         }
+
+        // TODO: color border
 
         return this.#renderer.generateTexture(bordersContainer);
     }

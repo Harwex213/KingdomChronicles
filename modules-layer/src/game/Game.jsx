@@ -11,7 +11,7 @@ const Game = observer(({ currentPlayer }) => {
             <div className={styles.container}>
                 <Map className={styles.map} />
                 <PlayerInfo className={styles.playerInfo} />
-                <PlayerActions />
+                <PlayerActions className={styles.playerActions} />
             </div>
         </CurrentPlayerContext.Provider>
     );

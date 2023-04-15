@@ -1,12 +1,18 @@
-import { Application, Container, Assets } from "pixi.js";
+import { Application, Container, Assets, Point, Graphics, Polygon } from "pixi.js";
 import { Viewport } from "pixi-viewport";
 import { RENDERER_CONFIG } from "../constants.js";
 import { ElementResizeObserver } from "../utils/elementResizeObserver.js";
 import { TileRenderer } from "../tileRenderer/tileRenderer.js";
 import { RegionBordersRenderer } from "./regionBordersRenderer";
 import { TilePositionCalculator } from "./tilePositionCalculator";
-import { findRegionCenterTile } from "../utils/findRegionCenterTile";
 import { CurrentPlayerActionsRenderer } from "../currentPlayerActionsRenderer/currentPlayerActionsRenderer";
+import { findRegionCenterTile } from "../utils/findRegionCenterTile";
+
+const CONTAINERS = {
+    TILES: 0,
+    REGION_BORDERS: 1,
+    CURRENT_PLAYER_ACTIONS: 2,
+};
 
 export class MapRenderer {
     _config;
@@ -32,7 +38,7 @@ export class MapRenderer {
         const initPixiApp = () => {
             this._pixiApp = new Application({
                 background: "#000",
-                antialias: false,
+                antialias: true,
             });
         };
 
@@ -52,11 +58,12 @@ export class MapRenderer {
                 .drag({
                     wheel: false,
                     mouseButtons: RENDERER_CONFIG.VIEWPORT.DRAG_MOUSE_BUTTON,
+                    factor: RENDERER_CONFIG.VIEWPORT.DRAG_FACTOR,
                 })
                 .pinch()
                 .decelerate()
                 .wheel({
-                    smooth: RENDERER_CONFIG.VIEWPORT.SMOOTH,
+                    smooth: RENDERER_CONFIG.VIEWPORT.WHEEL_SMOOTH,
                 })
                 .clampZoom({
                     minScale: this._config.viewport.minScale,
@@ -86,6 +93,7 @@ export class MapRenderer {
 
         const initRegionBordersRenderer = () => {
             this.#regionBordersRenderer = new RegionBordersRenderer({
+                ticker: this._pixiApp.ticker,
                 renderer: this._pixiApp.renderer,
                 reactionDisposers: this.#reactionDisposers,
             });
@@ -169,6 +177,8 @@ export class MapRenderer {
             this.#currentPlayerActionsRenderer.render(this.#container, mapToRender, currentPlayer);
         }
 
+        // this.#testBezierCurve(mapToRender, this.#container.children[CONTAINERS.REGION_BORDERS]);
+
         this.#setUpTileClickEvent(mapToRender.matrix, onTileClick);
 
         if (this._config.viewport.maxScale) {
@@ -184,6 +194,63 @@ export class MapRenderer {
         this._viewport.addChild(this.#container);
     }
 
+    #testBezierCurve(mapToRender, container) {
+        function calculateControlPoints(startPoint, endPoint, tension) {
+            const midpoint = new Point((startPoint.x + endPoint.x) / 2, (startPoint.y + endPoint.y) / 2);
+            const angle = Math.atan2(endPoint.y - startPoint.y, endPoint.x - startPoint.x);
+            const distance = Math.sqrt(
+                Math.pow(endPoint.x - startPoint.x, 2) + Math.pow(endPoint.y - startPoint.y, 2)
+            );
+            const controlPointDistance = (tension / 2) * distance;
+            const controlPoint1 = new Point(
+                midpoint.x - controlPointDistance * Math.cos(angle - Math.PI / 2),
+                midpoint.y - controlPointDistance * Math.sin(angle - Math.PI / 2)
+            );
+            const controlPoint2 = new Point(
+                midpoint.x + controlPointDistance * Math.cos(angle - Math.PI / 2),
+                midpoint.y + controlPointDistance * Math.sin(angle - Math.PI / 2)
+            );
+            return { controlPoint1, controlPoint2 };
+        }
+
+        const initialPoint = mapToRender.regions[119].renderCenterPoint;
+        const targetPoint = mapToRender.regions[120].renderCenterPoint;
+
+        const { controlPoint1, controlPoint2 } = calculateControlPoints(initialPoint, targetPoint, 0.2);
+
+        const move = new Graphics();
+        move.lineStyle(3, 0xffffff, 1);
+        move.moveTo(initialPoint.x, initialPoint.y);
+        move.bezierCurveTo(
+            controlPoint1.x,
+            controlPoint1.y,
+            controlPoint2.x,
+            controlPoint2.y,
+            targetPoint.x,
+            targetPoint.y
+        );
+        const angle = Math.atan2(controlPoint2.y - targetPoint.y, controlPoint2.x - targetPoint.x);
+
+        // Draw the arrowhead
+        const arrow = new Graphics();
+        const arrowheadLength = 20;
+        const arrowheadWidth = 10;
+        const arrowhead = new Polygon([
+            new Point(0, -arrowheadWidth / 2),
+            new Point(0, arrowheadWidth / 2),
+            new Point(arrowheadLength, 0),
+        ]);
+        arrow.rotation = angle + Math.PI;
+        arrow.x = targetPoint.x;
+        arrow.y = targetPoint.y;
+        arrow.beginFill(0xffffff, 1);
+        arrow.drawPolygon(arrowhead);
+        arrow.endFill();
+
+        container.addChild(move);
+        container.addChild(arrow);
+    }
+
     #setUpTileClickEvent(matrix, onTileClick) {
         this.#viewportClickedEventHandler = ({ event, world }) => {
             if (event.button !== 0 || world.x < 0 || world.y < 0) {
@@ -195,7 +262,7 @@ export class MapRenderer {
             if (tileRow) {
                 const tile = tileRow[tilePoint[1]];
                 if (tile) {
-                    onTileClick(tile);
+                    onTileClick(tile, event);
                     return;
                 }
             }
@@ -243,10 +310,13 @@ export class MapRenderer {
         }
 
         this._viewport.off("clicked", this.#viewportClickedEventHandler);
-
         for (const reactionDisposer of this.#reactionDisposers) {
             reactionDisposer();
         }
         this.#reactionDisposers.splice(0, this.#reactionDisposers.length);
+
+        this.#tileRenderer.clean();
+        this.#regionBordersRenderer.clean();
+        this.#currentPlayerActionsRenderer.clean();
     }
 }

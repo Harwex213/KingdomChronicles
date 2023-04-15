@@ -19,7 +19,7 @@ class PowerCenterControlArea {
                     spritesheet,
                     renderer,
                     container,
-                    bitmask: 0x111111,
+                    bitmask: 0b111111,
                     alpha: 0.5,
                 })
             );

@@ -31,7 +31,7 @@ const renderMap = async (map, { devBiomsRender, devRegionsRender }) => {
     mapRenderer.render({
         mapToRender: map,
         onTileClick: (event, mapTile) => {
-            console.log(event.button, mapTile);
+            console.log(mapTile, event);
         },
     });
 };

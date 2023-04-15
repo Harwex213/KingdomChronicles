@@ -1,15 +1,20 @@
 import { Sprite, Text, TextStyle } from "pixi.js";
 import { reaction } from "mobx";
-import { AREA_TYPES, BIOM_TYPES, TILE_TYPES, GLOBAL_BUILDING_TYPES } from "shared/enums";
 import {
-    RENDERER_CONFIG,
-    SPRITESHEET_BIOM_NAMES,
-    SPRITESHEET_FARM_NAMES,
-    SPRITESHEET_UNSORTED_NAMES,
-} from "../constants.js";
+    AREA_TYPES,
+    BIOM_TYPES,
+    TILE_TYPES,
+    GLOBAL_BUILDING_TYPES,
+    EXTERNAL_BUILDING_TYPE_NAMES,
+} from "shared/enums";
+import { RENDERER_CONFIG, SPRITESHEET_BIOM_NAMES, SPRITESHEET_STONE_QUARRY_NAME } from "../constants.js";
 import {
     AREA_TYPE_TO_BIOM_SPRITESHEET_NAME,
+    AREA_TYPE_TO_FARM_SPRITESHEET_NAME,
     AREA_TYPE_TO_POWER_CENTER_SPRITESHEET_NAME,
+    AREA_TYPE_TO_SAWMILL_NAME,
+    AREA_TYPE_TO_WOODCUTTER_SPRITESHEET_NAME,
+    toRoadSpritesheetName,
 } from "./spritesheetNames";
 
 export class TileRenderer {
@@ -17,9 +22,9 @@ export class TileRenderer {
     #spritesheet;
     #reactionDisposers;
 
-    constructor({ tilePositionCalculator, reactionDisposers }) {
+    constructor({ tilePositionCalculator }) {
         this.#tilePositionCalculator = tilePositionCalculator;
-        this.#reactionDisposers = reactionDisposers;
+        this.#reactionDisposers = [];
     }
 
     setSpritesheet(spritesheet) {
@@ -40,6 +45,13 @@ export class TileRenderer {
                 container.addChild(tile);
             }
         }
+    }
+
+    clean() {
+        for (const reactionDisposer of this.#reactionDisposers) {
+            reactionDisposer();
+        }
+        this.#reactionDisposers.splice(0, this.#reactionDisposers.length);
     }
 
     #devRegionRender(mapTile, tile, regions) {
@@ -79,19 +91,11 @@ export class TileRenderer {
             tile.addChild(remainedTicksTooltipToDestroy);
         }
 
-        let buildingStroke = null;
-
         this.#reactionDisposers.push(
             reaction(
                 () => mapTile.globalBuilding.type,
                 (type) => {
                     this.#setTileTexture(tile, mapTile);
-
-                    if (type !== GLOBAL_BUILDING_TYPES.POWER_CENTER && buildingStroke) {
-                        tile.removeChild(buildingStroke);
-                        buildingStroke.destroy();
-                        buildingStroke = null;
-                    }
                 }
             )
         );
@@ -103,11 +107,6 @@ export class TileRenderer {
                     if (remainedTicks === 0) {
                         remainedTicksTooltipToBuildAdded = false;
                         tile.removeChild(remainedTicksTooltipToBuild);
-
-                        if (mapTile.globalBuilding.type === GLOBAL_BUILDING_TYPES.POWER_CENTER) {
-                            buildingStroke = this.#createBuildingStroke();
-                            tile.addChild(buildingStroke);
-                        }
                     } else {
                         if (remainedTicksTooltipToBuildAdded === false) {
                             tile.addChild(remainedTicksTooltipToBuild);
@@ -148,10 +147,6 @@ export class TileRenderer {
             return SPRITESHEET_BIOM_NAMES.EMPTY;
         }
         if (mapTile.tileType === TILE_TYPES.LAND && mapTile.biomType !== BIOM_TYPES.NONE) {
-            if (mapTile.globalBuilding.type === GLOBAL_BUILDING_TYPES.EXTERNAL_BUILDING) {
-                return SPRITESHEET_FARM_NAMES.PLATEAU;
-            }
-
             if (mapTile.areaType === AREA_TYPES.MOUNTAIN) {
                 return SPRITESHEET_BIOM_NAMES.MOUNTAIN;
             }
@@ -160,18 +155,41 @@ export class TileRenderer {
                 return AREA_TYPE_TO_POWER_CENTER_SPRITESHEET_NAME[mapTile.areaType][mapTile.biomType];
             }
 
+            if (mapTile.globalBuilding.type === GLOBAL_BUILDING_TYPES.EXTERNAL_BUILDING) {
+                if (
+                    mapTile.globalBuilding.externalBuildingTypeName ===
+                    EXTERNAL_BUILDING_TYPE_NAMES.STONE_QUARRY
+                ) {
+                    return SPRITESHEET_STONE_QUARRY_NAME;
+                }
+
+                if (mapTile.globalBuilding.externalBuildingTypeName === EXTERNAL_BUILDING_TYPE_NAMES.FARM) {
+                    return AREA_TYPE_TO_FARM_SPRITESHEET_NAME[mapTile.areaType];
+                }
+
+                if (
+                    mapTile.globalBuilding.externalBuildingTypeName === EXTERNAL_BUILDING_TYPE_NAMES.SAWMILL
+                ) {
+                    return AREA_TYPE_TO_SAWMILL_NAME[mapTile.areaType][mapTile.biomType];
+                }
+
+                if (
+                    mapTile.globalBuilding.externalBuildingTypeName ===
+                    EXTERNAL_BUILDING_TYPE_NAMES.WOODCUTTER
+                ) {
+                    return AREA_TYPE_TO_WOODCUTTER_SPRITESHEET_NAME[mapTile.areaType][mapTile.biomType];
+                }
+            }
+
+            if (mapTile.globalBuilding.type === GLOBAL_BUILDING_TYPES.ROAD) {
+                return toRoadSpritesheetName(mapTile.globalBuilding.roadBitmask);
+            }
+
             return AREA_TYPE_TO_BIOM_SPRITESHEET_NAME[mapTile.areaType][mapTile.biomType];
         }
 
         return SPRITESHEET_BIOM_NAMES.WATER;
     };
-
-    #createBuildingStroke() {
-        const texture = this.#spritesheet.textures[SPRITESHEET_UNSORTED_NAMES.GLOBAL_BUILDING_STROKE];
-        const buildingStroke = new Sprite(texture);
-        buildingStroke.tint = 0x000;
-        return buildingStroke;
-    }
 
     #createRemainedTicksTooltip(tile, toDestroy = false) {
         const color = toDestroy
