@@ -7,3 +7,4 @@ export { Range } from "./range/Range";
 export { ResourceIcon } from "./resourceIcon/ResourceIcon";
 export { Tooltip } from "./tooltip/Tooltip";
 export { Switch } from "./switch/Switch";
+export { Cost } from "./cost/Cost";

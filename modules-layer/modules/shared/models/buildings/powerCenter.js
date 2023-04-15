@@ -88,6 +88,7 @@ class PowerCenter {
         makeObservable(this, {
             tier: observable,
             currentLevel: observable,
+            levelIncreaseCost: computed,
 
             people: observable,
             economic: observable,
@@ -177,16 +178,19 @@ class PowerCenter {
         this.#calcTotalThroughput();
     }
 
-    #subtractLevelIncreaseCost() {
+    get levelIncreaseCost() {
         const subtractMetaInfo = POWER_CENTER_TIER_TO_INCREASE_LEVEL[this.tier];
+        const cost = {};
         for (const [resourceName, initialValue] of Object.entries(subtractMetaInfo.COST)) {
-            const value = initialValue * Math.pos(subtractMetaInfo.RATIOS[resourceName], this.currentLevel);
-            this.storage[resourceName] -= value;
+            cost[resourceName] = Number(
+                (initialValue * Math.pow(subtractMetaInfo.RATIOS[resourceName], this.currentLevel)).toFixed(2)
+            );
         }
+        return cost;
     }
 
     increaseLevel() {
-        this.#subtractLevelIncreaseCost();
+        this.subtractBuildCost(this.levelIncreaseCost);
 
         this.currentLevel++;
 
@@ -206,11 +210,9 @@ class PowerCenter {
             (this.people.civilians + this.people.recruits) * POWER_CENTER_VALUES.PEOPLE_EATS_FOOD_RATIO;
         const foodAmountDelta = this.storage[RESOURCE_NAMES.FOOD] - requiredFoodAmount;
 
-        if (foodAmountDelta > 0) {
-            this.storage[RESOURCE_NAMES.FOOD] -= requiredFoodAmount;
-        } else {
-            this.storage[RESOURCE_NAMES.FOOD] = 0;
-            this.people.growth = foodAmountDelta * POWER_CENTER_VALUES.PEOPLE_EATS_FOOD_RATIO;
+        this.#tryDecreaseStorage(RESOURCE_NAMES.FOOD, requiredFoodAmount);
+        if (foodAmountDelta < 0) {
+            this.people.growth = Math.trunc(foodAmountDelta * POWER_CENTER_VALUES.PEOPLE_EATS_FOOD_RATIO);
         }
 
         this.storage[RESOURCE_NAMES.FOOD] = Number(this.storage[RESOURCE_NAMES.FOOD].toFixed(2));
@@ -228,11 +230,21 @@ class PowerCenter {
         this.#calcIncome();
     }
 
+    #tryDecreaseStorage(resourceName, amount) {
+        this.storage[resourceName] = this.storage[resourceName] - amount;
+        if (this.storage[resourceName] < 0) {
+            this.storage[resourceName] = 0;
+        }
+
+        this.storage[resourceName] = Number(this.storage[resourceName].toFixed(2));
+    }
+
     #tryIncreaseStorage(resourceName, producedAmount) {
         this.storage[resourceName] += Math.min(
             producedAmount,
             this.storageCapacity - this.storage[resourceName]
         );
+        this.storage[resourceName] = Number(this.storage[resourceName].toFixed(2));
     }
 
     produce() {
@@ -290,6 +302,7 @@ class PowerCenter {
                 continue;
             }
             this.storage[resourceName] -= value;
+            this.storage[resourceName] = Number(this.storage[resourceName].toFixed(2));
         }
     }
 

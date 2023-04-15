@@ -1,4 +1,4 @@
-import { makeObservable, action, computed, observable, runInAction } from "mobx";
+import { makeObservable, action, computed, observable, runInAction, reaction } from "mobx";
 import {
     TILE_TYPES,
     GLOBAL_BUILDING_TYPES,
@@ -64,6 +64,8 @@ class CurrentPlayer {
         };
 
         this.selectedPowerCenterActionPossibilities = {
+            [GAME_ACTIONS.INCREASE_POWER_CENTER_LEVEL]: false,
+
             [GAME_ACTIONS.START_BUILD_EXTERNAL_BUILDING]: {},
             [GAME_ACTIONS.START_BUILD_INTERNAL_BUILDING]: {},
 
@@ -78,7 +80,7 @@ class CurrentPlayer {
             [GAME_ACTIONS.REVOKE_COLONIST]: false,
         };
 
-        this.#updateActionPossibilities();
+        this.updateActionPossibilities();
 
         makeObservable(this, {
             tryingPlaceGlobalBuildingActionName: observable,
@@ -98,6 +100,8 @@ class CurrentPlayer {
             globalActionPossibilities: observable,
             selectedPowerCenterActionPossibilities: observable,
             selectedNeutralRegionActionPossibilities: observable,
+
+            updateActionPossibilities: action,
         });
     }
 
@@ -105,9 +109,7 @@ class CurrentPlayer {
         this.#mapRenderer.mountView(containerSelector);
     }
 
-    dispose() {
-        // TODO
-    }
+    dispose() {}
 
     #handleTileClick(tile) {
         if (tile === null) {
@@ -236,7 +238,7 @@ class CurrentPlayer {
     #selectObject(state, identifier) {
         this.selectedObject.state = state;
         this.selectedObject.identifier = identifier;
-        this.#updateActionPossibilities();
+        this.updateActionPossibilities();
     }
 
     abortSelectingObject() {
@@ -244,7 +246,7 @@ class CurrentPlayer {
         this.selectedObject.identifier = null;
     }
 
-    #updateActionPossibilities() {
+    updateActionPossibilities() {
         this.globalActionPossibilities[GAME_ACTIONS.START_BUILD_POWER_CENTER] = this.gameValidator.validate(
             GAME_VALIDATIONS.CAN_BUILD_POWER_CENTER,
             this.#gameValidatorParamCache
@@ -276,6 +278,12 @@ class CurrentPlayer {
                     this.#gameValidatorParamCache
                 );
             }
+
+            this.selectedPowerCenterActionPossibilities[GAME_ACTIONS.INCREASE_POWER_CENTER_LEVEL] =
+                this.gameValidator.validate(
+                    GAME_VALIDATIONS.CAN_INCREASE_POWER_CENTER_LEVEL,
+                    this.#gameValidatorParamCache
+                );
         }
 
         if (this.selectedObject.state === CURRENT_PLAYER_SELECTED_OBJECT_STATES.NEUTRAL_REGION) {
@@ -297,6 +305,15 @@ class CurrentPlayer {
     switchCanGrow() {
         if (this.selectedPowerCenter !== null) {
             this.#onAction(GAME_ACTIONS.SWITCH_POWER_CENTER_GROW, {
+                playerIndex: this.index,
+                powerCenterId: this.selectedPowerCenter.id,
+            });
+        }
+    }
+
+    increasePowerCenterLevel() {
+        if (this.selectedPowerCenter !== null) {
+            this.#onAction(GAME_ACTIONS.INCREASE_POWER_CENTER_LEVEL, {
                 playerIndex: this.index,
                 powerCenterId: this.selectedPowerCenter.id,
             });

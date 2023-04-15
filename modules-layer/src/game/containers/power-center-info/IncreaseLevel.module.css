@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.increaseLevelBtn {
+    height: 100%;
+    width: 100%;
+}
+
+.cost {
+    width: 100%;
+}

@@ -1,6 +1,7 @@
 import { action, computed, makeObservable, observable } from "mobx";
 import { PLAYER_VALUES, POWER_CENTER_VALUES, REGION_VALUES } from "../../constants";
 import { EXTERNAL_BUILDING_TYPES } from "../buildings/externalBuildingTypes";
+import { RESOURCE_NAMES } from "../../enums";
 
 const sumArithmeticProgression = (firstMember, delta, n) => ((2 * firstMember + delta * (n - 1)) / 2) * n;
 
@@ -139,10 +140,12 @@ class Player {
 
     decreaseTreasure(amount) {
         this.treasure -= amount;
+        this.treasure = Number(this.treasure.toFixed(2));
     }
 
     doEconomicDelta() {
         this.treasure += this.resultIncome - this.resultOutcome;
+        this.treasure = Number(this.treasure.toFixed(2));
     }
 
     addColonist() {

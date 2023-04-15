@@ -87,10 +87,12 @@ class DevGameService {
 
     #handleAction(actionName, params) {
         this.#gameModel.applyAction(actionName, params);
+        this.currentPlayer.updateActionPossibilities();
     }
 
     handleNextTick() {
         this.#gameModel.nextTick();
+        this.currentPlayer.updateActionPossibilities();
     }
 }
 

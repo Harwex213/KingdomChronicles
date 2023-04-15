@@ -18,6 +18,7 @@ import { destroyTradeRoute } from "./trade/destroyTradeRoute";
 import { sendColonist } from "./colonization/sendColonist";
 import { revokeColonist } from "./colonization/revokeColonist";
 
+import { increasePowerCenterLevel } from "./powerCenter/increasePowerCenterLevel";
 import { switchPowerCenterGrow } from "./powerCenter/switchPowerCenterGrow";
 
 const actions = {
@@ -40,6 +41,7 @@ const actions = {
     [GAME_ACTIONS.SEND_COLONIST]: sendColonist,
     [GAME_ACTIONS.REVOKE_COLONIST]: revokeColonist,
 
+    [GAME_ACTIONS.INCREASE_POWER_CENTER_LEVEL]: increasePowerCenterLevel,
     [GAME_ACTIONS.SWITCH_POWER_CENTER_GROW]: switchPowerCenterGrow,
 };
 
