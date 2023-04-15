@@ -85,6 +85,15 @@ export class TileRenderer {
 
         this.#setTileTexture(tile, mapTile);
 
+        this.#reactionDisposers.push(
+            reaction(
+                () => mapTile.globalBuilding.type,
+                (type) => {
+                    this.#setTileTexture(tile, mapTile);
+                }
+            )
+        );
+
         let remainedTicksTooltipToBuildAdded = false;
         const remainedTicksTooltipToBuild = this.#createRemainedTicksTooltip(tile);
         if (mapTile.globalBuilding.remainedTicksToBuild !== 0) {
@@ -92,6 +101,24 @@ export class TileRenderer {
             remainedTicksTooltipToBuildAdded = true;
             tile.addChild(remainedTicksTooltipToBuild);
         }
+
+        this.#reactionDisposers.push(
+            reaction(
+                () => mapTile.globalBuilding.remainedTicksToBuild,
+                (remainedTicks) => {
+                    if (remainedTicks === 0) {
+                        remainedTicksTooltipToBuildAdded = false;
+                        tile.removeChild(remainedTicksTooltipToBuild);
+                    } else {
+                        if (remainedTicksTooltipToBuildAdded === false) {
+                            remainedTicksTooltipToBuildAdded = true;
+                            tile.addChild(remainedTicksTooltipToBuild);
+                        }
+                        remainedTicksTooltipToBuild.text = remainedTicks.toString();
+                    }
+                }
+            )
+        );
 
         let remainedTicksTooltipToDestroyAdded = false;
         const remainedTicksTooltipToDestroy = this.#createRemainedTicksTooltip(tile, true);
@@ -103,32 +130,6 @@ export class TileRenderer {
 
         this.#reactionDisposers.push(
             reaction(
-                () => mapTile.globalBuilding.type,
-                (type) => {
-                    this.#setTileTexture(tile, mapTile);
-                }
-            )
-        );
-
-        this.#reactionDisposers.push(
-            reaction(
-                () => mapTile.globalBuilding.remainedTicksToBuild,
-                (remainedTicks) => {
-                    if (remainedTicks === 0) {
-                        remainedTicksTooltipToBuildAdded = false;
-                        tile.removeChild(remainedTicksTooltipToBuild);
-                    } else {
-                        if (remainedTicksTooltipToBuildAdded === false) {
-                            tile.addChild(remainedTicksTooltipToBuild);
-                        }
-                        remainedTicksTooltipToBuild.text = remainedTicks.toString();
-                    }
-                }
-            )
-        );
-
-        this.#reactionDisposers.push(
-            reaction(
                 () => mapTile.globalBuilding.remainedTicksToDestroy,
                 (remainedTicks) => {
                     if (remainedTicks === 0) {
@@ -136,7 +137,8 @@ export class TileRenderer {
                         tile.removeChild(remainedTicksTooltipToDestroy);
                     } else {
                         if (remainedTicksTooltipToDestroyAdded === false) {
-                            tile.addChild(remainedTicksTooltipToBuild);
+                            remainedTicksTooltipToDestroyAdded = true;
+                            tile.addChild(remainedTicksTooltipToDestroy);
                         }
                         remainedTicksTooltipToDestroy.text = remainedTicks.toString();
                     }
@@ -148,6 +150,10 @@ export class TileRenderer {
             reaction(
                 () => mapTile.globalBuilding.roadBitmask,
                 (roadBitmask) => {
+                    if (roadBitmask === null) {
+                        tile.children[ROAD_INDEX].texture = null;
+                        return;
+                    }
                     const roadTextureName = toRoadSpritesheetName(roadBitmask);
                     tile.children[ROAD_INDEX].texture = this.#spritesheet.textures[roadTextureName];
                 }

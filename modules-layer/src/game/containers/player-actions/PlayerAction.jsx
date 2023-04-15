@@ -11,7 +11,10 @@ const PlayerAction = observer(({ name, cost, value, description, onClick }) => {
         <Tooltip text={description}>
             <div
                 className={styles.action}
-                data-is-active={currentPlayer.tryingPlaceGlobalBuildingActionName === value}
+                data-is-active={
+                    currentPlayer.tryingPlaceGlobalBuildingActionName === value ||
+                    currentPlayer.tryingRemovePlacedGlobalBuildingActionName === value
+                }
                 data-is-disabled={!currentPlayer.globalActionPossibilities[value]}
                 onClick={() => onClick(value)}
             >

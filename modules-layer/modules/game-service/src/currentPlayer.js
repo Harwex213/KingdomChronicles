@@ -127,6 +127,18 @@ class CurrentPlayer {
             return;
         }
 
+        if (this.tryingRemovePlacedGlobalBuildingActionName !== null) {
+            this.#onAction(this.tryingRemovePlacedGlobalBuildingActionName, {
+                playerIndex: this.index,
+                row: tile.row,
+                col: tile.col,
+            });
+            runInAction(() => {
+                this.tryingRemovePlacedGlobalBuildingActionName = null;
+            });
+            return;
+        }
+
         this.trySelectObject(tile);
     }
 

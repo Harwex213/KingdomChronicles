@@ -132,7 +132,7 @@ export const SPRITESHEET_TILE_BORDER_NAMES = {
 export const SPRITESHEET_PLAYER_ACTIONS_NAMES = {
     CAN_BUILD: "can_build.png",
     CANNOT_BUILD: "cannot_build.png",
-    CAN_DESTROY: "CAN_DESTROY",
+    CAN_DESTROY: "can_delete.png",
 };
 
 export const SPRITESHEET_UNSORTED_NAMES = {

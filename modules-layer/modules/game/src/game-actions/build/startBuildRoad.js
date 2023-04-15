@@ -10,8 +10,10 @@ const startBuildRoad = ({ gameState, gameValidator, playerIndex, row, col }) => 
         playerIndex,
     });
 
-    canDoAction &&= gameValidator.validate(GAME_VALIDATIONS.CAN_BUILD_ROAD, {
+    canDoAction &&= gameValidator.validate(GAME_VALIDATIONS.CAN_PLACE_ROAD, {
         playerIndex,
+        row,
+        col,
     });
 
     if (canDoAction === false) {

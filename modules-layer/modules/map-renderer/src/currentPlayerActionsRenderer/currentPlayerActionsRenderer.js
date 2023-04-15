@@ -4,7 +4,7 @@ import { CURRENT_PLAYER_SELECTED_OBJECT_STATES, GAME_ACTIONS, GAME_VALIDATIONS }
 import { RENDERER_CONFIG } from "../constants";
 import { TileBorder } from "./tileBorder";
 import { RegionBorderByTile } from "./regionBorderByTile";
-import { BuildIndicator } from "./buildIndicator";
+import { Indicator, INDICATOR_MODES } from "./indicator";
 import { PowerCenterControlArea } from "./powerCenterControlArea";
 import { ArmySelection } from "./armySelection";
 
@@ -124,7 +124,7 @@ class CurrentPlayerActionsRenderer {
             )
         );
 
-        const buildIndicator = new BuildIndicator({
+        const buildIndicator = new Indicator({
             spritesheet: this.#spritesheet,
             ticker: this.#ticker,
             container: this.#container,
@@ -134,6 +134,7 @@ class CurrentPlayerActionsRenderer {
             tilePositionCalculator: this.#tilePositionCalculator,
             gameValidator: this.#gameValidator,
             playerIndex: currentPlayer.index,
+            mode: INDICATOR_MODES.BUILD,
         });
         this.#reactionDisposers.push(
             reaction(
@@ -160,6 +161,40 @@ class CurrentPlayerActionsRenderer {
                     }
 
                     buildIndicator.show(validationName, validationParams);
+                }
+            )
+        );
+
+        const destroyIndicator = new Indicator({
+            spritesheet: this.#spritesheet,
+            ticker: this.#ticker,
+            container: this.#container,
+            viewport: this.#viewport,
+            mousePos: this.#mousePos,
+            mapToRender: mapToRender,
+            tilePositionCalculator: this.#tilePositionCalculator,
+            gameValidator: this.#gameValidator,
+            playerIndex: currentPlayer.index,
+            mode: INDICATOR_MODES.DESTROY,
+        });
+        this.#reactionDisposers.push(
+            reaction(
+                () => currentPlayer.tryingRemovePlacedGlobalBuildingActionName,
+                (action) => {
+                    if (action === null) {
+                        destroyIndicator.hide();
+                        return;
+                    }
+
+                    let validationName;
+                    if (action === GAME_ACTIONS.START_DESTROY_ROAD) {
+                        validationName = GAME_VALIDATIONS.CAN_DESTROY_PLACED_ROAD;
+                    }
+                    if (action === GAME_ACTIONS.START_DESTROY_EXTERNAL_BUILDING) {
+                        validationName = GAME_VALIDATIONS.CAN_DESTROY_PLACED_EXTERNAL_BUILDING;
+                    }
+
+                    destroyIndicator.show(validationName);
                 }
             )
         );

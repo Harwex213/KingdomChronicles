@@ -1,7 +1,23 @@
 import { Sprite } from "pixi.js";
 import { RENDERER_CONFIG, SPRITESHEET_PLAYER_ACTIONS_NAMES } from "../constants";
 
-class BuildIndicator {
+const INDICATOR_MODES = {
+    BUILD: "BUILD",
+    DESTROY: "DESTROY",
+};
+
+const INDICATOR_MODE_TO_TEXTURE_NAME = {
+    [INDICATOR_MODES.BUILD]: {
+        CAN: SPRITESHEET_PLAYER_ACTIONS_NAMES.CAN_BUILD,
+        CANNOT: SPRITESHEET_PLAYER_ACTIONS_NAMES.CANNOT_BUILD,
+    },
+    [INDICATOR_MODES.DESTROY]: {
+        CAN: SPRITESHEET_PLAYER_ACTIONS_NAMES.CAN_DESTROY,
+        CANNOT: null,
+    },
+};
+
+class Indicator {
     #ticker;
     #spritesheet;
     #container;
@@ -14,6 +30,8 @@ class BuildIndicator {
     #playerIndex;
     #validationName;
     #validationParams;
+
+    #mode;
 
     #isAdded;
     #sprite;
@@ -30,6 +48,7 @@ class BuildIndicator {
         tilePositionCalculator,
         gameValidator,
         playerIndex,
+        mode,
     }) {
         this.#spritesheet = spritesheet;
         this.#ticker = ticker;
@@ -52,6 +71,8 @@ class BuildIndicator {
         };
 
         this.#updateSpritePosFunc = this.#updateSpritePos.bind(this);
+
+        this.#mode = mode;
     }
 
     #updateSpritePos() {
@@ -82,18 +103,16 @@ class BuildIndicator {
         this.#sprite.x = tile.renderPosition.x;
         this.#sprite.y = tile.renderPosition.y;
 
-        if (
-            this.#gameValidator.validate(this.#validationName, {
-                playerIndex: this.#playerIndex,
-                row: tile.row,
-                col: tile.col,
-                ...this.#validationParams,
-            })
-        ) {
-            this.#sprite.texture = this.#spritesheet.textures[SPRITESHEET_PLAYER_ACTIONS_NAMES.CAN_BUILD];
-        } else {
-            this.#sprite.texture = this.#spritesheet.textures[SPRITESHEET_PLAYER_ACTIONS_NAMES.CANNOT_BUILD];
-        }
+        const validationResult = this.#gameValidator.validate(this.#validationName, {
+            playerIndex: this.#playerIndex,
+            row: tile.row,
+            col: tile.col,
+            ...this.#validationParams,
+        });
+        const textureNames = INDICATOR_MODE_TO_TEXTURE_NAME[this.#mode];
+        const textureName = validationResult ? textureNames.CAN : textureNames.CANNOT;
+
+        this.#sprite.texture = this.#spritesheet.textures[textureName];
     }
 
     #addSprite() {
@@ -123,4 +142,4 @@ class BuildIndicator {
     }
 }
 
-export { BuildIndicator };
+export { Indicator, INDICATOR_MODES };
