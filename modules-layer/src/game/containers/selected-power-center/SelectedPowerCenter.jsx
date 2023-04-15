@@ -3,7 +3,6 @@ import React, { useContext, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Tab, Text } from "../../components";
 import { PowerCenterInfo } from "../power-center-info/PowerCenterInfo";
-import { PowerCenterOuterBuildings } from "../power-center-outer-buildings/PowerCenterOuterBuildings";
 import { CurrentPlayerContext } from "../../CurrentPlayerContext";
 
 const tabs = [
@@ -12,11 +11,11 @@ const tabs = [
         component: <PowerCenterInfo />,
     },
     {
-        label: "Outer buildings",
-        component: <PowerCenterOuterBuildings />,
+        label: "External buildings",
+        component: <div></div>,
     },
     {
-        label: "Inner buildings",
+        label: "Internal buildings",
         component: <div></div>,
     },
     {

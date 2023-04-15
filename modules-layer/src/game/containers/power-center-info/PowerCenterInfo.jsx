@@ -1,13 +1,12 @@
 import styles from "./PowerCenterInfo.module.css";
-import { gameService } from "../../devGameService/devGameService";
+import { useContext, useState } from "react";
+import { CurrentPlayerContext } from "../../CurrentPlayerContext";
 import { observer } from "mobx-react-lite";
-import { Block, Button, Range, Text, Container } from "../../../components";
-import { useState } from "react";
-import { ResourceInfo } from "./ResourceInfo";
-import { ResourceSelection } from "./ResourceSelection";
+import { Block, Button, Range, Text, Container } from "../../components";
 
 const PowerCenterInfo = observer(() => {
-    const selectedPowerCenter = gameService.currentPlayer.selectedPowerCenter;
+    const currentPlayer = useContext(CurrentPlayerContext);
+    const selectedPowerCenter = currentPlayer.selectedPowerCenter;
     const [selectedResource, setSelectedResource] = useState(null);
 
     const handleSelectResource = (name) => {
@@ -58,12 +57,12 @@ const PowerCenterInfo = observer(() => {
                     </div>
                 </Block>
             </div>
-            <ResourceInfo className={styles.resourceInfo} selectedResource={selectedResource} />
-            <ResourceSelection
-                className={styles.resourceSelection}
-                selectedResource={selectedResource}
-                onResourceSelect={handleSelectResource}
-            />
+            {/*<ResourceInfo className={styles.resourceInfo} selectedResource={selectedResource} />*/}
+            {/*<ResourceSelection*/}
+            {/*    className={styles.resourceSelection}*/}
+            {/*    selectedResource={selectedResource}*/}
+            {/*    onResourceSelect={handleSelectResource}*/}
+            {/*/>*/}
         </div>
     );
 });

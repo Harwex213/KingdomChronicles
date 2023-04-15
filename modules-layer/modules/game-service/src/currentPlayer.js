@@ -189,7 +189,7 @@ class CurrentPlayer {
 
         if (
             tile.hasBuildedGlobalBuilding &&
-            tile.globalBuilding.type === GLOBAL_BUILDING_TYPES.EXTERNAL_BUILDING &&
+            tile.globalBuilding.type === GLOBAL_BUILDING_TYPES.POWER_CENTER &&
             tileRegion.ownerIndex === this.index
         ) {
             this.#selectObject(CURRENT_PLAYER_SELECTED_OBJECT_STATES.POWER_CENTER, tile.globalBuilding.id);
@@ -258,7 +258,7 @@ class CurrentPlayer {
             this.#gameValidatorParamCache.powerCenterId = this.selectedObject.identifier;
 
             const canBuildExternalBuilding =
-                this.globalActionPossibilities[GAME_ACTIONS.START_BUILD_EXTERNAL_BUILDING];
+                this.selectedPowerCenterActionPossibilities[GAME_ACTIONS.START_BUILD_EXTERNAL_BUILDING];
             for (const externalBuildingTypeName of Object.values(EXTERNAL_BUILDING_TYPE_NAMES)) {
                 this.#gameValidatorParamCache.externalBuildingTypeName = externalBuildingTypeName;
                 canBuildExternalBuilding[externalBuildingTypeName] = this.gameValidator.validate(
@@ -268,7 +268,7 @@ class CurrentPlayer {
             }
 
             const canBuildInternalBuilding =
-                this.globalActionPossibilities[GAME_ACTIONS.START_BUILD_INTERNAL_BUILDING];
+                this.selectedPowerCenterActionPossibilities[GAME_ACTIONS.START_BUILD_INTERNAL_BUILDING];
             for (const internalBuildingTypeName of Object.values(INTERNAL_BUILDING_TYPE_NAMES)) {
                 this.#gameValidatorParamCache.internalBuildingTypeName = internalBuildingTypeName;
                 canBuildInternalBuilding[internalBuildingTypeName] = this.gameValidator.validate(

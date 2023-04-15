@@ -25,16 +25,6 @@ const GameScreen = () => {
                 <GameCreator className={styles.gameCreator} />
                 <GameProcessManager className={styles.gameProcessManager} />
                 <GameWrapper />
-                {/*<div className={styles.map}>*/}
-                {/*    <Map />*/}
-                {/*</div>*/}
-                {/*<div className={styles.playerInfo}>*/}
-                {/*    <PlayerInfo />*/}
-                {/*</div>*/}
-                {/*<div className={styles.playerActions}>*/}
-                {/*    <PlayerActions />*/}
-                {/*</div>*/}
-                {/*<SelectedObject className={styles.selectedObject} />*/}
             </div>
         </div>
     );

@@ -1,6 +1,6 @@
 import { Container, Sprite } from "pixi.js";
 import { RENDERER_CONFIG, SPRITESHEET_TILE_BORDER_NAMES } from "../constants";
-import { TILE_BITMASK_SIDES } from "shared/enums";
+import { HEXAGON_DIRECTION_TYPES, TILE_BITMASK_SIDES } from "shared/enums";
 
 class TileBorder {
     #spritesheet;
@@ -42,22 +42,22 @@ class TileBorder {
         this.#sprite.y = y;
 
         const tileBorder = new Container();
-        if (bitmask && TILE_BITMASK_SIDES.TOP_LEFT) {
+        if (bitmask && TILE_BITMASK_SIDES[HEXAGON_DIRECTION_TYPES.LEFT_UP]) {
             this.#addBorder(tileBorder, SPRITESHEET_TILE_BORDER_NAMES.TOP_LEFT);
         }
-        if (bitmask && TILE_BITMASK_SIDES.TOP_RIGHT) {
+        if (bitmask && TILE_BITMASK_SIDES[HEXAGON_DIRECTION_TYPES.RIGHT_UP]) {
             this.#addBorder(tileBorder, SPRITESHEET_TILE_BORDER_NAMES.TOP_RIGHT);
         }
-        if (bitmask && TILE_BITMASK_SIDES.LEFT) {
+        if (bitmask && TILE_BITMASK_SIDES[HEXAGON_DIRECTION_TYPES.LEFT]) {
             this.#addBorder(tileBorder, SPRITESHEET_TILE_BORDER_NAMES.LEFT);
         }
-        if (bitmask && TILE_BITMASK_SIDES.RIGHT) {
+        if (bitmask && TILE_BITMASK_SIDES[HEXAGON_DIRECTION_TYPES.RIGHT]) {
             this.#addBorder(tileBorder, SPRITESHEET_TILE_BORDER_NAMES.RIGHT);
         }
-        if (bitmask && TILE_BITMASK_SIDES.BOTTOM_LEFT) {
+        if (bitmask && TILE_BITMASK_SIDES[HEXAGON_DIRECTION_TYPES.LEFT_DOWN]) {
             this.#addBorder(tileBorder, SPRITESHEET_TILE_BORDER_NAMES.BOTTOM_LEFT);
         }
-        if (bitmask && TILE_BITMASK_SIDES.BOTTOM_RIGHT) {
+        if (bitmask && TILE_BITMASK_SIDES[HEXAGON_DIRECTION_TYPES.RIGHT_DOWN]) {
             this.#addBorder(tileBorder, SPRITESHEET_TILE_BORDER_NAMES.BOTTOM_RIGHT);
         }
         this.#sprite.texture = renderer.generateTexture(tileBorder);

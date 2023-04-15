@@ -4,6 +4,7 @@ import { CurrentPlayerContext } from "./CurrentPlayerContext";
 import { Map } from "./containers/map/Map";
 import { PlayerInfo } from "./containers/player-info/PlayerInfo";
 import { PlayerActions } from "./containers/player-actions/PlayerActions";
+import { SelectedObject } from "./containers/selected-object/SelectedObject";
 
 const Game = observer(({ currentPlayer }) => {
     return (
@@ -12,6 +13,7 @@ const Game = observer(({ currentPlayer }) => {
                 <Map className={styles.map} />
                 <PlayerInfo className={styles.playerInfo} />
                 <PlayerActions className={styles.playerActions} />
+                <SelectedObject className={styles.selectedObject} />
             </div>
         </CurrentPlayerContext.Provider>
     );
