@@ -293,6 +293,15 @@ class CurrentPlayer {
                 );
         }
     }
+
+    switchCanGrow() {
+        if (this.selectedPowerCenter !== null) {
+            this.#onAction(GAME_ACTIONS.SWITCH_POWER_CENTER_GROW, {
+                playerIndex: this.index,
+                powerCenterId: this.selectedPowerCenter.id,
+            });
+        }
+    }
 }
 
 export { CurrentPlayer };

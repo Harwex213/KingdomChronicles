@@ -2,12 +2,16 @@ import styles from "./PowerCenterInfo.module.css";
 import { useContext } from "react";
 import { CurrentPlayerContext } from "../../CurrentPlayerContext";
 import { observer } from "mobx-react-lite";
-import { Block, Button, Range, Text, Container } from "../../components";
+import { Block, Button, Range, Text, Container, Switch } from "../../components";
 import { ResourceInfo } from "./ResourceInfo";
 
 const PowerCenterInfo = observer(() => {
     const currentPlayer = useContext(CurrentPlayerContext);
     const selectedPowerCenter = currentPlayer.selectedPowerCenter;
+
+    const handleSwitchCanGrow = () => {
+        currentPlayer.switchCanGrow();
+    };
 
     return (
         <div className={styles.container}>
@@ -25,8 +29,9 @@ const PowerCenterInfo = observer(() => {
                         <Text>Income:</Text>
                         <Text>Outcome:</Text>
                         <Text>People growth:</Text>
+                        <Text>Can grow:</Text>
                     </Container>
-                    <Container>
+                    <Container centered="vertical">
                         <Text variant="positive" centered>
                             + {selectedPowerCenter.economic.income}
                         </Text>
@@ -34,6 +39,7 @@ const PowerCenterInfo = observer(() => {
                             - {selectedPowerCenter.economic.outcome}
                         </Text>
                         <Text centered>+ {selectedPowerCenter.people.growth}</Text>
+                        <Switch checked={selectedPowerCenter.people.canGrow} onChange={handleSwitchCanGrow} />
                     </Container>
                 </Block>
                 <Block className={styles.recruitTransform}>
