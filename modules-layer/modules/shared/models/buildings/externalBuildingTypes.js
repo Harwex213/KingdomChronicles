@@ -14,9 +14,11 @@ export const EXTERNAL_BUILDING_TYPES = {
         production: {
             requiredResource: null,
             requiredAmountPerTick: 0,
+            producedResource: RESOURCE_NAMES.FOOD,
             producedAmountPerTick: 2,
         },
         costPerTick: 15,
+        typeName: EXTERNAL_BUILDING_TYPE_NAMES.FARM,
     }),
     [EXTERNAL_BUILDING_TYPE_NAMES.WOODCUTTER]: new ExternalBuildingType({
         acceptableBioms: [BIOM_TYPES.FLATLAND, BIOM_TYPES.GRASSLAND, BIOM_TYPES.TUNDRA],
@@ -29,9 +31,11 @@ export const EXTERNAL_BUILDING_TYPES = {
         production: {
             requiredResource: null,
             requiredAmountPerTick: 0,
+            producedResource: RESOURCE_NAMES.WOOD,
             producedAmountPerTick: 2,
         },
         costPerTick: 15,
+        typeName: EXTERNAL_BUILDING_TYPE_NAMES.WOODCUTTER,
     }),
     [EXTERNAL_BUILDING_TYPE_NAMES.STONE_QUARRY]: new ExternalBuildingType({
         acceptableBioms: [BIOM_TYPES.FLATLAND, BIOM_TYPES.GRASSLAND, BIOM_TYPES.TUNDRA],
@@ -45,9 +49,11 @@ export const EXTERNAL_BUILDING_TYPES = {
         production: {
             requiredResource: null,
             requiredAmountPerTick: 0,
+            producedResource: RESOURCE_NAMES.STONE,
             producedAmountPerTick: 2,
         },
         costPerTick: 25,
+        typeName: EXTERNAL_BUILDING_TYPE_NAMES.STONE_QUARRY,
     }),
     [EXTERNAL_BUILDING_TYPE_NAMES.SAWMILL]: new ExternalBuildingType({
         acceptableBioms: [BIOM_TYPES.FLATLAND, BIOM_TYPES.GRASSLAND, BIOM_TYPES.TUNDRA, BIOM_TYPES.DESERT],
@@ -62,8 +68,25 @@ export const EXTERNAL_BUILDING_TYPES = {
         production: {
             requiredResource: RESOURCE_NAMES.WOOD,
             requiredAmountPerTick: 4,
+            producedResource: RESOURCE_NAMES.WOOD_BOARDS,
             producedAmountPerTick: 2,
         },
         costPerTick: 50,
+        typeName: EXTERNAL_BUILDING_TYPE_NAMES.SAWMILL,
     }),
 };
+
+export const FIRST_TIER_EXTERNAL_BUILDING_TYPES = [
+    EXTERNAL_BUILDING_TYPES.WOODCUTTER,
+    EXTERNAL_BUILDING_TYPES.FARM,
+];
+
+export const SECOND_TIER_EXTERNAL_BUILDING_TYPES = [
+    EXTERNAL_BUILDING_TYPES.STONE_QUARRY,
+    EXTERNAL_BUILDING_TYPES.SAWMILL,
+];
+
+export const EXTERNAL_BUILDING_TYPES_PER_TIER = [
+    FIRST_TIER_EXTERNAL_BUILDING_TYPES,
+    SECOND_TIER_EXTERNAL_BUILDING_TYPES,
+];

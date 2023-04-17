@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import { Tab, Text } from "../../components";
 import { PowerCenterInfo } from "../power-center-info/PowerCenterInfo";
 import { CurrentPlayerContext } from "../../CurrentPlayerContext";
+import { PowerCenterExternalBuildings } from "../power-center-external-buildings/PowerCenterExternalBuildings";
 
 const tabs = [
     {
@@ -12,7 +13,7 @@ const tabs = [
     },
     {
         label: "External buildings",
-        component: <div></div>,
+        component: <PowerCenterExternalBuildings />,
     },
     {
         label: "Internal buildings",

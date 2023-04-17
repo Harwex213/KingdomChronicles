@@ -36,6 +36,8 @@ const canBuildInternalBuilding = ({
             return false;
         }
     }
+
+    return true;
 };
 
 export { canBuildInternalBuilding };

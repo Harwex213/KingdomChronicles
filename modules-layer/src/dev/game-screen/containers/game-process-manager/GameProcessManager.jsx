@@ -22,6 +22,10 @@ const GameProcessManager = observer(({ className }) => {
         };
     }, []);
 
+    const startTickerBtnPlaceholder = devGameService.gameProcessConfig.tickerStarted
+        ? "Stop ticker"
+        : "Start ticker";
+
     return (
         <Container className={className}>
             <Select
@@ -30,7 +34,12 @@ const GameProcessManager = observer(({ className }) => {
                 value={devGameService.gameProcessConfig.pointOfViewPlayerIndex}
                 onChange={(value) => devGameService.changePlayerPointOfView(value)}
             />
-            <Button placeholder="Next tick" onClick={() => devGameService.handleNextTick()} />
+            <Button
+                placeholder="Next tick"
+                onClick={() => devGameService.handleNextTick()}
+                disabled={devGameService.gameProcessConfig.tickerStarted}
+            />
+            <Button placeholder={startTickerBtnPlaceholder} onClick={() => devGameService.switchTicker()} />
         </Container>
     );
 });

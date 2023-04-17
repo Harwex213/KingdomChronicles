@@ -212,7 +212,7 @@ class PowerCenter {
 
         this.#tryDecreaseStorage(RESOURCE_NAMES.FOOD, requiredFoodAmount);
         if (foodAmountDelta < 0) {
-            this.people.growth = Math.trunc(foodAmountDelta * POWER_CENTER_VALUES.PEOPLE_EATS_FOOD_RATIO);
+            this.people.growth = Math.trunc(foodAmountDelta);
         }
 
         this.storage[RESOURCE_NAMES.FOOD] = Number(this.storage[RESOURCE_NAMES.FOOD].toFixed(2));

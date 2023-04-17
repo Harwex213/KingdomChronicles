@@ -18,7 +18,7 @@ const ResourceInfo = observer(({ className = "", selectedPowerCenter }) => {
                         {resourceLayer.map((resource) => (
                             <div key={resource.name} className={styles.resourceContainer}>
                                 <ResourceIcon type={resource.name} />
-                                <Text>{selectedPowerCenter.storage[resource.name]}</Text>
+                                <Text>{selectedPowerCenter.storage[resource.name].toFixed(2)}</Text>
                             </div>
                         ))}
                     </Container>

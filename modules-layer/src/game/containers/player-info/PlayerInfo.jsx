@@ -35,15 +35,15 @@ const PlayerInfo = observer(({ className = "" }) => {
                 </Text>
                 <Block className={styles.economic}>
                     <Container direction="row" centered="vertical">
-                        <Text>{currentPlayer.treasure}</Text>
+                        <Text>{currentPlayer.treasure.toFixed(2)}</Text>
                         <ResourceIcon
                             className={styles.money}
                             type={RESOURCE_NAMES.MONEY}
                             selectable={false}
                         />
                     </Container>
-                    <Text variant="positive">+ {currentPlayer.income}</Text>
-                    <Text variant="negative">- {currentPlayer.outcome}</Text>
+                    <Text variant="positive">+ {currentPlayer.income.toFixed(2)}</Text>
+                    <Text variant="negative">- {currentPlayer.outcome.toFixed(2)}</Text>
                 </Block>
             </div>
         </Block>

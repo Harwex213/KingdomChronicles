@@ -123,9 +123,7 @@ class CurrentPlayer {
                 row: tile.row,
                 col: tile.col,
             });
-            runInAction(() => {
-                this.tryingPlaceGlobalBuildingActionName = null;
-            });
+
             return;
         }
 
@@ -134,9 +132,6 @@ class CurrentPlayer {
                 playerIndex: this.index,
                 row: tile.row,
                 col: tile.col,
-            });
-            runInAction(() => {
-                this.tryingRemovePlacedGlobalBuildingActionName = null;
             });
             return;
         }
@@ -171,6 +166,8 @@ class CurrentPlayer {
             powerCenterId: "",
         }
     ) {
+        this.tryingRemovePlacedGlobalBuildingActionName = null;
+
         if (actionName !== GLOBAL_BUILDING_TYPES.EXTERNAL_BUILDING) {
             this.abortSelectingObject();
         } else {
@@ -180,6 +177,8 @@ class CurrentPlayer {
     }
 
     startRemovingPlacedGlobalBuilding(actionName) {
+        this.tryingPlaceGlobalBuildingActionName = null;
+
         if (actionName !== GLOBAL_BUILDING_TYPES.EXTERNAL_BUILDING) {
             this.abortSelectingObject();
         }

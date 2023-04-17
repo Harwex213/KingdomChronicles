@@ -1,6 +1,6 @@
 import styles from "./IncreaseLevel.module.css";
 import { observer } from "mobx-react-lite";
-import { Block, Button, Cost, Text, Tooltip } from "../../components";
+import { Block, Button, BuildCost, Text, Tooltip } from "../../components";
 import { GAME_ACTIONS } from "shared/enums";
 
 const IncreaseLevel = observer(({ className = "", currentPlayer, selectedPowerCenter }) => {
@@ -18,7 +18,7 @@ const IncreaseLevel = observer(({ className = "", currentPlayer, selectedPowerCe
             <Text size="big" family="dumbledor" centered>
                 Level {selectedPowerCenter.currentLevel}
             </Text>
-            <Tooltip className={styles.cost} text={<Cost cost={levelIncreaseCost} />} position="bottom">
+            <Tooltip text={<BuildCost buildCost={levelIncreaseCost} />} position="bottom">
                 <Button
                     className={styles.increaseLevelBtn}
                     textSize="normal"

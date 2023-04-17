@@ -17,16 +17,15 @@
     padding: 5px;
 }
 
-.outerBuildings {
+.externalBuildings {
     height: 100%;
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-.outerBuildingsList {
+.externalBuildingsList {
     height: 100%;
-    background: #000;
 }
 
 .tabs {

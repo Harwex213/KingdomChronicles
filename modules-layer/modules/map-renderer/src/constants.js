@@ -1,6 +1,6 @@
 export const RENDERER_CONFIG = {
     VIEWPORT: {
-        DRAG_MOUSE_BUTTON: "middle",
+        DRAG_MOUSE_BUTTON: "left",
         DRAG_FACTOR: 1,
         WHEEL_SMOOTH: 3.5,
     },

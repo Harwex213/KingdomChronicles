@@ -9,12 +9,14 @@ class DevGameService {
     #gameModel;
     #mapRenderer;
     currentPlayer = null;
+    #intervalId;
 
     constructor() {
         this.gameCreationConfig = getGameCreationConfig();
         this.gameProcessConfig = {
             playersAmount: this.gameCreationConfig.playersAmount,
             pointOfViewPlayerIndex: 0,
+            tickerStarted: false,
         };
 
         const mapRendererConfig = new MapRendererConfig();
@@ -34,6 +36,7 @@ class DevGameService {
 
             currentPlayer: observable,
             startNewGame: action,
+            switchTicker: action,
         });
     }
 
@@ -93,6 +96,18 @@ class DevGameService {
     handleNextTick() {
         this.#gameModel.nextTick();
         this.currentPlayer.updateActionPossibilities();
+    }
+
+    switchTicker() {
+        if (this.gameProcessConfig.tickerStarted) {
+            clearInterval(this.#intervalId);
+        } else {
+            this.#intervalId = setInterval(() => {
+                this.handleNextTick();
+            }, 1000);
+        }
+
+        this.gameProcessConfig.tickerStarted = !this.gameProcessConfig.tickerStarted;
     }
 }
 

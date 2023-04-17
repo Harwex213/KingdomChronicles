@@ -2,7 +2,7 @@ import styles from "./PowerCenterInfo.module.css";
 import { useContext } from "react";
 import { CurrentPlayerContext } from "../../CurrentPlayerContext";
 import { observer } from "mobx-react-lite";
-import { Block, Button, Range, Text, Container, Switch, Tooltip } from "../../components";
+import { Block, Range, Text, Container, Switch } from "../../components";
 import { ResourceInfo } from "./ResourceInfo";
 import { IncreaseLevel } from "./IncreaseLevel";
 
@@ -21,15 +21,15 @@ const PowerCenterInfo = observer(() => {
                     <Container>
                         <Text>Income:</Text>
                         <Text>Outcome:</Text>
-                        <Text>People growth:</Text>
+                        <Text>Growth:</Text>
                         <Text>Can grow:</Text>
                     </Container>
                     <Container centered="vertical">
                         <Text variant="positive" centered>
-                            + {selectedPowerCenter.economic.income}
+                            + {selectedPowerCenter.economic.income.toFixed(2)}
                         </Text>
                         <Text variant="negative" centered>
-                            - {selectedPowerCenter.economic.outcome}
+                            - {selectedPowerCenter.economic.outcome.toFixed(2)}
                         </Text>
                         <Text centered>{selectedPowerCenter.people.growth}</Text>
                         <Switch checked={selectedPowerCenter.people.canGrow} onChange={handleSwitchCanGrow} />

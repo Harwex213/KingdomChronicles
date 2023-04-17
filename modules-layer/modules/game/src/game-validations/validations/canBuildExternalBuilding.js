@@ -22,6 +22,8 @@ const canBuildExternalBuilding = ({ gameState, playerIndex, powerCenterId, exter
             return false;
         }
     }
+
+    return true;
 };
 
 export { canBuildExternalBuilding };

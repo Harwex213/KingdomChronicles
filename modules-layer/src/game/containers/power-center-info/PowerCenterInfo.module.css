@@ -14,13 +14,13 @@
 }
 
 .level {
-    width: 130px;
+    width: 120px;
 }
 
 .economic {
     display: grid;
-    grid-template-columns: 70% 30%;
-    width: 170px;
+    grid-template-columns: 50% 50%;
+    width: 190px;
 }
 
 .economicColumn {

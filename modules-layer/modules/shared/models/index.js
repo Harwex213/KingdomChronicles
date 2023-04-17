@@ -15,10 +15,20 @@ export { RESOURCES, RESOURCE_LAYERS } from "./resource/resources";
 export { PowerCenter } from "./buildings/powerCenter";
 export { ExternalBuilding } from "./buildings/externalBuilding";
 export { ExternalBuildingType } from "./buildings/externalBuildingType";
-export { EXTERNAL_BUILDING_TYPES } from "./buildings/externalBuildingTypes";
+export {
+    EXTERNAL_BUILDING_TYPES,
+    EXTERNAL_BUILDING_TYPES_PER_TIER,
+    FIRST_TIER_EXTERNAL_BUILDING_TYPES,
+    SECOND_TIER_EXTERNAL_BUILDING_TYPES,
+} from "./buildings/externalBuildingTypes";
 export { InternalBuilding } from "./buildings/internalBuilding";
 export { InternalBuildingType } from "./buildings/internalBuildingType";
-export { INTERNAL_BUILDING_TYPES } from "./buildings/internalBuildingTypes";
+export {
+    INTERNAL_BUILDING_TYPES,
+    SECOND_TIER_INTERNAL_BUILDING_TYPES,
+    INTERNAL_BUILDING_TYPES_PER_TIER,
+    FIRST_TIER_INTERNAL_BUILDING_TYPES,
+} from "./buildings/internalBuildingTypes";
 
 export { Player } from "./player/player";
 

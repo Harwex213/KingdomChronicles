@@ -1,4 +1,4 @@
-import { Sprite, Graphics, Point } from "pixi.js";
+import { Sprite } from "pixi.js";
 import { reaction } from "mobx";
 import { CURRENT_PLAYER_SELECTED_OBJECT_STATES, GAME_ACTIONS, GAME_VALIDATIONS } from "shared/enums";
 import { RENDERER_CONFIG } from "../constants";
@@ -6,7 +6,6 @@ import { TileBorder } from "./tileBorder";
 import { RegionBorderByTile } from "./regionBorderByTile";
 import { Indicator, INDICATOR_MODES } from "./indicator";
 import { PowerCenterControlArea } from "./powerCenterControlArea";
-import { ArmySelection } from "./armySelection";
 
 class CurrentPlayerActionsRenderer {
     #ticker;
@@ -24,8 +23,6 @@ class CurrentPlayerActionsRenderer {
     #mousePos;
     #updateMousePos;
     #isPointerDown;
-
-    #armySelection;
 
     constructor({ ticker, renderer, viewport, tilePositionCalculator }) {
         this.#ticker = ticker;
@@ -47,12 +44,6 @@ class CurrentPlayerActionsRenderer {
             this.#mousePos.x = event.global.x;
             this.#mousePos.y = event.global.y;
         };
-
-        this.#armySelection = new ArmySelection({
-            ticker,
-            viewport,
-            mousePos: this.#mousePos,
-        });
     }
 
     setSpritesheet(spritesheet) {
@@ -65,8 +56,6 @@ class CurrentPlayerActionsRenderer {
         this.#gameValidator = currentPlayer.gameValidator;
 
         this.#viewport.on("mousemove", this.#updateMousePos);
-
-        this.#armySelection.render(container);
 
         let lastSelectedNeutralRegionIndex = null;
         const regionBordersByTile = this.#getRegionBordersByTile();
@@ -207,8 +196,6 @@ class CurrentPlayerActionsRenderer {
             reactionDisposer();
         }
         this.#reactionDisposers.splice(0, this.#reactionDisposers.length);
-
-        this.#armySelection.clean();
     }
 
     #getRegionBordersByTile() {

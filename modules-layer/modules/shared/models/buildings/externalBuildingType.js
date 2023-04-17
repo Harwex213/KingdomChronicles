@@ -7,6 +7,7 @@ class ExternalBuildingType {
         ticksAmountToDestroy,
         production,
         costPerTick,
+        typeName,
     }) {
         this.acceptableBioms = acceptableBioms;
         this.acceptableAreas = acceptableAreas;
@@ -15,6 +16,7 @@ class ExternalBuildingType {
         this.ticksAmountToDestroy = ticksAmountToDestroy;
         this.production = production;
         this.costPerTick = costPerTick;
+        this.typeName = typeName;
     }
 }
 
