@@ -38,6 +38,8 @@ public static class GameHubConstants
         public const string PlayerChangeReadyStatus = "PendingStartGameEvents_PlayerChangeReadyStatus";
         
         public const string GameStarted = "PendingStartGameEvents_GameStarted";
+        
+        public const string MapGenerationConfigUpdate = "PendingStartGameEvents_MapGenerationConfigUpdate";
     }
 
     public static class StartedGameEvents

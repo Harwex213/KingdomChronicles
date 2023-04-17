@@ -1,7 +1,7 @@
 import { useLayoutEffect } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { TextField, Select } from "../../components/form";
+import { TextField, Select } from "../../components/formik-form";
 import styles from "./profileInfoEdit.module.css";
 import internalization from "../../../common/internalization/profile-screen.json";
 import { currentProfileRoute } from "../../../services/states";

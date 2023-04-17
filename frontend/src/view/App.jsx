@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 import { useLayoutEffect } from "react";
 import { TitlesPreLoader } from "./loaders/TitlesPreLoader";
 import { PlayerStateCheck } from "./state-checks/PlayerStateCheck";
+import { GameSpritesheetPreLoader } from "./loaders/GameSpritesheetPreLoader";
 
 const App = observer(() => {
     useLayoutEffect(() => {
@@ -18,7 +19,9 @@ const App = observer(() => {
     if (authService.state.current === AUTH_SERVICE_STATES.USER_LOGGED) {
         return (
             <TitlesPreLoader>
-                <PlayerStateCheck />
+                <GameSpritesheetPreLoader>
+                    <PlayerStateCheck />
+                </GameSpritesheetPreLoader>
             </TitlesPreLoader>
         );
     }

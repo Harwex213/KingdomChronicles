@@ -37,12 +37,12 @@ connection.on(NOT_IN_GAME_EVENTS.NEW_CHAT_MESSAGE, (chatMessage) => {
 
 connection.on(PENDING_START_GAME_EVENTS.CREATED_GAME, (game) => {
     searchGameModel.clearChat();
-    pendingStartGameModel.setGameInfo(game);
+    pendingStartGameModel.setGameInfo(game, true);
     searchGameState.setState(SEARCH_GAME_STATES.IN_PENDING_START_GAME);
 });
 connection.on(PENDING_START_GAME_EVENTS.JOINED_TO_GAME, (game) => {
     searchGameModel.clearChat();
-    pendingStartGameModel.setGameInfo(game);
+    pendingStartGameModel.setGameInfo(game, true);
     searchGameState.setState(SEARCH_GAME_STATES.IN_PENDING_START_GAME);
 });
 connection.on(PENDING_START_GAME_EVENTS.LEAVED_FROM_GAME, () => {
@@ -62,6 +62,10 @@ connection.on(PENDING_START_GAME_EVENTS.PLAYER_CHANGE_READY_STATUS, (newReadySta
 
 connection.on(PENDING_START_GAME_EVENTS.NEW_CHAT_MESSAGE, (chatMessage) => {
     pendingStartGameModel.addChatMessage(chatMessage);
+});
+
+connection.on(PENDING_START_GAME_EVENTS.MAP_GENERATION_CONFIG_UPDATE, (newConfig) => {
+    pendingStartGameModel.setMapGenerationConfig(newConfig);
 });
 
 connection.on(PENDING_START_GAME_EVENTS.GAME_STARTED, () => {

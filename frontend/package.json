@@ -12,7 +12,12 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.9.0",
     "react-scripts": "^5.0.1",
-    "yup": "^1.0.2"
+    "yup": "^1.0.2",
+    "map-generator": "file:../modules-layer/modules/map-generator",
+    "map-renderer": "file:../modules-layer/modules/map-renderer",
+    "shared": "file:../modules-layer/modules/shared",
+    "game": "file:../modules-layer/modules/game",
+    "game-service": "file:../modules-layer/modules/game-service"
   },
   "devDependencies": {
     "eslint": "^8.36.0",

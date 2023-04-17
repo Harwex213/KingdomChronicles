@@ -4,7 +4,7 @@ import styles from "./newGameCreateSubScreen.module.css";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { TextField, Select } from "../../components/form";
+import { TextField, Select } from "../../components/formik-form";
 import { NEW_GAME_SCREEN_ROUTES } from "../../../common/constants/routes";
 import { startGameService } from "../../../services/start-game";
 

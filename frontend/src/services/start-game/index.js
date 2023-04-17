@@ -2,6 +2,8 @@ import { SERVER_METHODS } from "./config";
 import { connection, startGameConnector, searchGameModel, pendingStartGameModel } from "./init";
 import "./eventHandlers";
 import { globallyCatchHubException } from "../globallyCatchHubException";
+import { generateRandomString } from "../../common/utils";
+import { MAP_SIZE_TYPES } from "shared/enums";
 
 const startGameService = {};
 
@@ -10,7 +12,10 @@ startGameService.sendChatMessage = async (message) => {
 };
 
 startGameService.createGame = async (game) => {
-    game.mapGenerationConfig = "there will be serialized config";
+    game.mapGenerationConfig = JSON.stringify({
+        randomSeed: generateRandomString(10),
+        mapSizeType: MAP_SIZE_TYPES.SMALL,
+    });
     await connection.invoke(SERVER_METHODS.CREATE_GAME, game);
 };
 
@@ -32,6 +37,10 @@ startGameService.notReadyForGame = async () => {
 
 startGameService.startGame = async () => {
     await connection.invoke(SERVER_METHODS.START_GAME);
+};
+
+startGameService.updateMapGenerationConfig = async (newConfig) => {
+    await connection.invoke(SERVER_METHODS.UPDATE_MAP_GENERATION_CONFIG, JSON.stringify(newConfig));
 };
 
 globallyCatchHubException(startGameService);

@@ -10,12 +10,14 @@ export class PendingStartGame {
         });
     }
 
-    setGameInfo(gameInfo) {
+    setGameInfo(gameInfo, updateMapGenerationConfig = false) {
         this.id = gameInfo.id;
         this.name = gameInfo.name;
         this.maxPlayersAmount = gameInfo.maxPlayersAmount;
         this.ownerId = gameInfo.ownerId;
-        this.mapGenerationConfig = gameInfo.mapGenerationConfig;
+        if (updateMapGenerationConfig) {
+            this.mapGenerationConfig = JSON.parse(gameInfo.mapGenerationConfig);
+        }
         this.created = gameInfo.created;
         this.userProfiles = Object.values(gameInfo.userProfiles);
         this.playersReadyStatus = gameInfo.playersReadyStatus;
@@ -25,6 +27,10 @@ export class PendingStartGame {
             userProfile: this.userProfiles.find((userProfile) => userProfile.userId === userModel.id),
             isReady: this.playersReadyStatus[userModel.id],
         };
+    }
+
+    setMapGenerationConfig(mapGenerationConfig) {
+        this.mapGenerationConfig = JSON.parse(mapGenerationConfig);
     }
 
     changePlayerReadyStatus({ userId, status }) {
@@ -39,7 +45,7 @@ export class PendingStartGame {
         this.name = "";
         this.maxPlayersAmount = 0;
         this.ownerId = 0;
-        this.mapGenerationConfig = "";
+        this.mapGenerationConfig = {};
         this.created = null;
         this.userProfiles = [];
         this.playersReadyStatus = {};

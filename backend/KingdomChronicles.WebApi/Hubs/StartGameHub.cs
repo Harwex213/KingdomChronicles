@@ -280,6 +280,25 @@ public class StartGameHub : Hub
         await ChangeReadyStatus(false);
     }
 
+    public async Task UpdateMapGenerationConfig(string mapGenerationConfig)
+    {
+        var currentHubUser = GetCurrentHubUser();
+        var game = RetrieveGame(currentHubUser);
+
+        lock (game)
+        {
+            if (currentHubUser.UserProfile.UserId != game.OwnerId)
+            {
+                throw new HubException(GameHubConstants.Errors.ShouldBeOwner);
+            }
+
+            game.MapGenerationConfig = mapGenerationConfig;
+        }
+
+        await Clients.Group(game.Id.ToString())
+            .SendAsync(GameHubConstants.PendingStartGameEvents.MapGenerationConfigUpdate, mapGenerationConfig);
+    }
+
     public async Task LeaveFromGame()
     {
         var currentHubUser = GetCurrentHubUser();
