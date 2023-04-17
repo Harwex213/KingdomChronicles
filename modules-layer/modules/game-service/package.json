@@ -1,0 +1,9 @@
+{
+  "name": "game-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "shared": "file:../shared",
+    "game": "file:../game",
+    "map-renderer": "file:../map-renderer"
+  }}

@@ -1,0 +1,11 @@
+.block {
+    border: 2px #666666 solid;
+    background: #2e2e2e;
+    color: #fff;
+    padding: 5px;
+}
+
+.block[data-is-external="true"] {
+    border: 2px #484848 solid;
+    background: #1a1a1a;
+}

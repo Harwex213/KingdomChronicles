@@ -1,0 +1,7 @@
+.icon {
+
+}
+
+.icon[data-is-selectable="true"] {
+    cursor: pointer;
+}

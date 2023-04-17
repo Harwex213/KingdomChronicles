@@ -1,4 +1,4 @@
-import { mapSizeTypes } from "models/map";
+import { MAP_SIZE_TYPES } from "shared/enums";
 
 export const REGION_SIZES = {
     MIN: 14,
@@ -6,7 +6,7 @@ export const REGION_SIZES = {
 };
 
 export const MAP_SIZE_DIMENSIONS = {
-    [mapSizeTypes.SMALL]: { width: 40, height: 30 },
-    [mapSizeTypes.MEDIUM]: { width: 60, height: 40 },
-    [mapSizeTypes.BIG]: { width: 70, height: 60 },
+    [MAP_SIZE_TYPES.SMALL]: { width: 40, height: 30 },
+    [MAP_SIZE_TYPES.MEDIUM]: { width: 60, height: 40 },
+    [MAP_SIZE_TYPES.BIG]: { width: 70, height: 60 },
 };

@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "dependencies": {
-    "models": "file:../models",
-    "poisson-disk-sampling": "^2.3.1",
-    "seedrandom": "^3.0.5",
+    "shared": "file:../shared",
     "simplex-noise": "^4.0.1"
   }
 }
