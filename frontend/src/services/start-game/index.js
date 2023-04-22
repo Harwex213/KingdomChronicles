@@ -43,6 +43,10 @@ startGameService.updateMapGenerationConfig = async (newConfig) => {
     await connection.invoke(SERVER_METHODS.UPDATE_MAP_GENERATION_CONFIG, JSON.stringify(newConfig));
 };
 
+startGameService.editUserProfile = async (editUserProfile) => {
+    await connection.invoke(SERVER_METHODS.EDIT_USER_PROFILE, editUserProfile);
+};
+
 globallyCatchHubException(startGameService);
 
 export { startGameConnector, startGameService, searchGameModel, pendingStartGameModel };

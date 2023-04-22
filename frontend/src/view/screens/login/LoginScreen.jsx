@@ -35,7 +35,7 @@ const LoginScreen = () => {
 
     return (
         <div className={styles.screen}>
-            <h1>{locale.header}</h1>
+            <h1 className={styles.header}>{locale.header}</h1>
             <Formik
                 initialValues={form.initialValues}
                 validationSchema={form.validationSchema}

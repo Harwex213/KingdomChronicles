@@ -24,7 +24,7 @@ const startBuildInternalBuilding = ({
 
     const internalBuildingType = INTERNAL_BUILDING_TYPES[internalBuildingTypeName];
     const pendingBuildInternalBuilding = new PendingBuildInternalBuilding({
-        id: generateRandomId(),
+        id: gameState.randomizer.getRandom().toString(36).substring(0, 10),
         type: internalBuildingTypeName,
         powerCenterId,
         placementCellPos,

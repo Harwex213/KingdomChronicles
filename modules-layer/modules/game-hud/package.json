@@ -1,0 +1,14 @@
+{
+  "name": "game-hud",
+  "version": "1.0.0",
+  "dependencies": {
+    "shared": "file:../shared",
+    "game-service": "file:../game-service",
+    "game": "file:../game",
+    "map-renderer": "file:../map-renderer"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

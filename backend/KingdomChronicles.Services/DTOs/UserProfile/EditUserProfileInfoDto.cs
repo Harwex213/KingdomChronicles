@@ -17,4 +17,8 @@ public class EditUserProfileInfoDto
     public string? Motto { get; set; }
     
     public int? TitleId { get; set; }
+    
+    [Required(ErrorMessage = ValidationErrorMessages.BackgroundColorRequired)]
+    [RegularExpression("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", ErrorMessage = ValidationErrorMessages.HexColorInvalidRegex)]
+    public string? BackgroundColor { get; set; }
 }

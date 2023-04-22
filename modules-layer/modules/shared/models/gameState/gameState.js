@@ -18,6 +18,8 @@ class GameState {
         pendingDestroy = {
             globalBuildings: {},
         },
+
+        randomizer,
     }) {
         this.currentTick = currentTick;
 
@@ -28,6 +30,8 @@ class GameState {
 
         this.pendingBuild = pendingBuild;
         this.pendingDestroy = pendingDestroy;
+
+        this.randomizer = randomizer;
 
         makeObservable(this, {
             currentTick: observable,

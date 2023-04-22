@@ -52,11 +52,6 @@ class CurrentPlayer {
         };
         this.#onAction = onAction;
 
-        this.#mapRenderer.renderGame({
-            currentPlayer: this,
-            onTileClick: this.#handleTileClick.bind(this),
-        });
-
         this.globalActionPossibilities = {
             [GAME_ACTIONS.START_BUILD_POWER_CENTER]: false,
             [GAME_ACTIONS.START_BUILD_ROAD]: false,
@@ -102,6 +97,12 @@ class CurrentPlayer {
             selectedNeutralRegionActionPossibilities: observable,
 
             updateActionPossibilities: action,
+            destroySelectedPowerCenter: action,
+        });
+
+        this.#mapRenderer.renderGame({
+            currentPlayer: this,
+            onTileClick: this.#handleTileClick.bind(this),
         });
     }
 
@@ -122,6 +123,7 @@ class CurrentPlayer {
                 playerIndex: this.index,
                 row: tile.row,
                 col: tile.col,
+                ...this.placingExternalBuildingOptions,
             });
 
             return;
@@ -170,9 +172,8 @@ class CurrentPlayer {
 
         if (actionName !== GLOBAL_BUILDING_TYPES.EXTERNAL_BUILDING) {
             this.abortSelectingObject();
-        } else {
-            this.placingExternalBuildingOptions = externalBuildingOptions;
         }
+        this.placingExternalBuildingOptions = externalBuildingOptions;
         this.tryingPlaceGlobalBuildingActionName = actionName;
     }
 
@@ -183,6 +184,16 @@ class CurrentPlayer {
             this.abortSelectingObject();
         }
         this.tryingRemovePlacedGlobalBuildingActionName = actionName;
+    }
+
+    destroySelectedPowerCenter() {
+        const powerCenterId = this.selectedPowerCenter.id;
+        this.selectedObject.state = CURRENT_PLAYER_SELECTED_OBJECT_STATES.IDLE;
+        this.selectedObject.identifier = null;
+        this.#onAction(GAME_ACTIONS.START_DESTROY_POWER_CENTER, {
+            playerIndex: this.index,
+            powerCenterId: powerCenterId,
+        });
     }
 
     trySelectObject(tile) {

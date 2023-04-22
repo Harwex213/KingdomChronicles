@@ -417,6 +417,7 @@ public class StartGameHub : Hub
         userProfile.KingdomName = editUserProfileInfoDto.KingdomName!;
         userProfile.Motto = editUserProfileInfoDto.Motto!;
         userProfile.TitleId = editUserProfileInfoDto.TitleId!;
+        userProfile.FlagBackgroundColor = editUserProfileInfoDto.BackgroundColor!;
 
         _dbContext.UserProfiles.Update(userProfile);
         await _dbContext.SaveChangesAsync();

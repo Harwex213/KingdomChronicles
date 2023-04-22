@@ -1,0 +1,53 @@
+.screen {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+}
+
+.container {
+    max-width: 1920px;
+    max-height: 1080px;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    position: relative;
+}
+
+.pendingRunContainer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pendingRunBackground {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.7;
+    z-index: 999;
+}
+
+.pendingRun {
+    position: relative;
+    z-index: 1000;
+    border: 2px #666666 solid;
+}
+
+.chat {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 250px;
+    height: 300px;
+    border: 2px #666666 solid;
+    background: #2e2e2e;
+    padding: 5px;
+}

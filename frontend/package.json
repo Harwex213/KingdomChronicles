@@ -17,7 +17,8 @@
     "map-renderer": "file:../modules-layer/modules/map-renderer",
     "shared": "file:../modules-layer/modules/shared",
     "game": "file:../modules-layer/modules/game",
-    "game-service": "file:../modules-layer/modules/game-service"
+    "game-service": "file:../modules-layer/modules/game-service",
+    "game-hud": "file:../modules-layer/modules/game-hud"
   },
   "devDependencies": {
     "eslint": "^8.36.0",

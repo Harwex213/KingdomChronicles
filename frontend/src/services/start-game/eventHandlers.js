@@ -1,7 +1,8 @@
 import { connection, pendingStartGameModel, searchGameModel, startGameConnector } from "./init";
-import { NOT_IN_GAME_EVENTS, PENDING_START_GAME_EVENTS } from "./config";
+import { NOT_IN_GAME_EVENTS, PENDING_START_GAME_EVENTS, USER_PROFILE_EVENTS } from "./config";
 import { playerState, searchGameState } from "../states";
 import { PLAYER_STATES, SEARCH_GAME_STATES } from "../../common/constants/states";
+import { userProfile } from "../loaders/userProfileLoader";
 
 connection.onclose((error) => {
     if (error) {
@@ -70,5 +71,10 @@ connection.on(PENDING_START_GAME_EVENTS.MAP_GENERATION_CONFIG_UPDATE, (newConfig
 
 connection.on(PENDING_START_GAME_EVENTS.GAME_STARTED, () => {
     playerState.setState(PLAYER_STATES.IN_GAME);
+    searchGameState.setState(SEARCH_GAME_STATES.IDLE);
     startGameConnector.disconnect();
+});
+
+connection.on(USER_PROFILE_EVENTS.USER_PROFILE_INFO, (newUserProfile) => {
+    userProfile.setUserProfile(newUserProfile);
 });

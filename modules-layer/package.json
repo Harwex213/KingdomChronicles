@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "dev": "react-scripts start"
+    "dev": "react-app-rewired start"
   },
   "dependencies": {
     "control-bar-gui": "file:./modules/control-bar-gui",
@@ -11,7 +11,9 @@
     "map-renderer": "file:./modules/map-renderer",
     "game": "file:./modules/game",
     "game-service": "file:./modules/game-service",
+    "game-hud": "file:./modules/game-hud",
     "shared": "file:./modules/shared",
+
     "mobx": "^6.9.0",
     "mobx-react-lite": "^3.4.3",
     "react": "^18.2.0",
@@ -23,7 +25,11 @@
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.8.4"
+    "prettier": "^2.8.4",
+
+    "customize-cra": "^1.0.0",
+    "react-app-rewired": "^2.2.1",
+    "react-app-rewire-alias": "^1.1.7"
   },
   "browserslist": {
     "production": [

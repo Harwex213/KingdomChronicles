@@ -1,19 +1,38 @@
 .container {
-    display: flex;
-    justify-content: space-between;
+    font-size: 24px;
 }
 
 .info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
+.name {
+    font-size: 32px;
+}
+
+.logout {
+    margin-top: 50px;
+    cursor: pointer;
 }
 
 .flag {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.infoRow {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
 }
 
 .flagImage {
-    width: 250px;
-    height: 325px;
+    width: 160px;
+    height: 210px;
 }
 
 .flagDescription {

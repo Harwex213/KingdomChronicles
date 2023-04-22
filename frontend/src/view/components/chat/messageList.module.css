@@ -6,4 +6,13 @@
 .message {
     color: #fff;
     padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.messageHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

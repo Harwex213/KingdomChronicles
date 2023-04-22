@@ -1,10 +1,10 @@
 import { GAME_VALIDATIONS, GLOBAL_BUILDING_TYPES, RESOURCE_NAMES } from "shared/enums";
 import { EXTERNAL_BUILDING_TYPES, PendingBuildGlobalBuilding } from "shared/models";
-import { generateRandomId } from "../../utils";
 
 const startBuildExternalBuilding = ({
     gameState,
     gameValidator,
+
     playerIndex,
     powerCenterId,
     row,
@@ -33,7 +33,7 @@ const startBuildExternalBuilding = ({
 
     const externalBuildingType = EXTERNAL_BUILDING_TYPES[externalBuildingTypeName];
     const pendingBuildGlobalBuilding = new PendingBuildGlobalBuilding({
-        id: generateRandomId(),
+        id: gameState.randomizer.getRandom().toString(36).substring(0, 10),
         type: GLOBAL_BUILDING_TYPES.EXTERNAL_BUILDING,
         row,
         col,

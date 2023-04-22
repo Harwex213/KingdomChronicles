@@ -1,0 +1,57 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.back {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.backBtn {
+    min-width: 100px;
+    padding: 5px;
+}
+
+.main {
+    margin: auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.selectTarget {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.selectTargetBtn {
+    padding: 5px;
+}
+
+.selectResource {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.chooseAmount {
+}
+
+.send {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.sendBtn {
+    padding: 5px;
+    min-width: 100px;
+}

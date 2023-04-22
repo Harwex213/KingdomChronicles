@@ -62,6 +62,7 @@ class MapTile {
             onStartDestroyGlobalBuilding: action,
             decreaseRemainedTicksToDestroy: action,
             setRoadBitmask: action,
+            clearGlobalBuilding: action,
         });
     }
 
@@ -158,6 +159,15 @@ class MapTile {
             this.globalBuilding.externalBuildingTypeName = null;
             this.globalBuilding.roadBitmask = null;
         }
+    }
+
+    clearGlobalBuilding() {
+        this.globalBuilding.type = GLOBAL_BUILDING_TYPES.NONE;
+        this.globalBuilding.id = null;
+        this.globalBuilding.remainedTicksToBuild = 0;
+
+        this.globalBuilding.externalBuildingTypeName = null;
+        this.globalBuilding.roadBitmask = null;
     }
 
     get hasBuildedGlobalBuilding() {

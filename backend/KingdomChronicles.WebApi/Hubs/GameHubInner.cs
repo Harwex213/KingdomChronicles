@@ -1,11 +1,13 @@
 ﻿using KingdomChronicles.Services.Game;
 using KingdomChronicles.WebApi.Constants;
 using KingdomChronicles.WebApi.Hubs.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace KingdomChronicles.WebApi.Hubs;
 
-public partial class GameHub
+[Authorize]
+public partial class GameHub : Hub
 {
     public static void AddToStartedGames(StartedGame startedGame)
     {
@@ -35,7 +37,7 @@ public partial class GameHub
             game.PlayersConnectedStatus[joinerId] = true;
         }
 
-        await Groups.AddToGroupAsync(game.Id.ToString(), Context.ConnectionId);
+        await Groups.AddToGroupAsync(Context.ConnectionId, game.Id.ToString());
         
         await Clients.Caller.SendAsync(GameHubConstants.StartedGameEvents.JoinedToGame, game);
         await Clients.GroupExcept(game.Id.ToString(), Context.ConnectionId)

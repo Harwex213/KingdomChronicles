@@ -1,0 +1,42 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 10px;
+    font-size: 18px;
+}
+
+.actions {
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 10px;
+    align-items: center;
+}
+
+.header {
+    margin-right: auto;
+}
+
+.actionBtn {
+    min-width: 75px;
+    padding: 5px 10px;
+}
+
+.actionBtn:hover {
+    cursor: pointer;
+}
+
+.gameList {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100% - 60px);
+    overflow-y: scroll;
+    gap: 10px;
+}
+
+.gameRow {
+    margin-right: 10px;
+}

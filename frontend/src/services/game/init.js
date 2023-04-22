@@ -16,8 +16,9 @@ const gameConnector = new ConnectStateMachine({
         await connection.start();
     },
     disconnect: async () => {
-        startedGameModel.clearGameInfo();
         await connection.stop();
+        startedGameModel.clearGameInfo();
+        startedGameModel.clearChat();
     },
     onError: () => {
         gameConnector.errorMessage = internalization.errors.serviceUnavailable;

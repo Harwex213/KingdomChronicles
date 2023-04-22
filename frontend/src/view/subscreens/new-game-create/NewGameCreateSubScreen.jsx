@@ -60,7 +60,7 @@ const NewGameCreateSubScreen = () => {
 
     return (
         <div>
-            <h1>{locale.header}</h1>
+            <h1 className={styles.header}>{locale.header}</h1>
             <Formik
                 initialValues={{
                     name: "",
@@ -71,7 +71,7 @@ const NewGameCreateSubScreen = () => {
             >
                 {(formik) => (
                     <form className={styles.form} onSubmit={formik.handleSubmit}>
-                        <TextField name={form.fields.name} formik={formik}>
+                        <TextField name={form.fields.name} autoComplete="off" formik={formik}>
                             {locale.placeholders.name}
                         </TextField>
                         <Select

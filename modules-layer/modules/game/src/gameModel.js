@@ -25,7 +25,7 @@ class GameModel {
         mapGenerationConfig.mapSizeType = mapSizeType;
         const map = generateMap(mapGenerationConfig);
 
-        const gameState = new GameState({ map });
+        const gameState = new GameState({ map, randomizer });
 
         placePlayers({ randomizer, gameState, playersInfo });
 

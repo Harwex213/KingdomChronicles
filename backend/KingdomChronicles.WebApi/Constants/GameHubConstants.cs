@@ -5,7 +5,7 @@ public static class GameHubConstants
     public const string StartGameRoute = "start-game-hub";
     public const string GameRoute = "game-hub";
     public const string HubUserItemKey = "HubUser";
-    public const int TickSecondsAmount = 5;
+    public const int TickSecondsAmount = 1;
 
     public static class UserProfileEvents
     {

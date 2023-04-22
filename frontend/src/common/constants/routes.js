@@ -7,6 +7,10 @@ export const PENDING_START_GAME_ROUTES = {
     PENDING_START_GAME: "pending-start-game",
 };
 
+export const STARTED_GAME_ROUTES = {
+    GAME: "game",
+};
+
 export const PROFILE_SCREEN_ROUTES = {
     OVERVIEW: "overview",
     EDIT_INFO: "edit-info",

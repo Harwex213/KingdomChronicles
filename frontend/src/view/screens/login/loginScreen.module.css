@@ -5,6 +5,12 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    background: #000;
+    color: #c99507;
+    font-size: 24px;
+}
+
+.screen {
 }
 
 .submitButton {
@@ -17,4 +23,17 @@
 
 .registrationProposal {
     margin-top: 10px;
+}
+
+.registrationProposal a {
+    color: cornflowerblue;
+}
+
+.registrationProposal a:visited {
+    color: cornflowerblue;
+}
+
+.header {
+    color: #c99507;
+    font-size: 56px;
 }

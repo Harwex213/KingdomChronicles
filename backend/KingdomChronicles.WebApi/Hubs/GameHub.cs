@@ -2,10 +2,12 @@
 using KingdomChronicles.Services.Game;
 using KingdomChronicles.WebApi.Constants;
 using KingdomChronicles.WebApi.Hubs.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace KingdomChronicles.WebApi.Hubs;
 
+[Authorize]
 public partial class GameHub : Hub
 {
     private static readonly ConcurrentDictionary<string, string> ConnectionIds = new();
@@ -183,7 +185,7 @@ public partial class GameHub : Hub
             Message = message,
             SendingTime = DateTime.UtcNow
         };
-
+        
         await Clients.Group(currentHubUser.Game.Id.ToString())
             .SendAsync(GameHubConstants.StartedGameEvents.NewChatMessage, chatMessage);
     }

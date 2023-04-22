@@ -1,0 +1,14 @@
+.aborted {
+    background: #000;
+    font-size: 36px;
+    font-family: "Dumbledor 1", sans-serif;
+    color: #c99507;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.full {
+    width: 100vw;
+    height: 100vh;
+}

@@ -82,6 +82,7 @@ class ConnectStateMachine {
     }
 
     async #disconnectAction() {
+        this.#state.setState(CONNECT_SERVICE_STATES.IDLE);
         await this.#customActions.disconnect();
     }
 
@@ -129,6 +130,10 @@ class ConnectStateMachine {
             message: internalization.errors.serviceUnavailable,
         };
         this.#dispatch(CONNECT_SERVICE_ACTIONS.TERMINATE, error);
+    }
+
+    get isIdle() {
+        return this.#state.current === CONNECT_SERVICE_STATES.IDLE;
     }
 
     get isConnecting() {

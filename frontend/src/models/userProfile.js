@@ -1,6 +1,7 @@
 class UserProfile {
     constructor() {
         this.name = "";
+        this.kingdomName = "";
         this.motto = "";
         this.titleId = "";
         this.flag = {
@@ -12,8 +13,9 @@ class UserProfile {
         };
     }
 
-    setUserProfile({ name, motto, titleId, flag }) {
+    setUserProfile({ name, kingdomName, motto, titleId, flag }) {
         this.name = name;
+        this.kingdomName = kingdomName;
         this.titleId = titleId;
         this.motto = motto;
         this.flag.backgroundColor = flag.backgroundColor;
