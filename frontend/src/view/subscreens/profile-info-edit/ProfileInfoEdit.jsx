@@ -47,7 +47,8 @@ const ProfileInfoEditSubScreen = () => {
     const handleSubmit = async (values, formikHelpers) => {
         try {
             const newUserProfileInfo = { ...values };
-            newUserProfileInfo.titleId = values.titleId === "" ? null : Number(values.titleId);
+            newUserProfileInfo.titleId =
+                values.titleId === null || values.titleId === "" ? null : Number(values.titleId);
             newUserProfileInfo.backgroundColor = backgroundColor;
             // console.log(newUserProfileInfo);
             await startGameService.editUserProfile(newUserProfileInfo);

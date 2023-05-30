@@ -1,7 +1,7 @@
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { getGameCreationConfig, saveGameCreationConfig } from "./utils";
 import { playerInfoSamples } from "./playerInfoSamples";
-import { GameModel } from "modules/game";
+import { GameModel } from "game";
 import { CurrentPlayer } from "game-service";
 import { MapRenderer, MapRendererConfig } from "map-renderer";
 

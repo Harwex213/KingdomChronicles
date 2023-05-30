@@ -1,8 +1,9 @@
 {
-  "name": "map-generator",
+  "name": "game",
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
     "shared": "file:../shared",
     "map-generator": "file:../map-generator"
-  }}
+  }
+}
