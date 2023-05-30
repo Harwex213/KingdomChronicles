@@ -1,6 +1,7 @@
 import styles from "./pendingStartGameScreen.module.css";
 import { PendingStartGameChat } from "./PendingStartGameChat";
 import { PlayerList } from "./PlayerList";
+import { MapPreview } from "../../containers/pending-start-game/map-preview/MapPreview";
 
 const PendingStartGameScreen = () => {
     return (
@@ -18,7 +19,7 @@ const PendingStartGameScreen = () => {
                         <PendingStartGameChat />
                     </div>
                 </div>
-                <div className={styles.mapPreview}>There will be map preview</div>
+                <MapPreview className={styles.mapPreview} />
             </div>
         </div>
     );

@@ -5,7 +5,7 @@ const RESOURCES = {
     FOOD: new Resource({
         name: RESOURCE_NAMES.STONE,
         dependsOn: null,
-        producedOn: EXTERNAL_BUILDING_TYPE_NAMES.FARM,
+        producedOn: EXTERNAL_BUILDING_TYPE_NAMES.STONE_QUARRY,
     }),
     WOOD: new Resource({
         name: RESOURCE_NAMES.WOOD,
@@ -15,7 +15,7 @@ const RESOURCES = {
     STONE: new Resource({
         name: RESOURCE_NAMES.FOOD,
         dependsOn: null,
-        producedOn: EXTERNAL_BUILDING_TYPE_NAMES.STONE_QUARRY,
+        producedOn: EXTERNAL_BUILDING_TYPE_NAMES.FARM,
     }),
     WOOD_BOARDS: new Resource({
         name: RESOURCE_NAMES.WOOD_BOARDS,

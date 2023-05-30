@@ -4,10 +4,13 @@ import { startGameConnector } from "../../services/start-game";
 import { StartGameStateCheck } from "../state-checks/StartGameStateCheck";
 import { Loader } from "../components/loader/Loader";
 import { Aborted } from "../components/aborted/Aborted";
+import { LoaderFailed } from "../components/loaderFailed/LoaderFailed";
 
 const StartGameConnector = observer(() => {
     useLayoutEffect(() => {
-        startGameConnector.connect();
+        if (startGameConnector.isIdle) {
+            startGameConnector.connect();
+        }
 
         return () => {
             startGameConnector.disconnect();
@@ -19,7 +22,7 @@ const StartGameConnector = observer(() => {
     }
 
     if (startGameConnector.isError) {
-        return <div>{startGameConnector.errorMessage}</div>;
+        return <LoaderFailed>{startGameConnector.errorMessage}</LoaderFailed>;
     }
 
     if (startGameConnector.isAborted) {

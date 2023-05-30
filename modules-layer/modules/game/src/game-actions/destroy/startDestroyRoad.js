@@ -1,4 +1,4 @@
-import { GAME_VALIDATIONS } from "shared/enums";
+import { GAME_VALIDATIONS, GLOBAL_BUILDING_TYPES } from "shared/enums";
 import { ROAD_VALUES } from "shared/constants";
 import { PendingDestroyGlobalBuilding } from "shared/models";
 import { disconnectPowerCenters, findConnectedPowerCenter, generateRandomId } from "../../utils";
@@ -20,7 +20,8 @@ const startDestroyRoad = ({ gameState, gameValidator, playerIndex, row, col }) =
     disconnectPowerCenters(connectedPowerCenters);
 
     const pendingDestroyGlobalBuilding = new PendingDestroyGlobalBuilding({
-        id: generateRandomId(),
+        id: gameState.randomizer.getRandom().toString(36).substring(0, 10),
+        type: GLOBAL_BUILDING_TYPES.ROAD,
         row: row,
         col: col,
         totalTicks: ROAD_VALUES.TICKS_DESTROY_TIME,

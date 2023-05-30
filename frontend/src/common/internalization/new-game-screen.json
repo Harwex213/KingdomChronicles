@@ -17,5 +17,13 @@
       "submit": "Create",
       "backToSearch": "Back to search"
     }
+  },
+  "pendingStartGame": {
+    "mapGenerationConfig": {
+      "regenerate": "Regenerate",
+      "roll": "Roll",
+      "randomSeed": "Seed",
+      "mapSizeType": "Map size"
+    }
   }
 }

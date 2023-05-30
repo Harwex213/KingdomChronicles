@@ -32,6 +32,7 @@ public class Automapper : AutoMapper.Profile
                 BackgroundColor = u.FlagBackgroundColor,
                 ForegroundColor = u.FlagForegroundColor,
                 ForegroundSvg = u.FlagForegroundSvg,
+                EmblemColor = u.FlagEmblemColor,
                 EmblemSvg = u.FlagEmblemSvg
             }));
     }

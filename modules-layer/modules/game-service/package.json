@@ -6,4 +6,5 @@
     "shared": "file:../shared",
     "game": "file:../game",
     "map-renderer": "file:../map-renderer"
-  }}
+  }
+}

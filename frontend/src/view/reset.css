@@ -3,6 +3,7 @@
 *::before,
 *::after {
     box-sizing: border-box;
+    font-family: "Dumbledor 1", sans-serif;
 }
 
 /* Убираем внутренние отступы */

@@ -13,7 +13,11 @@ const MessageList = observer(({ chatMessages }) => {
         <div ref={messagesEndRef} className={styles.container}>
             {chatMessages.map((chatMessage) => (
                 <div key={chatMessage.sendingTime} className={styles.message}>
-                    {chatMessage.author} | {chatMessage.message} | {chatMessage.sendingTime}
+                    <div className={styles.messageHeader}>
+                        <p>{chatMessage.author}</p>
+                        <p>{new Date(chatMessage.sendingTime).toLocaleString()}</p>
+                    </div>
+                    <p>{chatMessage.message}</p>
                 </div>
             ))}
         </div>

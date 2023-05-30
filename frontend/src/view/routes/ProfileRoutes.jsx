@@ -9,7 +9,7 @@ const ProfileRoutes = () => {
         <Routes>
             <Route path={PROFILE_SCREEN_ROUTES.OVERVIEW} element={<ProfileOverviewSubScreen />} />
             <Route path={PROFILE_SCREEN_ROUTES.EDIT_INFO} element={<ProfileInfoEditSubScreen />} />
-            <Route path={PROFILE_SCREEN_ROUTES.EDIT_FLAG} element={<ProfileFlagEditSubScreen />} />
+            {/*<Route path={PROFILE_SCREEN_ROUTES.EDIT_FLAG} element={<ProfileFlagEditSubScreen />} />*/}
             <Route path="/" element={<Navigate to={PROFILE_SCREEN_ROUTES.OVERVIEW} replace={true} />} />
             <Route path="*" element={<Navigate to={PROFILE_SCREEN_ROUTES.OVERVIEW} replace={true} />} />
         </Routes>

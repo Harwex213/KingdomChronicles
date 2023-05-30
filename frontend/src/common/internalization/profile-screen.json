@@ -29,5 +29,15 @@
       "placeholder": "Prefix"
     },
     "submit": "Submit"
+  },
+  "flagEdit": {
+    "tabLabels": {
+      "background": "Background",
+      "foreground": "Foreground",
+      "emblem": "Emblem"
+    },
+    "backgroundTab": {
+      "colorPickerPlaceholder": "Edit background color"
+    }
   }
 }

@@ -1,6 +1,5 @@
 import { INTERNAL_BUILDING_TYPE_NAMES, POWER_CENTER_TIERS, RESOURCE_NAMES } from "../../enums";
 import { InternalBuildingType } from "./internalBuildingType";
-import { EXTERNAL_BUILDING_TYPES } from "./externalBuildingTypes";
 
 export const INTERNAL_BUILDING_TYPES = {
     [INTERNAL_BUILDING_TYPE_NAMES.WORKSHOP]: new InternalBuildingType({
@@ -11,6 +10,7 @@ export const INTERNAL_BUILDING_TYPES = {
             [RESOURCE_NAMES.WOOD_BOARDS]: 50,
         },
         ticksAmountToBuild: 3,
+        typeName: INTERNAL_BUILDING_TYPE_NAMES.WORKSHOP,
     }),
     [INTERNAL_BUILDING_TYPE_NAMES.TAX_OFFICE]: new InternalBuildingType({
         minRequiredTier: POWER_CENTER_TIERS.FIRST,
@@ -20,6 +20,7 @@ export const INTERNAL_BUILDING_TYPES = {
             [RESOURCE_NAMES.WOOD_BOARDS]: 50,
         },
         ticksAmountToBuild: 5,
+        typeName: INTERNAL_BUILDING_TYPE_NAMES.TAX_OFFICE,
     }),
     [INTERNAL_BUILDING_TYPE_NAMES.WAREHOUSE]: new InternalBuildingType({
         minRequiredTier: POWER_CENTER_TIERS.FIRST,
@@ -29,6 +30,7 @@ export const INTERNAL_BUILDING_TYPES = {
             [RESOURCE_NAMES.WOOD_BOARDS]: 30,
         },
         ticksAmountToBuild: 3,
+        typeName: INTERNAL_BUILDING_TYPE_NAMES.WAREHOUSE,
     }),
     [INTERNAL_BUILDING_TYPE_NAMES.COLONIZATION_CENTER]: new InternalBuildingType({
         minRequiredTier: POWER_CENTER_TIERS.SECOND,
@@ -39,6 +41,7 @@ export const INTERNAL_BUILDING_TYPES = {
             [RESOURCE_NAMES.WOOD_BOARDS]: 50,
         },
         ticksAmountToBuild: 10,
+        typeName: INTERNAL_BUILDING_TYPE_NAMES.COLONIZATION_CENTER,
     }),
     [INTERNAL_BUILDING_TYPE_NAMES.GUILD]: new InternalBuildingType({
         minRequiredTier: POWER_CENTER_TIERS.SECOND,
@@ -48,6 +51,7 @@ export const INTERNAL_BUILDING_TYPES = {
             [RESOURCE_NAMES.STONE]: 50,
         },
         ticksAmountToBuild: 5,
+        typeName: INTERNAL_BUILDING_TYPE_NAMES.GUILD,
     }),
     [INTERNAL_BUILDING_TYPE_NAMES.MARKET]: new InternalBuildingType({
         minRequiredTier: POWER_CENTER_TIERS.SECOND,
@@ -58,6 +62,7 @@ export const INTERNAL_BUILDING_TYPES = {
             [RESOURCE_NAMES.WOOD_BOARDS]: 70,
         },
         ticksAmountToBuild: 10,
+        typeName: INTERNAL_BUILDING_TYPE_NAMES.MARKET,
     }),
 };
 
@@ -68,7 +73,7 @@ export const FIRST_TIER_INTERNAL_BUILDING_TYPES = [
 
 export const SECOND_TIER_INTERNAL_BUILDING_TYPES = [
     INTERNAL_BUILDING_TYPES.COLONIZATION_CENTER,
-    INTERNAL_BUILDING_TYPES.MARKET,
+    INTERNAL_BUILDING_TYPES.GUILD,
 ];
 
 export const INTERNAL_BUILDING_TYPES_PER_TIER = [

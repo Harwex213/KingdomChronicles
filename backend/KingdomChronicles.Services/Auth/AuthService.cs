@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Text;
+using AutoMapper;
 using KingdomChronicles.DataAccess.Entities;
 using KingdomChronicles.Services.DTOs.Auth;
 using KingdomChronicles.Services.Exceptions;
@@ -63,6 +64,7 @@ public class AuthService : IAuthService
         {
             UserId = userEntity.Id,
             Name = userEntity.Username,
+            KingdomName = "Realm of " + userEntity.Username,
             TitleId = TitleEntity.DefaultTitleId,
             FlagBackgroundColor = Internal.Utils.GetRandomHexColor()
         };

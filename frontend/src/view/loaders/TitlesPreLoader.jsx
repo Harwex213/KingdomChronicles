@@ -2,6 +2,7 @@ import { useLayoutEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { titlesLoader, errorMessage } from "../../services/loaders/titlesLoader";
 import { Loader } from "../components/loader/Loader";
+import { LoaderFailed } from "../components/loaderFailed/LoaderFailed";
 
 const TitlesPreLoader = observer(({ children }) => {
     useLayoutEffect(() => {
@@ -12,7 +13,7 @@ const TitlesPreLoader = observer(({ children }) => {
         return <Loader />;
     }
     if (titlesLoader.isError) {
-        return <div>{errorMessage}</div>;
+        return <LoaderFailed>{errorMessage}</LoaderFailed>;
     }
     if (titlesLoader.isSuccess) {
         return children;

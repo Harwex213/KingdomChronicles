@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import internalization from "../../../common/internalization/new-game-screen.json";
-import styles from "./newGameSearch.module.css";
+import styles from "./newGameSearchSubScreen.module.css";
 import { PendingStartGameRow } from "../../components/new-game/PendingStartGameRow";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";

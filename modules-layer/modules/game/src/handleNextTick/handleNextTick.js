@@ -106,10 +106,10 @@ const continueDestroyGlobalBuildings = (gameState) => {
         pendingDestroyGlobalBuilding.remainedTicks--;
         if (pendingDestroyGlobalBuilding.remainedTicks === 0) {
             if (pendingDestroyGlobalBuilding.type === GLOBAL_BUILDING_TYPES.POWER_CENTER) {
-                roadDestroyed(gameState, pendingDestroyGlobalBuilding);
+                powerCenterDestroyed(gameState, pendingDestroyGlobalBuilding);
             }
             if (pendingDestroyGlobalBuilding.type === GLOBAL_BUILDING_TYPES.ROAD) {
-                powerCenterDestroyed(gameState, pendingDestroyGlobalBuilding);
+                roadDestroyed(gameState, pendingDestroyGlobalBuilding);
             }
             garbage.push(pendingDestroyGlobalBuilding.id);
         }

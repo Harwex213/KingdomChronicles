@@ -115,6 +115,12 @@ public class AppDbContext : DbContext
             .HasMaxLength(UserProfileConstraint.NameMaxLength)
             .IsRequired();
         
+        // Kingdom name
+        typeBuilder
+            .Property(p => p.KingdomName)
+            .HasMaxLength(UserProfileConstraint.KingdomNameMaxLength)
+            .IsRequired();
+        
         // Motto
         typeBuilder
             .Property(p => p.Motto)

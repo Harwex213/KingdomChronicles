@@ -18,10 +18,6 @@
 .mapPreview {
     width: 55%;
     height: 100%;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .settings {
@@ -37,6 +33,7 @@
     width: 100%;
     height: 40%;
     background: #444444;
+    padding: 5px;
 }
 
 .gameInfo {

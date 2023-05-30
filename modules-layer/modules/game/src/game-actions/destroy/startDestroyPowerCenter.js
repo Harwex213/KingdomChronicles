@@ -1,6 +1,7 @@
 import { PendingDestroyGlobalBuilding } from "shared/models";
 import { POWER_CENTER_VALUES } from "shared/constants";
 import { destroyExternalBuilding, disconnectPowerCenters, findConnectedPowerCenter } from "../../utils";
+import { GLOBAL_BUILDING_TYPES } from "shared/enums";
 
 const startDestroyPowerCenter = ({ gameState, playerIndex, powerCenterId }) => {
     const player = gameState.players[playerIndex];
@@ -17,6 +18,7 @@ const startDestroyPowerCenter = ({ gameState, playerIndex, powerCenterId }) => {
 
     const pendingDestroyGlobalBuilding = new PendingDestroyGlobalBuilding({
         id: powerCenter.id,
+        type: GLOBAL_BUILDING_TYPES.POWER_CENTER,
         row: powerCenter.row,
         col: powerCenter.col,
         totalTicks: POWER_CENTER_VALUES.TICKS_DESTROY_TIME,
@@ -37,7 +39,7 @@ const startDestroyPowerCenter = ({ gameState, playerIndex, powerCenterId }) => {
     player.removePowerCenter(powerCenterId);
 
     gameState.pendingDestroy.globalBuildings[pendingDestroyGlobalBuilding.id] = pendingDestroyGlobalBuilding;
-    delete this.powerCenters[powerCenterId];
+    delete gameState.powerCenters[powerCenterId];
 };
 
 export { startDestroyPowerCenter };

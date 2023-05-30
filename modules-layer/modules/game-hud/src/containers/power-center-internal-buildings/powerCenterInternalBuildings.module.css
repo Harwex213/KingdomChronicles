@@ -1,0 +1,28 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.placementCells {
+
+}
+
+.internalBuildings {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.internalBuildingsList {
+    height: 100%;
+}
+
+.tabs {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}

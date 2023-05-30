@@ -1,0 +1,47 @@
+.select {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}    .select select {
+         font-family: 'Dumbledor 1', sans-serif;
+         display: inline-block;
+         width: 100%;
+         cursor: pointer;
+         padding: 5px 5px;
+         outline: 0;
+         border: 1px solid #000000;
+         border-radius: 0px;
+         background: #626262;
+         color: #cbba19;
+         appearance: none;
+         -webkit-appearance: none;
+         -moz-appearance: none;
+     }
+.select select::-ms-expand {
+    display: none;
+}
+.select select:hover,
+.select select:focus {
+    color: #cbba19;
+    background: #626262;
+}
+.select select:disabled {
+    opacity: 1;
+    pointer-events: none;
+}
+.select_arrow {
+    position: absolute;
+    top: 13px;
+    right: 13px;
+    pointer-events: none;
+    border-style: solid;
+    border-width: 8px 5px 0px 5px;
+    border-color: #000000 transparent transparent transparent;
+}
+.select select:hover ~ .select_arrow,
+.select select:focus ~ .select_arrow {
+    border-top-color: #000000;
+}
+.select select:disabled ~ .select_arrow {
+    border-top-color: #cccccc;
+}

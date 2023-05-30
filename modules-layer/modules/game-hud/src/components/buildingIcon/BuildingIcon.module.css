@@ -1,0 +1,12 @@
+.icon {
+    width: 48px;
+    height: 48px;
+    border: 2px solid silver;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon__selected {
+    border: 2px solid gold;
+}

@@ -9,6 +9,12 @@ export const SERVER_METHODS = {
     READY_FOR_GAME: "ReadyForGame",
     NOT_READY_FOR_GAME: "NotReadyForGame",
     START_GAME: "StartGame",
+    UPDATE_MAP_GENERATION_CONFIG: "UpdateMapGenerationConfig",
+    EDIT_USER_PROFILE: "EditUserProfileInfo",
+};
+
+export const USER_PROFILE_EVENTS = {
+    USER_PROFILE_INFO: "UserProfileEvents_UserProfileInfo",
 };
 
 export const NOT_IN_GAME_EVENTS = {
@@ -29,5 +35,6 @@ export const PENDING_START_GAME_EVENTS = {
     PLAYER_JOINED: "PendingStartGameEvents_PlayerJoined",
     PLAYER_LEAVED: "PendingStartGameEvents_PlayerLeaved",
     PLAYER_CHANGE_READY_STATUS: "PendingStartGameEvents_PlayerChangeReadyStatus",
-    GAME_STARTED: "PendingStartGameEvents_LeavedFromGame",
+    GAME_STARTED: "PendingStartGameEvents_GameStarted",
+    MAP_GENERATION_CONFIG_UPDATE: "PendingStartGameEvents_MapGenerationConfigUpdate",
 };

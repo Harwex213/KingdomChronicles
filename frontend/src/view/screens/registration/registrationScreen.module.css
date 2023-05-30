@@ -5,6 +5,9 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    background: #000;
+    color: #c99507;
+    font-size: 24px;
 }
 
 .submitButton {
@@ -17,4 +20,12 @@
 
 .loginProposal {
     margin-top: 10px;
+}
+
+.loginProposal a {
+    color: cornflowerblue;
+}
+
+.loginProposal a:visited {
+    color: cornflowerblue;
 }

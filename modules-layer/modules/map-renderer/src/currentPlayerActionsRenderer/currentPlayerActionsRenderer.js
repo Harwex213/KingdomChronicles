@@ -143,7 +143,7 @@ class CurrentPlayerActionsRenderer {
                         validationName = GAME_VALIDATIONS.CAN_PLACE_ROAD;
                     }
                     if (action === GAME_ACTIONS.START_BUILD_EXTERNAL_BUILDING) {
-                        validationName = GAME_VALIDATIONS.CAN_BUILD_EXTERNAL_BUILDING;
+                        validationName = GAME_VALIDATIONS.CAN_PLACE_EXTERNAL_BUILDING;
                         validationParams = {
                             ...currentPlayer.placingExternalBuildingOptions,
                         };

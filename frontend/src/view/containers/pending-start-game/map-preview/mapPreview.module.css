@@ -1,0 +1,36 @@
+.map {
+    position: relative;
+}
+
+.generationConfig {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: #000;
+    border: 2px solid silver;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    color: #ffffff;
+}
+
+.seed {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.seedInputContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.seedInput {
+    width: 100%;
+}
+
+.mapSizeType {
+    width: 100%;
+    height: 30px;
+}

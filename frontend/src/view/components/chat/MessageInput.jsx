@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import * as yup from "yup";
-import { TextField } from "../form";
+import { TextField } from "../formik-form";
 import internalization from "../../../common/internalization/containers.json";
 import styles from "./messageInput.module.css";
 

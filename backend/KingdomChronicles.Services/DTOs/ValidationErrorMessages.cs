@@ -13,9 +13,13 @@ public static class ValidationErrorMessages
     public const string NameRequired = "In-game Name is required";
     public const string NameMaxLengthExceeded = "In-game Name is too long";
     
+    public const string KingdomNameRequired = "In-game Kingdom name is required";
+    public const string KingdomNameMaxLengthExceeded = "In-game Kingdom name is too long";
+    
+    public const string BackgroundColorRequired = "Background color is required";
+    public const string HexColorInvalidRegex = "Color should be in HEX format";
+    
     public const string MottoMaxLengthExceeded = "Motto is too long";
-
-    public const string TitleRequired = "Title is required";
 
     public const string GameNameRequired = "Game name is required";
     public const string GameNameMaxLengthExceeded = "Game name is too long";

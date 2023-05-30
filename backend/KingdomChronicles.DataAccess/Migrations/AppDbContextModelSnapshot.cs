@@ -74,12 +74,37 @@ namespace KingdomChronicles.DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "Free city"
+                            Name = "Emperor"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "House"
+                            Name = "Consul"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Senator"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Tsar"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Prince"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Nobleman"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Trader"
                         });
                 });
 
@@ -124,6 +149,9 @@ namespace KingdomChronicles.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("FlagEmblemColor")
+                        .HasColumnType("text");
+
                     b.Property<string>("FlagEmblemSvg")
                         .HasColumnType("text");
 
@@ -132,6 +160,11 @@ namespace KingdomChronicles.DataAccess.Migrations
 
                     b.Property<string>("FlagForegroundSvg")
                         .HasColumnType("text");
+
+                    b.Property<string>("KingdomName")
+                        .IsRequired()
+                        .HasMaxLength(35)
+                        .HasColumnType("character varying(35)");
 
                     b.Property<string>("Motto")
                         .HasMaxLength(50)

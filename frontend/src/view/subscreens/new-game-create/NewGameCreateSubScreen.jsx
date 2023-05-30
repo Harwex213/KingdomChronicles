@@ -4,7 +4,7 @@ import styles from "./newGameCreateSubScreen.module.css";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { TextField, Select } from "../../components/form";
+import { TextField, Select } from "../../components/formik-form";
 import { NEW_GAME_SCREEN_ROUTES } from "../../../common/constants/routes";
 import { startGameService } from "../../../services/start-game";
 
@@ -60,7 +60,7 @@ const NewGameCreateSubScreen = () => {
 
     return (
         <div>
-            <h1>{locale.header}</h1>
+            <h1 className={styles.header}>{locale.header}</h1>
             <Formik
                 initialValues={{
                     name: "",
@@ -71,7 +71,7 @@ const NewGameCreateSubScreen = () => {
             >
                 {(formik) => (
                     <form className={styles.form} onSubmit={formik.handleSubmit}>
-                        <TextField name={form.fields.name} formik={formik}>
+                        <TextField name={form.fields.name} autoComplete="off" formik={formik}>
                             {locale.placeholders.name}
                         </TextField>
                         <Select

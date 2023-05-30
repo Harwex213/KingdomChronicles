@@ -1,0 +1,18 @@
+.container {
+    width: 400px;
+    height: 450px;
+    background: #383838;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 18px;
+}
+
+.header {
+    color: #ffffff;
+}
+
+.run {
+
+}

@@ -14,6 +14,7 @@ export class StartedGame {
         this.id = gameInfo.id;
         this.name = gameInfo.name;
         this.ownerId = gameInfo.ownerId;
+        this.mapGenerationConfig = JSON.parse(gameInfo.mapGenerationConfig);
         this.created = gameInfo.created;
         this.userProfiles = gameInfo.userProfiles;
         this.playersConnectedStatus = gameInfo.playersConnectedStatus;
@@ -36,6 +37,7 @@ export class StartedGame {
         this.id = "";
         this.name = "";
         this.ownerId = 0;
+        this.mapGenerationConfig = {};
         this.created = null;
         this.userProfiles = [];
         this.playersConnectedStatus = {};
